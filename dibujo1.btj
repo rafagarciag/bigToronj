@@ -1,0 +1,46 @@
+drawing (1024, 768, #ffffff){
+	trans(_WIDTH/2, _HEIGHT/2);
+
+	
+	push();
+	set_color(#c8f1aa);
+	int radio = 100;
+	circle(radio);
+	
+	color black = #000000;
+	set_color(black);
+
+	int base = 50;
+	int altura = 40;
+	tetragon(base, altura);
+	pop();
+	
+	trans(100, 500);
+	push();
+	coord p1 = pointer(100, 600);
+	line(pointer(_POINTERX, _POINTERY)), p1);
+
+	pop();
+	
+	
+	trans(800, 200);
+	push();
+	for(int i=0; i<1; i++){
+		triangle(_POINTER, pointer(_POINTERX+200, _POINTERY), pointer(_POINTERX+100, _POINTERY+200));
+		trans(800, 500);
+		push();
+	}
+	
+	pop_origin();
+
+	
+	if(10!=5){
+		tetragon(10, 10);
+	}
+	else {
+		tetragon(800, 800);
+	}
+	int final = 0;
+	
+	
+}
