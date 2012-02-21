@@ -35,6 +35,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Metodos predefinidos */
 (trans)						{printf("TRANS  \n");}
+(rotate)					{printf("ROTATE  \n");}
 (push)						{printf("PUSH  \n");}
 (pop)						{printf("POP  \n");}
 (pop_origin)				{printf("POP ORIGIN  \n");}
