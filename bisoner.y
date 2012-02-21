@@ -65,7 +65,19 @@ void yyerror(const char *s);
 
 //GRAMATICA!
 
-programa	: DRAWING LLAVEI LLAVED {cout << "Un programa" << endl }
+programa	: DRAWING canvas LLAVEI bloque LLAVED {cout << "Un programa" << endl }
+			;
+
+canvas		: PARENI CTE_ENTERA COMA CTE_ENTERA COMA CTE_HEXADECIMAL PAREND
+			;
+		
+bloque		:
+			| estatuto bloque
+			;
+			
+estatuto	:
+			| IF
+			| FOR
 			;
 
 %%
