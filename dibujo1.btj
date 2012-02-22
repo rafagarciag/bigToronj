@@ -12,12 +12,14 @@ drawing (1024, 768, #ffffff){
 
 	int base = 50;
 	int altura = 40;
+	rotate_in_place(1.2);
 	tetragon(base, altura);
 	pop();
 	
 	trans(100, 500);
 	push();
 	coord p1 = pointer(100, 600);
+	rotate(0.5);
 	line(pointer(_POINTERX, _POINTERY)), p1);
 
 	pop();
@@ -30,14 +32,16 @@ drawing (1024, 768, #ffffff){
 		trans(800, 500);
 		push();
 	}
-	
+
 	pop_origin();
 
 	
 	if(10!=5){
+		scale(1.5);
 		tetragon(10, 10);
 	}
 	else {
+		scale(0.5);
 		tetragon(800, 800);
 	}
 	int final = 0;

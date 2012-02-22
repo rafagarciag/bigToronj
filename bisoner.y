@@ -32,6 +32,8 @@ void yyerror(const char *s);
 %token	WIDTH
 %token	HEIGHT
 %token	TRANS
+%token	SCALE
+%token	ROTATE_PLACE
 %token	ROTATE
 %token	PUSH
 %token	POP
@@ -76,8 +78,11 @@ bloque		:
 			;
 			
 estatuto	:
-			| IF
-			| FOR
+			| asignacion
+			;
+
+asignacion	:
+			|
 			;
 
 %%

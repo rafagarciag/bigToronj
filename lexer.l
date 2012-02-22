@@ -42,6 +42,8 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Metodos predefinidos */
 (trans)						{return TRANS;}
+(scale)						{return SCALE;}
+(rotate_in_place)			{return ROTATE_PLACE;}
 (rotate)					{return ROTATE;}
 (push)						{return PUSH;}
 (pop)						{return POP;}
