@@ -1,12 +1,9 @@
 %{
-	#include <iostream>
-	using namespace std;
-	#define YY_DECL extern "C" int yylex()
-	#include "bisoner.tab.h"
-	
-	int lineNumber=0;
+#include <string.h>
+#include "bisoner.tab.h"
+extern YYSTYPE yylval;
 %}
-
+	int lineNumber=1;
 IDEN		[a-z][_a-zA-Z0-9]*
 DIGIT		[0-9]
 HEX			[a-fA-F]
@@ -16,44 +13,42 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 %%
 
 	/* Palabras reservadas */
-(drawing)					{return DRAWING;}
+(drawing)					{printf("DRAWING \n");return DRAWING;}
 
 	/* Tipos de dato */
-(int)						{return INT;}
-(float)						{return FLOAT;}
-(coord)						{return COORD;}
-(color)						{return COLOR;}
+(int)						{printf("INT \n");return INT;}
+(float)						{printf("FLOAT \n");return FLOAT;}
+(color)						{printf("COLOR \n");return COLOR;}
 
 	/* Constantes enteras */
-{DIGIT}+					{return CTE_ENTERA;}
+{DIGIT}+					{printf("CTE_I \n");return CTE_I;}
 
 	/* Constantes flotantes */
-{DIGIT}+\.{DIGIT}+			{return CTE_FLOTANTE;}
+{DIGIT}+\.{DIGIT}+			{printf("CTE_F \n");return CTE_F;}
 
 	/* Constantes hexadecimales */
-#({DIGIT}|{HEX}){6}			{return CTE_HEXADECIMAL;}
+#({DIGIT}|{HEX}){6}			{printf("CTE_HEX \n");return CTE_HEX;}
 
 	/* Constantes globales, siempre accesibles */
 (_POINTER)					{return POINTER;}
 (_POINTERX)					{return POINTER_X;}
 (_POINTERY)					{return POINTER_Y;}
-(_WIDTH)					{return WIDTH;}
-(_HEIGHT)					{return HEIGHT;}
+(_WIDTH)					{printf("WIDTH \n");return WIDTH;}
+(_HEIGHT)					{printf("HEIGHT \n");return HEIGHT;}
 
 	/* Metodos predefinidos */
-(trans)						{return TRANS;}
+(trans)						{printf("TRANS \n");return TRANS;}
 (scale)						{return SCALE;}
 (rotate_in_place)			{return ROTATE_PLACE;}
 (rotate)					{return ROTATE;}
 (push)						{return PUSH;}
 (pop)						{return POP;}
 (pop_origin)				{return POP_ORIGIN;}
-(pointer)					{return POINTER_METHOD;}
-(set_color)					{return COLOR_METHOD;}
+(set_color)					{printf("COLOR_METHOD \n");return COLOR_METHOD;}
 
 	/* Metodos para crear figuras */
-(triangle)					{return TRIANGULO;}
-(tetragon)					{return TETRA;}
+(triangle)					{return TRIANGLE;}
+(tetragon)					{return TETRAGON;}
 (circle)					{return CIRCLE;}
 (line)						{return LINE;}
 	
@@ -64,16 +59,19 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 	/* Ciclo for */
 (for)						{return FOR;}
 
+	/* Ciclo while */
+(while)						{return WHILE;}
+
 	/* Identificadores */
 {IDEN}						{return ID;}
 
 	/* Caracteres terminales */
-";"							{return PUNCOMA;}
-","							{return COMA;}
-"{"							{return LLAVEI;}
-"}"							{return LLAVED;}
-"("							{return PARENI;}
-")"							{return PAREND;}
+";"							{printf("PUNCOMA \n");return PUNCOMA;}
+","							{printf("COMA \n");return COMA;}
+"{"							{printf("LLAVEI \n");return LLAVEI;}
+"}"							{printf("LLAVED \n");return LLAVED;}
+"("							{printf("PARENI \n");return PARENI;}
+")"							{printf("PAREND \n");return PAREND;}
 "="							{return IGUAL;}
 "<"							{return MENOR;}
 ">"							{return MAYOR;}
@@ -81,12 +79,12 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 "+"							{return SUMA;}
 "-"							{return RESTA;}
 "*"							{return MULT;}
-"/"							{return DIVI;}
+"/"							{printf("SLASH \n");return DIVI;}
 
 	/* Lo que se ignora */
 	/*(\/\*)[a-zA-Z0-9{DEL}]*(\*\/)	{}*/
 	
-{WHITE}+					{}
+{WHITE}					{if(!strcmp(yytext,"\n")) lineNumber++; }
 
 
 %%

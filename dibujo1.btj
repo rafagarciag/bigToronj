@@ -2,7 +2,7 @@ drawing (1024, 768, #ffffff){
 	trans(_WIDTH/2, _HEIGHT/2);
 	
 	push();
-	color(#c8f1aa);
+	set_color(#c8f1aa);
 	int radio = 100;
 	circle(radio);
 	
