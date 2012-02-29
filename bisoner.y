@@ -13,9 +13,12 @@ int yyerror(char *s);
 %token	INT
 %token	FLOAT
 %token	COLOR
+%token	STRING
+%token	VOID
 %token	CTE_I
 %token	CTE_F
 %token	CTE_HEX
+%token	CTE_STRING
 %token	POINTER
 %token	POINTER_X
 %token	POINTER_Y
@@ -33,6 +36,7 @@ int yyerror(char *s);
 %token	TETRAGON
 %token	CIRCLE
 %token	LINE
+%token	FUNCTION
 %token	IF
 %token	ELSE
 %token	FOR
@@ -57,7 +61,10 @@ int yyerror(char *s);
 
 //GRAMATICA!
 
-programa	: DRAWING canvas bloque {printf("Un programa");}
+programa	: functions DRAWING canvas bloque {printf("Un programa");}
+			;
+functions	:
+			| function functions
 			;
 
 canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND
@@ -166,7 +173,7 @@ elem1		: /*vacio*/
 			| DIVI elem
 			;
 			
-factor		: PAREND expresion PAREND
+factor		: PARENI expresion PAREND
 			| negativo constante
 			;
 negativo	: /*vacio*/
@@ -180,16 +187,27 @@ expresion1	: /*vacio*/
 			| MENOR exp
 			| DIFF exp
 			;
+			
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque LLAVED
+			| FUNCTION VOID ID PARENI function1 PAREND LLAVEI bloque LLAVED
+			;
+function1	: tipo ID function11
+			;
+function11	:
+			| COMA function1
+			;
 
 tipo		: INT
 			| FLOAT
 			| COLOR
+			| STRING
 			;
 
 constante	: ID
 			| CTE_I
 			| CTE_F
 			| CTE_HEX
+			| CTE_STRING
 			| WIDTH
 			| HEIGHT
 			| POINTER
