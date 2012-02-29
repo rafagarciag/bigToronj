@@ -19,6 +19,8 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (int)						{printf("INT \n");return INT;}
 (float)						{printf("FLOAT \n");return FLOAT;}
 (color)						{printf("COLOR \n");return COLOR;}
+(string)					{printf("STRING \n");return STRING;}
+(void)						{printf("VOID \n");return VOID;}
 
 	/* Constantes enteras */
 {DIGIT}+					{printf("CTE_I \n");return CTE_I;}
@@ -28,6 +30,9 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Constantes hexadecimales */
 #({DIGIT}|{HEX}){6}			{printf("CTE_HEX \n");return CTE_HEX;}
+
+	/* Constantes strings */
+(\".+\")					{printf("CTE_STRING \n");return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
 (_POINTER)					{return POINTER;}
@@ -51,6 +56,9 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (tetragon)					{return TETRAGON;}
 (circle)					{return CIRCLE;}
 (line)						{return LINE;}
+
+	/* Metodos del usuario */
+(function)					{printf("FUNCTION \n");return FUNCTION;}
 	
 	/* Condicional if */
 (if)						{return IF;}
