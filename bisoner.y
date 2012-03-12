@@ -51,7 +51,12 @@ int yyerror(char *s);
 %token	IGUAL
 %token	MENOR
 %token	MAYOR
+%token	IGUALDAD
+%token	MENORI
+%token	MAYORI
 %token	DIFF
+%token	AND
+%token	OR
 %token	SUMA
 %token	RESTA
 %token	MULT
@@ -63,8 +68,18 @@ int yyerror(char *s);
 
 programa	: functions DRAWING canvas bloque {printf("Un programa");}
 			;
+			
 functions	:
 			| function functions
+			;
+			
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque LLAVED
+			| FUNCTION VOID ID PARENI function1 PAREND LLAVEI bloque LLAVED
+			;
+function1	: tipo ID function11
+			;
+function11	:
+			| COMA function1
 			;
 
 canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND
@@ -92,9 +107,9 @@ estatuto	: asignacion
 asignacion	: ID IGUAL exp PUNCOMA
 			;
 
-declaracion	: tipo ids declaracion1 PUNCOMA 
+declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID ids1
+ids 		: ID declaracion1 ids1
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -173,7 +188,7 @@ elem1		: /*vacio*/
 			| DIVI elem
 			;
 			
-factor		: PARENI expresion PAREND
+factor		: PARENI exp PAREND
 			| negativo constante
 			;
 negativo	: /*vacio*/
@@ -186,15 +201,6 @@ expresion1	: /*vacio*/
 			| MAYOR exp
 			| MENOR exp
 			| DIFF exp
-			;
-			
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque LLAVED
-			| FUNCTION VOID ID PARENI function1 PAREND LLAVEI bloque LLAVED
-			;
-function1	: tipo ID function11
-			;
-function11	:
-			| COMA function1
 			;
 
 tipo		: INT
