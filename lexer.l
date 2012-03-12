@@ -81,9 +81,14 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 "("							{printf("PARENI \n");return PARENI;}
 ")"							{printf("PAREND \n");return PAREND;}
 "="							{return IGUAL;}
+"=="						{printf("IGUALIGUAL \n");return IGUALDAD;}
 "<"							{return MENOR;}
+"<="						{return MENORI;}
 ">"							{return MAYOR;}
+">="						{return MAYORI;}
 "!="						{return DIFF;}
+"&&"						{printf("AND \n"); return AND;}
+"||"						{printf("OR \n"); return OR;}
 "+"							{return SUMA;}
 "-"							{return RESTA;}
 "*"							{return MULT;}
