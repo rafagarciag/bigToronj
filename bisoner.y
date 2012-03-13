@@ -195,12 +195,20 @@ negativo	: /*vacio*/
 			| RESTA
 			;
 
-expresion	: exp expresion1
+expresion	: exp expresion1 expresion11
 			;
 expresion1	: /*vacio*/
 			| MAYOR exp
 			| MENOR exp
 			| DIFF exp
+			| IGUALDAD exp
+			| MAYORI exp
+			| MENORI exp
+			;
+			
+expresion11	: /*vacio*/
+			| AND expresion
+			| OR expresion
 			;
 
 tipo		: INT
