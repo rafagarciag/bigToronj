@@ -37,6 +37,7 @@ int yyerror(char *s);
 %token	CIRCLE
 %token	LINE
 %token	FUNCTION
+%token	RETURN
 %token	IF
 %token	ELSE
 %token	FOR
@@ -102,6 +103,10 @@ estatuto	: asignacion
 			| met_bt_or
 			| met_bt
 			| dibujo
+			| return 
+			;
+
+return		: RETURN exp PUNCOMA
 			;
 
 asignacion	: ID IGUAL exp PUNCOMA

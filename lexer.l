@@ -59,6 +59,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Metodos del usuario */
 (function)					{printf("FUNCTION \n");return FUNCTION;}
+(return)					{printf("RETURN \n");return RETURN}
 	
 	/* Condicional if */
 (if)						{return IF;}
