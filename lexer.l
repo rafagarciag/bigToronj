@@ -59,20 +59,20 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Metodos del usuario */
 (function)					{printf("FUNCTION \n");return FUNCTION;}
-(return)					{printf("RETURN \n");return RETURN}
+(return)					{printf("RETURN \n");return RETURN;}
 	
 	/* Condicional if */
-(if)						{return IF;}
+(if)						{printf("IF\n");return IF;}
 (else)						{return ELSE;}
 
 	/* Ciclo for */
-(for)						{return FOR;}
+(for)						{printf("FOR\n");return FOR;}
 
 	/* Ciclo while */
 (while)						{return WHILE;}
 
 	/* Identificadores */
-{IDEN}						{return ID;}
+{IDEN}						{printf("ID\n");return ID;}
 
 	/* Caracteres terminales */
 ";"							{printf("PUNCOMA \n");return PUNCOMA;}
@@ -81,9 +81,9 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 "}"							{printf("LLAVED \n");return LLAVED;}
 "("							{printf("PARENI \n");return PARENI;}
 ")"							{printf("PAREND \n");return PAREND;}
-"="							{return IGUAL;}
+"="							{printf("IGUAL\n");return IGUAL;}
 "=="						{printf("IGUALIGUAL \n");return IGUALDAD;}
-"<"							{return MENOR;}
+"<"							{printf("MENOR_QUE \n");return MENOR;}
 "<="						{return MENORI;}
 ">"							{return MAYOR;}
 ">="						{return MAYORI;}

@@ -15,7 +15,7 @@ drawing (1024, 768, #ffffff){
 	circle(radio);
 	
 	color black = #000000;
-	color(black);
+	set_color(black);
 
 	int base = 50;
 	int altura = 40;
@@ -32,7 +32,7 @@ drawing (1024, 768, #ffffff){
 	trans(800, 200);
 	push();
 	int i;
-	for(i=0; i<1; i++){
+	for(i=0; i<1; i=i+2){
 		triangle(50,60,30,80,70,80);
 		trans(800, 500);
 		push();

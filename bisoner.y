@@ -67,15 +67,15 @@ int yyerror(char *s);
 
 //GRAMATICA!
 
-programa	: functions DRAWING canvas bloque {printf("Un programa");}
+programa	: functions DRAWING canvas bloque {printf("\nCompilación exitosa\n");}
 			;
 			
 functions	:
 			| function functions
 			;
 			
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque LLAVED
-			| FUNCTION VOID ID PARENI function1 PAREND LLAVEI bloque LLAVED
+function	: FUNCTION tipo ID PARENI function1 PAREND bloque
+			| FUNCTION VOID ID PARENI function1 PAREND bloque
 			;
 function1	: tipo ID function11
 			;
