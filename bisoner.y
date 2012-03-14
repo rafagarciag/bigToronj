@@ -74,7 +74,7 @@ functions	:
 			| function functions
 			;
 			
-function	: FUNCTION tipo ID PARENI function1 PAREND bloque
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED
 			| FUNCTION VOID ID PARENI function1 PAREND bloque
 			;
 function1	: tipo ID function11
@@ -88,11 +88,11 @@ canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND
 		
 bloque		: LLAVEI bloque1 LLAVED
 			;
-bloque1		:
-			| estatuto bloque2
+bloque1		: /*vacio*/
+			| estatuto bloque1
 			;
-bloque2		: /*vacio*/
-			| estatuto bloque2
+			
+bloque_fun	: bloque1
 			;
 			
 estatuto	: asignacion
@@ -123,13 +123,16 @@ declaracion1: /*vacio*/
 			| IGUAL exp
 			;
 
-if			: IF PARENI expresion PAREND bloque else PUNCOMA
+if			: IF PARENI expresion PAREND bloque else
 			;
 else		: /*vacio*/
 			| ELSE bloque 
 			;
+			
+asignacion_in_line	: ID IGUAL exp
+					;
 
-for			: FOR PARENI asignacion PUNCOMA expresion PUNCOMA exp PAREND bloque
+for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_line PAREND bloque
 			;
 
 while 		: WHILE PARENI expresion PAREND bloque
@@ -167,10 +170,10 @@ dibujo		: line
 			| circle
 			;
 
-line		: LINE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
+line		: LINE PARENI exp COMA exp PAREND PUNCOMA
 			;
 
-triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp COMA exp COMA exp PAREND PUNCOMA
+triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
 			;
 			
 tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA

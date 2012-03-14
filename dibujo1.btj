@@ -3,7 +3,6 @@ function int metodo1 (int x, int y){
 		circle(x);
 		x=x-1;	
 	}
-
 }
 
 drawing (1024, 768, #ffffff){
@@ -14,18 +13,22 @@ drawing (1024, 768, #ffffff){
 	int radio = 100;
 	circle(radio);
 	
+	rotate(.9);
+	
 	color black = #000000;
 	set_color(black);
 
 	int base = 50;
 	int altura = 40;
+	rotate_in_place(1.2);
 	tetragon(base, altura);
 	pop();
 	
 	trans(100, 500);
+	scale(1.912);
 	push();
 
-	line(10,10,50,50);
+	line(50,50);
 	pop();
 	
 	
@@ -33,7 +36,7 @@ drawing (1024, 768, #ffffff){
 	push();
 	int i;
 	for(i=0; i<1; i=i+2){
-		triangle(50,60,30,80,70,80);
+		triangle(30,80,70,80);
 		trans(800, 500);
 		push();
 	}

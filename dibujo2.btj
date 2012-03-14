@@ -18,7 +18,7 @@ drawing (1024, 768, #ffffff){
 	base = altura + 1;
 	altura = altura-1;
 	
-	if (base < altura){
+	if (base < altura && cosa >= 2){
 		radio = altura * 2;
 	}
 
