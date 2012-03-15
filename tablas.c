@@ -9,17 +9,19 @@ struct var{
 struct proc{
 	char* id;
 	int tipo;
+	int total=0;
 	struct var variables[100];
 };
 
 struct proc procedimientos[100];
 
-void agregaProcedimiento(int indexProc, char* id, int tipo){
+void agregaProcedimiento(int indexProc, int tipo, char* id){
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
 }
 
 void agregaVariable(int indexProc, int indexVar, char* id, int tipo, int dv){
+	procedimientos[indexProc].total++;
 	procedimientos[indexProc].variables[indexVar].id=id;
 	procedimientos[indexProc].variables[indexVar].tipo=tipo;
 	procedimientos[indexProc].variables[indexVar].dv=dv;

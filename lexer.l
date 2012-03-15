@@ -1,4 +1,5 @@
 %{
+#include <stdio.h>
 #include <string.h>
 #include "bisoner.tab.h"
 extern YYSTYPE yylval;
@@ -13,13 +14,14 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 %%
 
 	/* Palabras reservadas */
+(global)					{return GLOBAL;}
 (drawing)					{printf("DRAWING \n");return DRAWING;}
 
 	/* Tipos de dato */
-(int)						{printf("INT \n");return INT;}
-(float)						{printf("FLOAT \n");return FLOAT;}
-(color)						{printf("COLOR \n");return COLOR;}
-(string)					{printf("STRING \n");return STRING;}
+(int)						{printf("INT \n");yylval.number=0;return INT;}
+(float)						{printf("FLOAT \n");yylval.number=1;return FLOAT;}
+(color)						{printf("COLOR \n");yylval.number=2;return COLOR;}
+(string)					{printf("STRING \n");yylval.number=3;return STRING;}
 (void)						{printf("VOID \n");return VOID;}
 
 	/* Constantes enteras */
@@ -72,7 +74,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (while)						{return WHILE;}
 
 	/* Identificadores */
-{IDEN}						{printf("ID\n");return ID;}
+{IDEN}						{printf("ID\n");yylval.string=strdup(yytext);return ID;}
 
 	/* Caracteres terminales */
 ";"							{printf("PUNCOMA \n");return PUNCOMA;}

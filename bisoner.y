@@ -1,19 +1,32 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "tablas.h"
 
 extern int lineNumber;
 int yyerror(char *s);
+
+int indexProc=0;
+int indexVar=0;
+int tipo=1000;
+
+//agregaProcedimiento(indexProc, tipo,"global");
+
 %}
 
 //DECLARACION DE TOKENS
-
+%union 
+{
+        int number;
+        char *string;
+}
 
 %token	DRAWING
-%token	INT
-%token	FLOAT
-%token	COLOR
-%token	STRING
+%token	GLOBAL
+%token	<number> INT
+%token	<number> FLOAT
+%token	<number> COLOR
+%token	<number> STRING
 %token	VOID
 %token	CTE_I
 %token	CTE_F
@@ -42,7 +55,7 @@ int yyerror(char *s);
 %token	ELSE
 %token	FOR
 %token	WHILE
-%token	ID
+%token	<string> ID
 %token	PUNCOMA
 %token	COMA
 %token	LLAVEI
@@ -67,15 +80,19 @@ int yyerror(char *s);
 
 //GRAMATICA!
 
-programa	: functions DRAWING canvas bloque {printf("\nCompilación exitosa\n");}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing"); printf("\nCompilación exitosa\n");imprimeProcs(indexProc);}
+			;
+			
+global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global"); indexProc++; indexVar=0;}
+			| GLOBAL declaracion global
 			;
 			
 functions	:
 			| function functions
 			;
 			
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED
-			| FUNCTION VOID ID PARENI function1 PAREND bloque
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3); indexProc++;indexVar=0;} 
+			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3); indexProc++;indexVar=0;}
 			;
 function1	: tipo ID function11
 			;
@@ -103,7 +120,6 @@ estatuto	: asignacion
 			| met_bt_or
 			| met_bt
 			| dibujo
-			| return 
 			;
 
 return		: RETURN exp PUNCOMA
@@ -114,7 +130,7 @@ asignacion	: ID IGUAL exp PUNCOMA
 
 declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID declaracion1 ids1
+ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, indexVar, tipo, $1, 0); indexVar++;}
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -219,10 +235,10 @@ expresion11	: /*vacio*/
 			| OR expresion
 			;
 
-tipo		: INT
-			| FLOAT
-			| COLOR
-			| STRING
+tipo		: INT		{tipo=$1;}
+			| FLOAT		{tipo=$1;}
+			| COLOR		{tipo=$1;}
+			| STRING	{tipo=$1;}
 			;
 
 constante	: ID
