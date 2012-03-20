@@ -20,7 +20,9 @@
 #define	COLOR		2
 #define	STRING		3
 
-char cubo[4][4][13];
+
+int main(){
+	char cubo[4][4][13];
 //	===========================
 //	Operaciones aritmeticas
 //	===========================
@@ -243,8 +245,9 @@ cubo[STRING][INT][IGUAL]=	'w';	//error
 cubo[STRING][FLOAT][IGUAL]=	'w';	//error
 cubo[STRING][COLOR][IGUAL]=	'w';	//error
 cubo[STRING][STRING][IGUAL]='s';	//error
-
-void cuboSyn(int tipo1, int tipo2, int op){
-	printf("%c", cubo[tipo1][tipo2][op]);
+ 	
+ 	printf("%c \n", cubo[0][0][0]);
+ 	return 0;
 }
+
 
