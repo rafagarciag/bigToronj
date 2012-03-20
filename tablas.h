@@ -9,7 +9,11 @@ struct var{
 struct proc{
 	int tipo;
 	char* id;
-	int total;
+	int index;
+	int totalInt;
+	int totalFlo;
+	int totalCol;
+	int totalStr;
 	struct var variables[100];
 };
 
@@ -20,11 +24,11 @@ void agregaProcedimiento(int indexProc, int tipo, char* id){
 	procedimientos[indexProc].tipo=tipo;
 }
 
-void agregaVariable(int indexProc, int indexVar, int tipo, char* id, int dv){
-	procedimientos[indexProc].total++;
-	procedimientos[indexProc].variables[indexVar].id=id;
-	procedimientos[indexProc].variables[indexVar].tipo=tipo;
-	procedimientos[indexProc].variables[indexVar].dv=dv;
+void agregaVariable(int indexProc, int tipo, char* id, int dv){
+	procedimientos[indexProc].variables[procedimientos[indexProc].index].id=id;
+	procedimientos[indexProc].variables[procedimientos[indexProc].index].tipo=tipo;
+	procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=dv;
+	procedimientos[indexProc].index++;
 }
 
 void imprimeProcs(int x){
@@ -32,7 +36,7 @@ void imprimeProcs(int x){
 	int i,j;
 	for (i=0;i<total;i++){
 		printf("PROC/ tipo: %d, id: %s, scope: %d\n",procedimientos[i].tipo, procedimientos[i].id, i);
-		for(j=0;j<procedimientos[i].total;j++)
+		for(j=0;j<procedimientos[i].index;j++)
 			printf("VAR/ tipo: %d, id: %s\n", procedimientos[i].variables[j].tipo, procedimientos[i].variables[j].id);
 	}
 

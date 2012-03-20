@@ -130,7 +130,7 @@ asignacion	: ID IGUAL exp PUNCOMA
 
 declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, indexVar, tipo, $1, 0); indexVar++;}
+ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, tipo, $1, 0); indexVar++;}
 			;
 ids1		: /*vacio*/
 			| COMA ids
