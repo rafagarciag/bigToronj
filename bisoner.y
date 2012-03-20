@@ -7,7 +7,6 @@ extern int lineNumber;
 int yyerror(char *s);
 
 int indexProc=0;
-int indexVar=0;
 int tipo=1000;
 
 //agregaProcedimiento(indexProc, tipo,"global");
@@ -80,10 +79,10 @@ int tipo=1000;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing"); printf("\nCompilación exitosa\n");imprimeProcs(indexProc);}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeProcs(indexProc);}
 			;
 			
-global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global"); indexProc++; indexVar=0;}
+global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
 			| GLOBAL declaracion global
 			;
 			
@@ -91,8 +90,8 @@ functions	:
 			| function functions
 			;
 			
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3); indexProc++;indexVar=0;} 
-			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3); indexProc++;indexVar=0;}
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3, lineNumber); indexProc++;}
+			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3, lineNumber); indexProc++;}
 			;
 function1	: tipo ID function11
 			;
@@ -130,7 +129,7 @@ asignacion	: ID IGUAL exp PUNCOMA
 
 declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, tipo, $1, 0); indexVar++;}
+ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 ids1		: /*vacio*/
 			| COMA ids

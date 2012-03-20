@@ -19,15 +19,34 @@ struct proc{
 
 struct proc procedimientos[100];
 
-void agregaProcedimiento(int indexProc, int tipo, char* id){
+void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
 }
 
-void agregaVariable(int indexProc, int tipo, char* id, int dv){
+void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	procedimientos[indexProc].variables[procedimientos[indexProc].index].id=id;
 	procedimientos[indexProc].variables[procedimientos[indexProc].index].tipo=tipo;
-	procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=dv;
+	switch (tipo){
+		case 0:
+			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalInt;
+			procedimientos[indexProc].totalInt++;
+			break;
+		case 1:
+			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalFlo+100;
+			procedimientos[indexProc].totalFlo++;
+			break;
+		case 2:
+			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalCol+200;
+			procedimientos[indexProc].totalCol++;
+			break;
+		case 3:
+			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalStr+300;
+			procedimientos[indexProc].totalStr++;
+			break;
+	
+	}
+	
 	procedimientos[indexProc].index++;
 }
 
@@ -37,7 +56,7 @@ void imprimeProcs(int x){
 	for (i=0;i<total;i++){
 		printf("PROC/ tipo: %d, id: %s, scope: %d\n",procedimientos[i].tipo, procedimientos[i].id, i);
 		for(j=0;j<procedimientos[i].index;j++)
-			printf("VAR/ tipo: %d, id: %s\n", procedimientos[i].variables[j].tipo, procedimientos[i].variables[j].id);
+			printf("VAR/ tipo: %d, id: %s, dv: %d\n", procedimientos[i].variables[j].tipo, procedimientos[i].variables[j].id,procedimientos[i].variables[j].dv);
 	}
 
 }
