@@ -79,7 +79,7 @@ int tipo=1000;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeProcs(indexProc);}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");}
 			;
 			
 global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
@@ -129,7 +129,9 @@ asignacion	: ID IGUAL exp PUNCOMA
 
 declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, tipo, $1, lineNumber);}
+ids 		: ids_var declaracion1 ids1 
+			;
+ids_var		: ID { agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -171,7 +173,7 @@ trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA
 			;
 rotate		: ROTATE PARENI exp PAREND PUNCOMA
 			;
-rotate_place	: ROTATE_PLACE PARENI exp PAREND PUNCOMA
+rotate_place: ROTATE_PLACE PARENI exp PAREND PUNCOMA
 			;
 scale		: SCALE PARENI exp PAREND PUNCOMA
 			;
