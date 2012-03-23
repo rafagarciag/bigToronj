@@ -83,8 +83,8 @@ programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc
 			;
 			
 global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
-			| GLOBAL declaracion global
-			;
+		| GLOBAL declaracion global
+		;
 			
 functions	:
 			| function functions
@@ -93,8 +93,11 @@ functions	:
 function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3, lineNumber); indexProc++;}
 			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3, lineNumber); indexProc++;}
 			;
-function1	: tipo ID function11
+function1	: tipo ids_fun function11
 			;
+ids_fun		: ID	{{agregaVariable(indexProc, tipo, $1, lineNumber);}}
+			;
+			
 function11	:
 			| COMA function1
 			;
@@ -131,7 +134,7 @@ declaracion	: tipo ids PUNCOMA
 			;
 ids 		: ids_var declaracion1 ids1 
 			;
-ids_var		: ID { agregaVariable(indexProc, tipo, $1, lineNumber);}
+ids_var		: ID {agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -243,7 +246,7 @@ tipo		: INT		{tipo=$1;}
 			;
 
 constante	: ID
-			| CTE_I
+			| CTE_I		
 			| CTE_F
 			| CTE_HEX
 			| CTE_STRING

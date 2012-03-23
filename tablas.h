@@ -17,13 +17,17 @@ struct proc{
 };
 
 struct proc procedimientos[100];
-struct var variables[100];
+struct var globales[100];
+struct var variables[100][3];
 
 void imprimeProcs(int x){
 	int j;
-	for(j=0;j<procedimientos[x].index;j++)
-		printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j].tipo, variables[j].id,variables[j].dv);
-
+	for(j=0;j<procedimientos[x].index;j++){
+		if(x==0)
+			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
+		else
+			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][1].tipo, variables[j][1].id,variables[j][1].dv);
+	}
 }
 
 void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
@@ -33,23 +37,29 @@ void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
 }
 
 void agregaVariable(int indexProc, int tipo, char* id, int linea){
-	variables[procedimientos[indexProc].index].id=id;
-	variables[procedimientos[indexProc].index].tipo=tipo;
+	int offset=0, tabla=0;
+	if (indexProc > 0){
+		offset=200;
+		tabla=1;
+	}
+		
+	variables[procedimientos[indexProc].index][tabla].id=id;
+	variables[procedimientos[indexProc].index][tabla].tipo=tipo;
 	switch (tipo){
 		case 0:
-			variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalInt;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalInt;
 			procedimientos[indexProc].totalInt++;
 			break;
 		case 1:
-			variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalFlo+100;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalFlo+50;
 			procedimientos[indexProc].totalFlo++;
 			break;
 		case 2:
-			variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalCol+200;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalCol+100;
 			procedimientos[indexProc].totalCol++;
 			break;
 		case 3:
-			variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalStr+300;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalStr+150;
 			procedimientos[indexProc].totalStr++;
 			break;
 	}
