@@ -79,12 +79,12 @@ int tipo=1000;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeProcs(indexProc);}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");}
 			;
 			
 global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
-			| GLOBAL declaracion global
-			;
+		| GLOBAL declaracion global
+		;
 			
 functions	:
 			| function functions
@@ -93,8 +93,11 @@ functions	:
 function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3, lineNumber); indexProc++;}
 			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3, lineNumber); indexProc++;}
 			;
-function1	: tipo ID function11
+function1	: tipo ids_fun function11
 			;
+ids_fun		: ID	{{agregaVariable(indexProc, tipo, $1, lineNumber);}}
+			;
+			
 function11	:
 			| COMA function1
 			;
@@ -129,7 +132,9 @@ asignacion	: ID IGUAL exp PUNCOMA
 
 declaracion	: tipo ids PUNCOMA 
 			;
-ids 		: ID declaracion1 ids1 { agregaVariable(indexProc, tipo, $1, lineNumber);}
+ids 		: ids_var declaracion1 ids1 
+			;
+ids_var		: ID {agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -171,7 +176,7 @@ trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA
 			;
 rotate		: ROTATE PARENI exp PAREND PUNCOMA
 			;
-rotate_place	: ROTATE_PLACE PARENI exp PAREND PUNCOMA
+rotate_place: ROTATE_PLACE PARENI exp PAREND PUNCOMA
 			;
 scale		: SCALE PARENI exp PAREND PUNCOMA
 			;
@@ -241,7 +246,7 @@ tipo		: INT		{tipo=$1;}
 			;
 
 constante	: ID
-			| CTE_I
+			| CTE_I		
 			| CTE_F
 			| CTE_HEX
 			| CTE_STRING

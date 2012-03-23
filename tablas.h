@@ -14,83 +14,55 @@ struct proc{
 	int totalFlo;
 	int totalCol;
 	int totalStr;
-	struct var variables[100];
 };
 
 struct proc procedimientos[100];
+struct var globales[100];
+struct var variables[100][3];
+
+void imprimeProcs(int x){
+	int j;
+	for(j=0;j<procedimientos[x].index;j++){
+		if(x==0)
+			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
+		else
+			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][1].tipo, variables[j][1].id,variables[j][1].dv);
+	}
+}
 
 void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
+	imprimeProcs(indexProc);
 }
 
 void agregaVariable(int indexProc, int tipo, char* id, int linea){
-	procedimientos[indexProc].variables[procedimientos[indexProc].index].id=id;
-	procedimientos[indexProc].variables[procedimientos[indexProc].index].tipo=tipo;
+	int offset=0, tabla=0;
+	if (indexProc > 0){
+		offset=200;
+		tabla=1;
+	}
+		
+	variables[procedimientos[indexProc].index][tabla].id=id;
+	variables[procedimientos[indexProc].index][tabla].tipo=tipo;
 	switch (tipo){
 		case 0:
-			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalInt;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalInt;
 			procedimientos[indexProc].totalInt++;
 			break;
 		case 1:
-			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalFlo+100;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalFlo+50;
 			procedimientos[indexProc].totalFlo++;
 			break;
 		case 2:
-			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalCol+200;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalCol+100;
 			procedimientos[indexProc].totalCol++;
 			break;
 		case 3:
-			procedimientos[indexProc].variables[procedimientos[indexProc].index].dv=procedimientos[indexProc].totalStr+300;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalStr+150;
 			procedimientos[indexProc].totalStr++;
 			break;
-	
 	}
 	
 	procedimientos[indexProc].index++;
 }
-
-void imprimeProcs(int x){
-	int total=x+1;
-	int i,j;
-	for (i=0;i<total;i++){
-		printf("PROC/ tipo: %d, id: %s, scope: %d\n",procedimientos[i].tipo, procedimientos[i].id, i);
-		for(j=0;j<procedimientos[i].index;j++)
-			printf("VAR/ tipo: %d, id: %s, dv: %d\n", procedimientos[i].variables[j].tipo, procedimientos[i].variables[j].id,procedimientos[i].variables[j].dv);
-	}
-
-}
-
-/*
-int main(){
-	
-	
-	
-	
-	
-	procedimientos[0].id = "Primer Proc";
-	procedimientos[0].tipo = 0;
-	
-	procedimientos[0].variables[0].id = "primer variable";
-	procedimientos[0].variables[0].tipo = 0;
-	procedimientos[0].variables[0].dv=0;
-	
-	procedimientos[0].variables[1].id="Segunda variable";
-	procedimientos[0].variables[1].tipo=1;
-	procedimientos[0].variables[1].dv=1;
-	
-	procedimientos[1].id = "Segundo Proc";
-	procedimientos[1].tipo = 0;
-	
-	procedimientos[1].variables[0].id = "primer variable";
-	procedimientos[1].variables[0].tipo = 0;
-	procedimientos[1].variables[0].dv=0;
-	
-	procedimientos[1].variables[1].id="Segunda variable";
-	procedimientos[1].variables[1].tipo=1;
-	procedimientos[1].variables[1].dv=1;
-	
-	printf("primer proc, segunda variable, TIPO: %d", procedimientos[0].variables[1].tipo);
-
-	return 0;
-}*/

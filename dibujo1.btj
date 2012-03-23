@@ -2,7 +2,7 @@ global int gvar1, gvar2, gvar3;
 global float gvar4, gvar5, gvar6;
 global string unString;
 
-function float metodo1 (int x, int y){
+function float metodo1 (int x, float y){
 
 	int var1, var2, var3;
 	float var4, var5, var6;
