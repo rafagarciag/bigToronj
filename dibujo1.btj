@@ -10,6 +10,7 @@ function float metodo1 (int x, float y){
 		circle(x);
 		x=x-1;
 	}
+	int var1;
 	return x;
 }
 

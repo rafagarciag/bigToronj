@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 struct var{
 	int tipo;
@@ -18,7 +19,7 @@ struct proc{
 
 struct proc procedimientos[100];
 struct var globales[100];
-struct var variables[100][3];
+struct var variables[100][2];
 
 void imprimeProcs(int x){
 	int j;
@@ -66,3 +67,32 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	
 	procedimientos[indexProc].index++;
 }
+
+int existeVariable(int indexProc, char* id){
+	int i;
+	if(indexProc>0){
+		for(i=0;i<procedimientos[indexProc].index;i++)
+			if(!strcmp(variables[i][1].id, id))
+				return variables[i][1].dv;
+	}
+	for(i=0;i<procedimientos[0].index;i++)
+		if(!strcmp(variables[i][0].id, id))
+			return variables[i][0].dv;
+	return -1000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tablas.h"
+#include "cuadruplosExpresiones.h"
 
 extern int lineNumber;
 int yyerror(char *s);
@@ -134,7 +135,12 @@ declaracion	: tipo ids PUNCOMA
 			;
 ids 		: ids_var declaracion1 ids1 
 			;
-ids_var		: ID {agregaVariable(indexProc, tipo, $1, lineNumber);}
+ids_var		: ID 	{
+						if(existeVariable(indexProc, $1)==-1000)	
+							agregaVariable(indexProc, tipo, $1, lineNumber);
+						else
+							printf("Error en linea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
+					}
 			;
 ids1		: /*vacio*/
 			| COMA ids
