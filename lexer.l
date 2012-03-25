@@ -15,43 +15,43 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 
 	/* Palabras reservadas */
 (global)					{return GLOBAL;}
-(drawing)					{printf("DRAWING \n");return DRAWING;}
+(drawing)					{return DRAWING;}
 
 	/* Tipos de dato */
-(int)						{printf("INT \n");yylval.number=0;return INT;}
-(float)						{printf("FLOAT \n");yylval.number=1;return FLOAT;}
-(color)						{printf("COLOR \n");yylval.number=2;return COLOR;}
-(string)					{printf("STRING \n");yylval.number=3;return STRING;}
-(void)						{printf("VOID \n");return VOID;}
+(int)						{yylval.number=0;return INT;}
+(float)						{yylval.number=1;return FLOAT;}
+(color)						{yylval.number=2;return COLOR;}
+(string)					{yylval.number=3;return STRING;}
+(void)						{return VOID;}
 
 	/* Constantes enteras */
-{DIGIT}+					{printf("CTE_I \n");return CTE_I;}
+{DIGIT}+					{return CTE_I;}
 
 	/* Constantes flotantes */
-{DIGIT}+\.{DIGIT}+			{printf("CTE_F \n");return CTE_F;}
+{DIGIT}+\.{DIGIT}+			{return CTE_F;}
 
 	/* Constantes hexadecimales */
-#({DIGIT}|{HEX}){6}			{printf("CTE_HEX \n");return CTE_HEX;}
+#({DIGIT}|{HEX}){6}			{return CTE_HEX;}
 
 	/* Constantes strings */
-(\".+\")					{printf("CTE_STRING \n");return CTE_STRING; }
+(\".+\")					{return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
 (_POINTER)					{return POINTER;}
 (_POINTERX)					{return POINTER_X;}
 (_POINTERY)					{return POINTER_Y;}
-(_WIDTH)					{printf("WIDTH \n");return WIDTH;}
-(_HEIGHT)					{printf("HEIGHT \n");return HEIGHT;}
+(_WIDTH)					{return WIDTH;}
+(_HEIGHT)					{return HEIGHT;}
 
 	/* Metodos predefinidos */
-(trans)						{printf("TRANS \n");return TRANS;}
+(trans)						{return TRANS;}
 (scale)						{return SCALE;}
 (rotate_in_place)			{return ROTATE_PLACE;}
 (rotate)					{return ROTATE;}
 (push)						{return PUSH;}
 (pop)						{return POP;}
 (pop_origin)				{return POP_ORIGIN;}
-(set_color)					{printf("COLOR_METHOD \n");return COLOR_METHOD;}
+(set_color)					{return COLOR_METHOD;}
 
 	/* Metodos para crear figuras */
 (triangle)					{return TRIANGLE;}
@@ -60,42 +60,42 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (line)						{return LINE;}
 
 	/* Metodos del usuario */
-(function)					{printf("FUNCTION \n");return FUNCTION;}
-(return)					{printf("RETURN \n");return RETURN;}
+(function)					{return FUNCTION;}
+(return)					{return RETURN;}
 	
 	/* Condicional if */
-(if)						{printf("IF\n");return IF;}
+(if)						{return IF;}
 (else)						{return ELSE;}
 
 	/* Ciclo for */
-(for)						{printf("FOR\n");return FOR;}
+(for)						{return FOR;}
 
 	/* Ciclo while */
 (while)						{return WHILE;}
 
 	/* Identificadores */
-{IDEN}						{printf("ID\n");yylval.string=strdup(yytext);return ID;}
+{IDEN}						{yylval.string=strdup(yytext);return ID;}
 
 	/* Caracteres terminales */
-";"							{printf("PUNCOMA \n");return PUNCOMA;}
-","							{printf("COMA \n");return COMA;}
-"{"							{printf("LLAVEI \n");return LLAVEI;}
-"}"							{printf("LLAVED \n");return LLAVED;}
-"("							{printf("PARENI \n");return PARENI;}
-")"							{printf("PAREND \n");return PAREND;}
-"="							{printf("IGUAL\n");return IGUAL;}
-"=="						{printf("IGUALIGUAL \n");return IGUALDAD;}
-"<"							{printf("MENOR_QUE \n");return MENOR;}
+";"							{return PUNCOMA;}
+","							{return COMA;}
+"{"							{return LLAVEI;}
+"}"							{return LLAVED;}
+"("							{return PARENI;}
+")"							{return PAREND;}
+"="							{return IGUAL;}
+"=="						{return IGUALDAD;}
+"<"							{return MENOR;}
 "<="						{return MENORI;}
 ">"							{return MAYOR;}
 ">="						{return MAYORI;}
 "!="						{return DIFF;}
-"&&"						{printf("AND \n"); return AND;}
-"||"						{printf("OR \n"); return OR;}
+"&&"						{return AND;}
+"||"						{return OR;}
 "+"							{return SUMA;}
 "-"							{return RESTA;}
 "*"							{return MULT;}
-"/"							{printf("SLASH \n");return DIVI;}
+"/"							{return DIVI;}
 
 	/* Lo que se ignora */
 	/*(\/\*)[a-zA-Z0-9{DEL}]*(\*\/)	{}*/
