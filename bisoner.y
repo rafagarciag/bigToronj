@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "tablas.h"
 #include "cuadruplosExpresiones.h"
+#include "generacionCuadruplos.h"
 
 extern int lineNumber;
 int yyerror(char *s);
@@ -18,6 +19,8 @@ int temporales=400;
 int operando;
 int operador;
 ////////////////////////
+
+char* aux_asignacion;
 
 %}
 
@@ -39,7 +42,6 @@ int operador;
 %token	<string> CTE_F
 %token	<string> CTE_HEX
 %token	<string> CTE_STRING
-%token	POINTER
 %token	POINTER_X
 %token	POINTER_Y
 %token	WIDTH
@@ -69,6 +71,7 @@ int operador;
 %token	LLAVED
 %token	PARENI
 %token	PAREND
+%token	NOT
 %token	IGUAL
 %token	MENOR
 %token	MAYOR
@@ -87,10 +90,10 @@ int operador;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
 			;
 
-global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
+global	: /*vacio*/		{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
 		| GLOBAL declaracion global
 		;
 
@@ -138,7 +141,12 @@ estatuto	: asignacion
 return		: RETURN exp PUNCOMA
 			;
 
-asignacion	: ID IGUAL exp PUNCOMA
+asignacion	: ID IGUAL exp PUNCOMA	{
+										if(existeVariable(indexProc, $1)==-1000)
+											printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+										else
+											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+									}
 			;
 
 declaracion	: tipo ids PUNCOMA 
@@ -146,8 +154,10 @@ declaracion	: tipo ids PUNCOMA
 ids 		: ids_var declaracion1 ids1 
 			;
 ids_var		: ID 	{
-						if(existeVariable(indexProc, $1)==-1000)	
+						if(existeVariable(indexProc, $1)==-1000){
 							agregaVariable(indexProc, tipo, $1, lineNumber);
+							aux_asignacion=$1;
+						}
 						else
 							printf("Error en linea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
 					}
@@ -156,10 +166,18 @@ ids1		: /*vacio*/
 			| COMA ids
 			;
 declaracion1: /*vacio*/
-			| IGUAL exp
+			| IGUAL exp	{generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, aux_asignacion));}
 			;
 
-if			: IF PARENI expresion PAREND bloque else
+if			: IF PARENI expresion_if PAREND bloque else
+			;
+expresion_if: expresion	{
+				int resultado = popPilaOperandos();
+				//Veirificar que resultado pueda ser utilizado en aritmetica booleana
+				//Generar gotoF
+				printf("GotoF(%d) \n", resultado);
+					
+			}
 			;
 else		: /*vacio*/
 			| ELSE bloque 
@@ -236,28 +254,40 @@ elem11		: MULT	{pushPilaOperadores(102);}
 			| DIVI	{pushPilaOperadores(103);}
 			;
 
-factor		: PARENI exp PAREND
+factor		: PARENI exp_paso_4 exp exp_paso_5 PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
 			| RESTA	
 			;
 
-expresion	: exp expresion1 expresion11
+expresion	: negacion exp expresion1 expresion_paso1 expresion11	{printf("Generar cuadruplo de expresion\n");}
+			;
+expresion_paso1	: 	{
+						generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
+						pushPilaOperandos(temporales++);
+					}
+				;
+negacion	: /*vacio*/
+			| NOT	{pushPilaOperadores(208);}
 			;
 expresion1	: /*vacio*/
-			| MAYOR exp
-			| MENOR exp
-			| DIFF exp
-			| IGUALDAD exp
-			| MAYORI exp
-			| MENORI exp
+			| operadores_log1 exp
 			;
+operadores_log1	: MENOR		{pushPilaOperadores(207);}
+				| MENORI	{pushPilaOperadores(206);}
+				| MAYOR		{pushPilaOperadores(205);}
+				| MAYORI	{pushPilaOperadores(204);}
+				| IGUALDAD	{pushPilaOperadores(203);}
+				| DIFF		{pushPilaOperadores(202);}
+				;
 
 expresion11	: /*vacio*/
-			| AND expresion
-			| OR expresion
+			| operadores_log expresion
 			;
+operadores_log	:	AND	{pushPilaOperadores(201);}
+				|	OR	{pushPilaOperadores(200);}
+				;
 
 tipo		: INT		{tipo=$1;}
 			| FLOAT		{tipo=$1;}
@@ -269,22 +299,21 @@ constante	: ID	{
 						if((operando=existeVariable(indexProc, $1))==-1000)
 							printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 					}
-			| CTE_I			{agregaConstante(0, $1);}
-			| CTE_F			{agregaConstante(1, $1);}
-			| CTE_HEX		{agregaConstante(2, $1);}
-			| CTE_STRING	{agregaConstante(3, $1);}
+			| CTE_I			{agregaConstante(0, $1);operando=existeCteInt($1);}
+			| CTE_F			{agregaConstante(1, $1);operando=existeCteFloat($1);}
+			| CTE_HEX		{agregaConstante(2, $1);operando=existeCteHex($1);}
+			| CTE_STRING	{agregaConstante(3, $1);operando=existeCteString($1);}
 			| WIDTH
 			| HEIGHT
-			| POINTER
 			| POINTER_X
 			| POINTER_Y
 			;
-			
+
 exp_paso_1	:	{pushPilaOperandos(operando)}
 			;
 exp_paso_2	:	{
 					if(peekPilaOperadores()==100||peekPilaOperadores()==101){
-						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
 						pushPilaOperandos(temporales++);
 					}
 				}
@@ -292,11 +321,18 @@ exp_paso_2	:	{
 
 exp_paso_3	:	{
 					if(peekPilaOperadores()==102||peekPilaOperadores()==103){
-						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
 						pushPilaOperandos(temporales++);
 					}
 				}
 			;
+
+exp_paso_4	:	{pushPilaOperadores(9999);}
+			;
+
+exp_paso_5	:	{popPilaOperadores();}
+			;
+
 %%
 int yyerror(char *s) {
 	printf("Compilation error, line #%d\n", lineNumber);

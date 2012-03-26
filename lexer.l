@@ -25,16 +25,16 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (void)						{return VOID;}
 
 	/* Constantes enteras */
-{DIGIT}+					{printf("CTE_I \n");yylval.string=strdup(yytext);return CTE_I;}
+{DIGIT}+					{yylval.string=strdup(yytext);return CTE_I;}
 
 	/* Constantes flotantes */
-{DIGIT}+\.{DIGIT}+			{printf("CTE_F \n");yylval.string=strdup(yytext);return CTE_F;}
+{DIGIT}+\.{DIGIT}+			{yylval.string=strdup(yytext);return CTE_F;}
 
 	/* Constantes hexadecimales */
-#({DIGIT}|{HEX}){6}			{printf("CTE_HEX \n");yylval.string=strdup(yytext);return CTE_HEX;}
+#({DIGIT}|{HEX}){6}			{yylval.string=strdup(yytext);return CTE_HEX;}
 
 	/* Constantes strings */
-(\".+\")					{printf("CTE_STRING \n");yylval.string=strdup(yytext);return CTE_STRING; }
+(\".+\")					{yylval.string=strdup(yytext);return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
 (_POINTERX)					{return POINTER_X;}
@@ -73,7 +73,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (while)						{return WHILE;}
 
 	/* Identificadores */
-{IDEN}						{printf("ID\n");yylval.string=strdup(yytext);return ID;}
+{IDEN}						{yylval.string=strdup(yytext);return ID;}
 
 	/* Caracteres terminales */
 ";"							{return PUNCOMA;}
@@ -82,6 +82,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 "}"							{return LLAVED;}
 "("							{return PARENI;}
 ")"							{return PAREND;}
+"!"							{return NOT;}
 "="							{return IGUAL;}
 "=="						{return IGUALDAD;}
 "<"							{return MENOR;}
