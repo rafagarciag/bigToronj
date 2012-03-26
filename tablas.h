@@ -101,6 +101,19 @@ void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
 	imprimeProcs(indexProc);
 }
 
+int existeVariable(int indexProc, char* id){
+	int i;
+	if(indexProc>0){
+		for(i=0;i<procedimientos[indexProc].index;i++)
+			if(!strcmp(variables[i][1].id, id))
+				return variables[i][1].dv;
+	}
+	for(i=0;i<procedimientos[0].index;i++)
+		if(!strcmp(variables[i][0].id, id))
+			return variables[i][0].dv;
+	return -1000;
+}
+
 void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	int offset=0, tabla=0;
 	if (indexProc > 0){
@@ -132,16 +145,35 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	procedimientos[indexProc].index++;
 }
 
-int existeVariable(int indexProc, char* id){
+int existeCteInt(int x){
 	int i;
-	if(indexProc>0){
-		for(i=0;i<procedimientos[indexProc].index;i++)
-			if(!strcmp(variables[i][1].id, id))
-				return variables[i][1].dv;
-	}
-	for(i=0;i<procedimientos[0].index;i++)
-		if(!strcmp(variables[i][0].id, id))
-			return variables[i][0].dv;
+	for(i=0;i<i_cteInt;i++)
+		if(constantesInt[i].valor==x)
+			return constantesInt[i].dv;
+	return -1000;
+}
+
+int existeCteFloat(float x){
+	int i;
+	for(i=0;i<i_cteFloat;i++)
+		if(constantesFloat[i].valor=x)
+			return constantesFloat[i].dv;
+	return -1000;
+}
+
+int existeCteHex(char* x){
+	int i;
+	for(i=0;i<i_cteHex;i++)
+		if(!strcmp(constantesHex[i].valor, x))
+			return constantesHex[i].dv;
+	return -1000;
+}
+
+int existeCteString(char* x){
+	int i;
+	for(i=0;i<i_cteString;i++)
+		if(!strcmp(constantesString[i].valor, x))
+			return constantesString[i].dv;
 	return -1000;
 }
 
@@ -149,30 +181,38 @@ void agregaConstante(int tipo, char* valor){
 	switch(tipo){
 		//INT
 		case 0:
-			constantesInt[i_cteInt].valor = atoi(valor);
-			constantesInt[i_cteInt].dv = offsetConstantes + offsetInt+ i_cteInt;
-			i_cteInt++;
+			if(existeCteInt(atoi(valor))==-1000){
+				constantesInt[i_cteInt].valor = atoi(valor);
+				constantesInt[i_cteInt].dv = offsetConstantes + offsetInt+ i_cteInt;
+				i_cteInt++;
+			}
 			break;
 			
 		//FLOAT
 		case 1:
-			constantesFloat[i_cteFloat].valor = atof(valor);
-			constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat+ i_cteFloat;
-			i_cteFloat++;
+			if(existeCteFloat(atof(valor))==-1000){
+				constantesFloat[i_cteFloat].valor = atof(valor);
+				constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat+ i_cteFloat;
+				i_cteFloat++;
+			}
 			break;
-		
+
 		//HEX
 		case 2:
-			constantesHex[i_cteHex].valor = valor;
-			constantesHex[i_cteHex].dv = offsetConstantes + offsetHex+ i_cteHex;
-			i_cteHex++;
+			if(existeCteHex(valor)==-1000){
+				constantesHex[i_cteHex].valor = valor;
+				constantesHex[i_cteHex].dv = offsetConstantes + offsetHex+ i_cteHex;
+				i_cteHex++;
+			}
 			break;
 			
 		//STRING
 		case 3:
-			constantesString[i_cteString].valor = valor;
-			constantesString[i_cteString].dv = offsetConstantes + offsetString +i_cteString;
-			i_cteString++;
+			if(existeCteString(valor)==-1000){
+				constantesString[i_cteString].valor = valor;
+				constantesString[i_cteString].dv = offsetConstantes + offsetString +i_cteString;
+				i_cteString++;
+			}
 			break;
 		
 		//Constante _WIDTH
