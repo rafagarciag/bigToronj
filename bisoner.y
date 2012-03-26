@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tablas.h"
+#include "cuadruplosExpresiones.h"
 
 extern int lineNumber;
 int yyerror(char *s);
@@ -9,7 +10,14 @@ int yyerror(char *s);
 int indexProc=0;
 int tipo=1000;
 
-//agregaProcedimiento(indexProc, tipo,"global");
+//Variables temporales
+int temporales=400;
+//////////////////////
+
+//Cuadruplos expresiones
+int operando;
+int operador;
+////////////////////////
 
 %}
 
@@ -27,10 +35,10 @@ int tipo=1000;
 %token	<number> COLOR
 %token	<number> STRING
 %token	VOID
-%token	CTE_I
-%token	CTE_F
-%token	CTE_HEX
-%token	CTE_STRING
+%token	<string> CTE_I
+%token	<string> CTE_F
+%token	<string> CTE_HEX
+%token	<string> CTE_STRING
 %token	POINTER
 %token	POINTER_X
 %token	POINTER_Y
@@ -79,41 +87,44 @@ int tipo=1000;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();}
 			;
-			
+
 global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
 		| GLOBAL declaracion global
 		;
-			
+
 functions	:
 			| function functions
 			;
-			
+
 function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3, lineNumber); indexProc++;}
 			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3, lineNumber); indexProc++;}
 			;
 function1	: tipo ids_fun function11
 			;
-ids_fun		: ID	{{agregaVariable(indexProc, tipo, $1, lineNumber);}}
+ids_fun		: ID	{agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
-			
+
 function11	:
 			| COMA function1
 			;
 
-canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND
+canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND {
+				agregaConstante(100, $2);
+				agregaConstante(101, $4);
+			}
 			;
-		
+
 bloque		: LLAVEI bloque1 LLAVED
 			;
 bloque1		: /*vacio*/
 			| estatuto bloque1
 			;
-			
+
 bloque_fun	: bloque1
 			;
-			
+
 estatuto	: asignacion
 			| declaracion
 			| if
@@ -134,7 +145,12 @@ declaracion	: tipo ids PUNCOMA
 			;
 ids 		: ids_var declaracion1 ids1 
 			;
-ids_var		: ID {agregaVariable(indexProc, tipo, $1, lineNumber);}
+ids_var		: ID 	{
+						if(existeVariable(indexProc, $1)==-1000)	
+							agregaVariable(indexProc, tipo, $1, lineNumber);
+						else
+							printf("Error en linea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
+					}
 			;
 ids1		: /*vacio*/
 			| COMA ids
@@ -148,7 +164,7 @@ if			: IF PARENI expresion PAREND bloque else
 else		: /*vacio*/
 			| ELSE bloque 
 			;
-			
+
 asignacion_in_line	: ID IGUAL exp
 					;
 
@@ -157,14 +173,14 @@ for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_li
 
 while 		: WHILE PARENI expresion PAREND bloque
 			;
-			
+
 met_bt_or	: met_bt_or1 PARENI PAREND PUNCOMA
 			;
 met_bt_or1	: PUSH
 			| POP
 			| POP_ORIGIN
 			;
-			
+
 met_bt		: trans
 			| rotate
 			| scale
@@ -183,7 +199,7 @@ scale		: SCALE PARENI exp PAREND PUNCOMA
 
 color_method	: COLOR_METHOD PARENI exp PAREND PUNCOMA
 				;
-			
+
 dibujo		: line
 			| triangle
 			| tetragon
@@ -195,29 +211,33 @@ line		: LINE PARENI exp COMA exp PAREND PUNCOMA
 
 triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
 			;
-			
+
 tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA
 			;
-			
+
 circle		: CIRCLE PARENI exp PAREND PUNCOMA
 			;
-			
-exp			: elem exp1
+
+exp			: elem exp_paso_2 exp1 
 			;
 exp1		: /*vacio*/
-			| SUMA exp
-			| RESTA exp
+			| exp11 exp
+			;			
+exp11		: SUMA 	{pushPilaOperadores(100);}
+			| RESTA	{pushPilaOperadores(101);}
 			;
 
-elem		: factor elem1
+elem		: factor exp_paso_3 elem1 
 			;
 elem1		: /*vacio*/
-			| MULT elem
-			| DIVI elem
+			| elem11 elem
 			;
-			
+elem11		: MULT	{pushPilaOperadores(102);}
+			| DIVI	{pushPilaOperadores(103);}
+			;
+
 factor		: PARENI exp PAREND
-			| negativo constante
+			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
 			| RESTA
@@ -233,7 +253,7 @@ expresion1	: /*vacio*/
 			| MAYORI exp
 			| MENORI exp
 			;
-			
+
 expresion11	: /*vacio*/
 			| AND expresion
 			| OR expresion
@@ -245,11 +265,14 @@ tipo		: INT		{tipo=$1;}
 			| STRING	{tipo=$1;}
 			;
 
-constante	: ID
-			| CTE_I		
-			| CTE_F
-			| CTE_HEX
-			| CTE_STRING
+constante	: ID	{
+						if((operando=existeVariable(indexProc, $1))==-1000)
+							printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+					}
+			| CTE_I			{agregaConstante(0, $1);}
+			| CTE_F			{agregaConstante(1, $1);}
+			| CTE_HEX		{agregaConstante(2, $1);}
+			| CTE_STRING	{agregaConstante(3, $1);}
 			| WIDTH
 			| HEIGHT
 			| POINTER
@@ -257,10 +280,28 @@ constante	: ID
 			| POINTER_Y
 			;
 
+exp_paso_1	:	{pushPilaOperandos(operando)}
+			;
+
+exp_paso_2	:	{
+					if(peekPilaOperadores()==100||peekPilaOperadores()==101){
+						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						pushPilaOperandos(temporales++);
+					}
+				}
+			;
+
+exp_paso_3	:	{
+					if(peekPilaOperadores()==102||peekPilaOperadores()==103){
+						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						pushPilaOperandos(temporales++);
+					}
+				}
+			;
 %%
 int yyerror(char *s) {
 	printf("Compilation error, line #%d\n", lineNumber);
-	
+
 	return (0);
 }
 
@@ -268,5 +309,3 @@ int main(void){
 	yyparse();
 	exit(0);
 }
-
-
