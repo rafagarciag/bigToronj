@@ -1,6 +1,6 @@
 global int gvar1, gvar2, gvar3;
 global float gvar4, gvar5, gvar6;
-global string unString;
+global string unString="probando cte String";
 
 function float metodo1 (int x, float y){
 
@@ -18,7 +18,7 @@ function float metodo2 (int x, int y){
 	float var44, var55, var66;
 	while(x>y){
 		circle(x);
-		x=x-1;	
+		x=x-1.2;	
 	}
 	return x;
 }

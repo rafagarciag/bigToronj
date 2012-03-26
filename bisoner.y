@@ -138,7 +138,12 @@ estatuto	: asignacion
 return		: RETURN exp PUNCOMA
 			;
 
-asignacion	: ID IGUAL exp PUNCOMA
+asignacion	: ID IGUAL exp PUNCOMA	{
+										if(existeVariable(indexProc, $1)==-1000)
+											printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+										else
+											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+									}
 			;
 
 declaracion	: tipo ids PUNCOMA 

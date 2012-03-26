@@ -40,14 +40,25 @@ struct cteString{
 struct proc procedimientos[100];
 struct var globales[100];
 struct var variables[100][2];
+
+//CONSTANTES
+int offsetConstantes = 1200;
+
 struct cteInt constantesInt[50];
-int i_cteInt = 2;	//Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
+int offsetInt = 2; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
+int i_cteInt = 0;
+
 struct cteFloat constantesFloat[50];
+int offsetFloat = 50;
 int i_cteFloat = 0;
+
 struct cteHex constantesHex[50];
+int offsetHex = 100;
 int i_cteHex = 0;
+
 struct cteString constantesString[50];
 int i_cteString = 0;
+int offsetString = 150;
 
 void imprimeProcs(int x){
 	int j;
@@ -65,22 +76,22 @@ void imprimeConstantes(){
 	
 	printf("ENTEROS\n");
 	for(i=0; i<i_cteInt; i++){
-		printf("Constante %d con valor: %d\n", i, constantesInt[i].valor);
+		printf("Constante %d con valor: %d\n", constantesInt[i].dv, constantesInt[i].valor);
 	}
 	
 	printf("FLOTANTES\n");
 	for(i=0; i<i_cteFloat; i++){
-		printf("Constante %d con valor: %f\n", i, constantesFloat[i].valor);
+		printf("Constante %d con valor: %f\n", constantesFloat[i].dv, constantesFloat[i].valor);
 	}
 	
 	printf("HEX\n");
 	for(i=0; i<i_cteHex; i++){
-		printf("Constante %d con valor: %s\n", i, constantesHex[i].valor);
+		printf("Constante %d con valor: %s\n", constantesHex[i].dv, constantesHex[i].valor);
 	}
 	
 	printf("STRING\n");
 	for(i=0; i<i_cteString; i++){
-		printf("Constante %d con valor: %s\n", i, constantesString[i].valor);
+		printf("Constante %d con valor: %s\n", constantesString[i].dv, constantesString[i].valor);
 	}
 }
 
@@ -135,43 +146,33 @@ int existeVariable(int indexProc, char* id){
 }
 
 void agregaConstante(int tipo, char* valor){
-	int offsetConstantes = 1200;
-	int offsetInt = 2;
-	int offsetFloat = 50;
-	int offsetHex = 100;
-	int offsetString = 150;
-	
 	switch(tipo){
 		//INT
 		case 0:
 			constantesInt[i_cteInt].valor = atoi(valor);
-			constantesInt[i_cteInt].dv = offsetConstantes + offsetInt;
+			constantesInt[i_cteInt].dv = offsetConstantes + offsetInt+ i_cteInt;
 			i_cteInt++;
-			offsetInt++;
 			break;
 			
 		//FLOAT
 		case 1:
 			constantesFloat[i_cteFloat].valor = atof(valor);
-			constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat;
+			constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat+ i_cteFloat;
 			i_cteFloat++;
-			offsetFloat++;
 			break;
 		
 		//HEX
 		case 2:
 			constantesHex[i_cteHex].valor = valor;
-			constantesHex[i_cteHex].dv = offsetConstantes + offsetHex;
+			constantesHex[i_cteHex].dv = offsetConstantes + offsetHex+ i_cteHex;
 			i_cteHex++;
-			offsetHex++;
 			break;
 			
 		//STRING
 		case 3:
 			constantesString[i_cteString].valor = valor;
-			constantesString[i_cteString].dv = offsetConstantes + offsetString;
+			constantesString[i_cteString].dv = offsetConstantes + offsetString +i_cteString;
 			i_cteString++;
-			offsetString++;
 			break;
 		
 		//Constante _WIDTH
