@@ -261,11 +261,20 @@ negativo	: /*vacio*/
 			| RESTA	
 			;
 
-expresion	: negacion exp expresion1 expresion_paso1 expresion11	{printf("Generar cuadruplo de expresion\n");}
+expresion	: negacion exp expresion1 expresion_paso1 expresion11 expresion_paso2	{printf("Generar cuadruplo de expresion\n");}
 			;
+expresion_paso2:	{
+						if(peekPilaOperadores()==200||peekPilaOperadores()==201){
+							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
+							pushPilaOperandos(temporales++);
+						}
+					}
+				;
 expresion_paso1	: 	{
-						generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
-						pushPilaOperandos(temporales++);
+						if(peekPilaOperadores()>=202 && peekPilaOperadores()<=207){
+							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
+							pushPilaOperandos(temporales++);
+						}
 					}
 				;
 negacion	: /*vacio*/

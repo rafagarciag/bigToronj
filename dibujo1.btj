@@ -2,16 +2,22 @@ global int gvar1, gvar2, gvar3;
 global float gvar4, gvar5, gvar6;
 global string unString;
 
-function float metodo1 (int x, float y){
+function void metodo1 (int x, float y){
 
 	int var1, var2=1, var3=4;
 
-	var1=(var2-123)*124+var3;
 	
-	return 1;
+	if(var1+var2<var3+5 && var1<var3 || var2){
+		var1=10;
+	}
+	else {
+		var1=11;
+	}
+	
+
 }
 
-function float metodo2 (int x, int y){
+function void metodo2 (int x, int y){
 
 	int var11, var22, var33;
 	float var44, var55, var66;
@@ -19,7 +25,6 @@ function float metodo2 (int x, int y){
 		circle(x);
 		x=x-1.3;	
 	}
-	return x;
 }
 
 function void metodo3 (int x, int y){
