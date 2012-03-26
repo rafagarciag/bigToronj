@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int pilaOperandos [200];
 int pilaOperadores[200];
 
@@ -11,7 +13,11 @@ void pushPilaOperandos(int x){
 
 int popPilaOperandos(){
 	indexOperandos--;
-	return pilaOperandos[indexOperandos+1];
+	return pilaOperandos[indexOperandos];
+}
+
+int peekPilaOperandos(){
+	return pilaOperandos[indexOperandos-1];
 }
 
 void pushPilaOperadores(int x){
@@ -21,11 +27,9 @@ void pushPilaOperadores(int x){
 
 int popPilaOperadores(){
 	indexOperadores--;
-	return pilaOperadores[indexOperadores+1]
+	return pilaOperadores[indexOperadores];
 }
 
-int main(){
-	
-
-
+int peekPilaOperadores(){
+	return pilaOperadores[indexOperadores-1];
 }

@@ -25,16 +25,16 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (void)						{return VOID;}
 
 	/* Constantes enteras */
-{DIGIT}+					{printf("CTE_I \n");yylval.string=strdup(yytext);return CTE_I;}
+{DIGIT}+					{return CTE_I;}
 
 	/* Constantes flotantes */
-{DIGIT}+\.{DIGIT}+			{printf("CTE_F \n");yylval.string=strdup(yytext);return CTE_F;}
+{DIGIT}+\.{DIGIT}+			{return CTE_F;}
 
 	/* Constantes hexadecimales */
-#({DIGIT}|{HEX}){6}			{printf("CTE_HEX \n");yylval.string=strdup(yytext);return CTE_HEX;}
+#({DIGIT}|{HEX}){6}			{return CTE_HEX;}
 
 	/* Constantes strings */
-(\".+\")					{printf("CTE_STRING \n");yylval.string=strdup(yytext);return CTE_STRING; }
+(\".+\")					{return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
 (_POINTER)					{return POINTER;}
@@ -74,7 +74,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (while)						{return WHILE;}
 
 	/* Identificadores */
-{IDEN}						{printf("ID\n");yylval.string=strdup(yytext);return ID;}
+{IDEN}						{yylval.string=strdup(yytext);return ID;}
 
 	/* Caracteres terminales */
 ";"							{return PUNCOMA;}

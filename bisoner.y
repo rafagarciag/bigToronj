@@ -240,7 +240,7 @@ factor		: PARENI exp PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
-			| RESTA
+			| RESTA	
 			;
 
 expresion	: exp expresion1 expresion11
@@ -279,10 +279,9 @@ constante	: ID	{
 			| POINTER_X
 			| POINTER_Y
 			;
-
+			
 exp_paso_1	:	{pushPilaOperandos(operando)}
 			;
-
 exp_paso_2	:	{
 					if(peekPilaOperadores()==100||peekPilaOperadores()==101){
 						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);

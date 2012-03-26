@@ -4,13 +4,12 @@ global string unString;
 
 function float metodo1 (int x, float y){
 
-	int var1, var2, var3;
-	float var4, var5, var6;
-	while(x>y){
-		circle(x);
-		x=x-1;
-	}
-	return x;
+	int var1,var2,var3,var4,var5,var6;
+
+	var1=var2+var3*var4-var5*var6;
+	
+	var2=var3-var4+var5;
+	return 1;
 }
 
 function float metodo2 (int x, int y){
