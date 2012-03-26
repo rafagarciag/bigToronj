@@ -1,0 +1,10 @@
+Suma	100
+Resta	101
+Mult	102
+Divi	103
+
+Asignacion	150
+
+goto	300
+gotoV	301
+gotoF	302

@@ -45,8 +45,8 @@ struct var variables[100][2];
 int offsetConstantes = 1200;
 
 struct cteInt constantesInt[50];
-int offsetInt = 2; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
-int i_cteInt = 0;
+int offsetInt = 0; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
+int i_cteInt = 2;
 
 struct cteFloat constantesFloat[50];
 int offsetFloat = 50;
@@ -145,18 +145,20 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	procedimientos[indexProc].index++;
 }
 
-int existeCteInt(int x){
+int existeCteInt(char* x){
 	int i;
+	int y = atoi(x);
 	for(i=0;i<i_cteInt;i++)
-		if(constantesInt[i].valor==x)
+		if(constantesInt[i].valor==y)
 			return constantesInt[i].dv;
 	return -1000;
 }
 
-int existeCteFloat(float x){
+int existeCteFloat(char* x){
 	int i;
+	float y = atof(x);
 	for(i=0;i<i_cteFloat;i++)
-		if(constantesFloat[i].valor=x)
+		if(constantesFloat[i].valor==y)
 			return constantesFloat[i].dv;
 	return -1000;
 }
@@ -181,18 +183,18 @@ void agregaConstante(int tipo, char* valor){
 	switch(tipo){
 		//INT
 		case 0:
-			if(existeCteInt(atoi(valor))==-1000){
+			if(existeCteInt(valor)==-1000){
 				constantesInt[i_cteInt].valor = atoi(valor);
-				constantesInt[i_cteInt].dv = offsetConstantes + offsetInt+ i_cteInt;
+				constantesInt[i_cteInt].dv = offsetConstantes + offsetInt + i_cteInt;
 				i_cteInt++;
 			}
 			break;
 			
 		//FLOAT
 		case 1:
-			if(existeCteFloat(atof(valor))==-1000){
+			if(existeCteFloat(valor)==-1000){
 				constantesFloat[i_cteFloat].valor = atof(valor);
-				constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat+ i_cteFloat;
+				constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat + i_cteFloat;
 				i_cteFloat++;
 			}
 			break;
