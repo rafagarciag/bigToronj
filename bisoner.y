@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "tablas.h"
 #include "cuadruplosExpresiones.h"
+#include "generacionCuadruplos.h"
 
 extern int lineNumber;
 int yyerror(char *s);
@@ -39,7 +40,6 @@ int operador;
 %token	<string> CTE_F
 %token	<string> CTE_HEX
 %token	<string> CTE_STRING
-%token	POINTER
 %token	POINTER_X
 %token	POINTER_Y
 %token	WIDTH
@@ -87,10 +87,10 @@ int operador;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();}
+programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
 			;
 
-global	: /*vacio*/				{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
+global	: /*vacio*/		{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
 		| GLOBAL declaracion global
 		;
 
@@ -236,7 +236,7 @@ elem11		: MULT	{pushPilaOperadores(102);}
 			| DIVI	{pushPilaOperadores(103);}
 			;
 
-factor		: PARENI exp PAREND
+factor		: PARENI exp_paso_4 exp exp_paso_5 PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
@@ -275,7 +275,6 @@ constante	: ID	{
 			| CTE_STRING	{agregaConstante(3, $1);}
 			| WIDTH
 			| HEIGHT
-			| POINTER
 			| POINTER_X
 			| POINTER_Y
 			;
@@ -284,7 +283,7 @@ exp_paso_1	:	{pushPilaOperandos(operando)}
 			;
 exp_paso_2	:	{
 					if(peekPilaOperadores()==100||peekPilaOperadores()==101){
-						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
 						pushPilaOperandos(temporales++);
 					}
 				}
@@ -292,11 +291,18 @@ exp_paso_2	:	{
 
 exp_paso_3	:	{
 					if(peekPilaOperadores()==102||peekPilaOperadores()==103){
-						printf("/////////////////Linea: %d Cuadruplo: %d,%d,%d,%d\n",lineNumber ,popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
+						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
 						pushPilaOperandos(temporales++);
 					}
 				}
 			;
+
+exp_paso_4	:	{pushPilaOperadores(9999);}
+			;
+
+exp_paso_5	:	{popPilaOperadores();}
+			;
+
 %%
 int yyerror(char *s) {
 	printf("Compilation error, line #%d\n", lineNumber);
