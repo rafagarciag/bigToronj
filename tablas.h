@@ -62,6 +62,7 @@ int offsetString = 150;
 
 void imprimeProcs(int x){
 	int j;
+	printf("Proc %s\n", procedimientos[x].id);
 	for(j=0;j<procedimientos[x].index;j++){
 		if(x==0)
 			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);

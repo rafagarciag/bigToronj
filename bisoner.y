@@ -20,6 +20,8 @@ int operando;
 int operador;
 ////////////////////////
 
+char* aux_asignacion;
+
 %}
 
 //DECLARACION DE TOKENS
@@ -151,8 +153,10 @@ declaracion	: tipo ids PUNCOMA
 ids 		: ids_var declaracion1 ids1 
 			;
 ids_var		: ID 	{
-						if(existeVariable(indexProc, $1)==-1000)	
+						if(existeVariable(indexProc, $1)==-1000){
 							agregaVariable(indexProc, tipo, $1, lineNumber);
+							aux_asignacion=$1;
+						}
 						else
 							printf("Error en linea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
 					}
@@ -161,7 +165,7 @@ ids1		: /*vacio*/
 			| COMA ids
 			;
 declaracion1: /*vacio*/
-			| IGUAL exp
+			| IGUAL exp	{generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, aux_asignacion));}
 			;
 
 if			: IF PARENI expresion PAREND bloque else
