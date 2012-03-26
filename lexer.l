@@ -37,7 +37,6 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (\".+\")					{printf("CTE_STRING \n");yylval.string=strdup(yytext);return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
-(_POINTER)					{return POINTER;}
 (_POINTERX)					{return POINTER_X;}
 (_POINTERY)					{return POINTER_Y;}
 (_WIDTH)					{return WIDTH;}
