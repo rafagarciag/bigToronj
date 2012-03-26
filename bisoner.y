@@ -261,43 +261,51 @@ negativo	: /*vacio*/
 			| RESTA	
 			;
 
-expresion	: negacion exp expresion1 expresion_paso1 expresion11 expresion_paso2	{printf("Generar cuadruplo de expresion\n");}
+expresion	: elem_log expresion_paso1 expresion1
 			;
-expresion_paso2:	{
+expresion1	:
+			| expresion11 expresion
+			;
+expresion11	: AND	{pushPilaOperadores(200);}
+			| OR	{pushPilaOperadores(201);}
+			;
+			
+elem_log	: factor_log expresion_paso2 elem_log1
+			;
+elem_log1	:
+			| elem_log11 elem_log
+			;
+elem_log11	: MENOR		{pushPilaOperadores(207);}
+			| MENORI	{pushPilaOperadores(206);}
+			| MAYOR		{pushPilaOperadores(205);}
+			| MAYORI	{pushPilaOperadores(204);}
+			| IGUALDAD	{pushPilaOperadores(203);}
+			| DIFF		{pushPilaOperadores(202);}
+			;
+			
+factor_log	: PARENI expresion PAREND
+			| negacion exp
+			;
+
+negacion	: /*vacio*/
+			| NOT	{pushPilaOperadores(208);}
+			;
+
+expresion_paso1:	{
 						if(peekPilaOperadores()==200||peekPilaOperadores()==201){
 							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
 							pushPilaOperandos(temporales++);
 						}
 					}
 				;
-expresion_paso1	: 	{
+expresion_paso2	: 	{
 						if(peekPilaOperadores()>=202 && peekPilaOperadores()<=207){
 							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
 							pushPilaOperandos(temporales++);
 						}
 					}
 				;
-negacion	: /*vacio*/
-			| NOT	{pushPilaOperadores(208);}
-			;
-expresion1	: /*vacio*/
-			| operadores_log1 exp
-			;
-operadores_log1	: MENOR		{pushPilaOperadores(207);}
-				| MENORI	{pushPilaOperadores(206);}
-				| MAYOR		{pushPilaOperadores(205);}
-				| MAYORI	{pushPilaOperadores(204);}
-				| IGUALDAD	{pushPilaOperadores(203);}
-				| DIFF		{pushPilaOperadores(202);}
-				;
-
-expresion11	: /*vacio*/
-			| operadores_log expresion
-			;
-operadores_log	:	AND	{pushPilaOperadores(201);}
-				|	OR	{pushPilaOperadores(200);}
-				;
-
+				
 tipo		: INT		{tipo=$1;}
 			| FLOAT		{tipo=$1;}
 			| COLOR		{tipo=$1;}
