@@ -169,18 +169,31 @@ declaracion1: /*vacio*/
 			| IGUAL exp	{generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, aux_asignacion));}
 			;
 
-if			: IF PARENI expresion_if PAREND bloque else
+if			: IF PARENI expresion PAREND if_paso_1 bloque else
 			;
-expresion_if: expresion	{
-				int resultado = popPilaOperandos();
-				//Veirificar que resultado pueda ser utilizado en aritmetica booleana
-				//Generar gotoF
-				printf("GotoF(%d) \n", resultado);
-					
-			}
+if_paso_1	:	{
+					pushPilaSaltos(0);
+					generaCuadruplo(302, popPilaOperandos(), -1, 0);
+				}
 			;
-else		: /*vacio*/
-			| ELSE bloque 
+if_paso_2	:	{
+					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
+				}
+			;
+
+
+else		: /*vacio*/ if_paso_2
+			| ELSE else_paso_1 bloque else_paso_2
+			;
+else_paso_1 :	{
+					generaCuadruplo(300, -1, -1, 0);
+					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
+					pushPilaSaltos(-1);
+				}
+			;
+else_paso_2 :	{
+					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos());
+				}
 			;
 
 asignacion_in_line	: ID IGUAL exp
@@ -189,9 +202,21 @@ asignacion_in_line	: ID IGUAL exp
 for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_line PAREND bloque
 			;
 
-while 		: WHILE PARENI expresion PAREND bloque
+while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque
 			;
+while_paso_1:	{
+					pushPilaSaltos(0);
+				}
+			;
+while_paso_2:	{
+				
+				}
+			;
+while_paso_3:	{
 
+				}
+			;
+			
 met_bt_or	: met_bt_or1 PARENI PAREND PUNCOMA
 			;
 met_bt_or1	: PUSH

@@ -1,25 +1,18 @@
 drawing (1024, 768, #ffffff){
-
-	trans(_WIDTH/2, _HEIGHT/2);
 	
-	push();
-	set_color(#c8f1aa);
-	int radio = 100;
-	circle(radio);
+	int var1, var2=1, var3=4, var4, var5;
 	
-	color black = #000000;
-	set_color(black);
-
-	int base = 50;
-	int altura = 40;
-	tetragon(base, altura);
-	pop();
-	
-	base = altura + 1;
-	altura = altura-1;
-	
-	if (base < altura && cosa >= 2){
-		radio = altura * 2;
+	if(var1<var2){
+		var1=var2+var3;
+		var1=var2+var3;
 	}
-
+	var1=1024;
+	if(var1<var2){
+		var1=var2+var3;
+		var1=var2+var3;
+	}
+	else{
+		var1=var4+var5;
+		var1=var4+var5;
+	}
 }

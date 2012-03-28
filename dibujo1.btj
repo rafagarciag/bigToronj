@@ -4,20 +4,15 @@ global string unString;
 
 function void metodo1 (int x, float y){
 
-	int var1, var2=1, var3=4;
-
-	if((var1<var2&&var2<var3)|| var2){
-		var1=10;
+	int var1, var2=1, var3=4, var4, var5;
+	if(var1<var2){
+		var1=var2+var3;
+		var1=var2+var3;
 	}
-	else {
-		var1=11;
-	}
-	
-
 }
 
 function void metodo2 (int x, int y){
-
+	gvar1=1;
 	int var11, var22, var33;
 	float var44, var55, var66;
 	while(x>y){
