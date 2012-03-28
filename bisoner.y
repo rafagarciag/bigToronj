@@ -20,6 +20,11 @@ int operando;
 int operador;
 ////////////////////////
 
+//Cuadruplos while
+int falso;
+int retorno;
+//////////////////
+
 char* aux_asignacion;
 
 %}
@@ -202,18 +207,22 @@ asignacion_in_line	: ID IGUAL exp
 for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_line PAREND bloque
 			;
 
-while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque
+while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque while_paso_3
 			;
 while_paso_1:	{
 					pushPilaSaltos(0);
 				}
 			;
 while_paso_2:	{
-				
+					pushPilaSaltos(0);
+					generaCuadruplo(302, popPilaOperandos(), -1, 0);
 				}
 			;
 while_paso_3:	{
-
+					falso=popPilaSaltos();
+					retorno=popPilaSaltos();
+					generaCuadruplo(300,-1,-1,retorno);
+					rellenaGoToF(falso, getPointerCuadruplos());
 				}
 			;
 			
@@ -300,12 +309,12 @@ elem_log	: factor_log expresion_paso2 elem_log1
 elem_log1	:
 			| elem_log11 elem_log
 			;
-elem_log11	: MENOR		{pushPilaOperadores(207);}
-			| MENORI	{pushPilaOperadores(206);}
-			| MAYOR		{pushPilaOperadores(205);}
-			| MAYORI	{pushPilaOperadores(204);}
-			| IGUALDAD	{pushPilaOperadores(203);}
-			| DIFF		{pushPilaOperadores(202);}
+elem_log11	: MENOR		{pushPilaOperadores(202);}
+			| MENORI	{pushPilaOperadores(203);}
+			| MAYOR		{pushPilaOperadores(204);}
+			| MAYORI	{pushPilaOperadores(205);}
+			| IGUALDAD	{pushPilaOperadores(206);}
+			| DIFF		{pushPilaOperadores(207);}
 			;
 			
 factor_log	: PARENI expresion PAREND
