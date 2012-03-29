@@ -8,13 +8,13 @@ drawing (1024, 768, #ffffff){
 	}
 	var0=768;
 	if(var1<var2){
-		var1=var2+var3;
-		var1=var2+var3;
+		var1=var2+_WIDTH;
+		var1=var2+_HEIGHT;
 	}
 	var1=1024;
 	if(var1<var2){
-		var1=var2+var3;
-		var1=var2+var3;
+		var1=var2+_POINTERX;
+		var1=var2+_POINTERY;
 	}
 	else{
 		var1=var4+var5;

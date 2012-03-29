@@ -27,6 +27,9 @@ int retorno;
 
 char* aux_asignacion;
 
+//Agrega _PointerX y _PointerY a la tabla de globales
+
+
 %}
 
 //DECLARACION DE TOKENS
@@ -95,7 +98,10 @@ char* aux_asignacion;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
+programa	: a_pointers global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
+			;
+
+a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
 			;
 
 global	: /*vacio*/		{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
@@ -354,10 +360,10 @@ constante	: ID	{
 			| CTE_F			{agregaConstante(1, $1);operando=existeCteFloat($1);}
 			| CTE_HEX		{agregaConstante(2, $1);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1);operando=existeCteString($1);}
-			| WIDTH
-			| HEIGHT
-			| POINTER_X
-			| POINTER_Y
+			| WIDTH			{operando=1200;}
+			| HEIGHT		{operando=1201;}
+			| POINTER_X		{operando=0;}
+			| POINTER_Y		{operando=1;}
 			;
 
 exp_paso_1	:	{pushPilaOperandos(operando)}
