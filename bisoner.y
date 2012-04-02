@@ -9,6 +9,7 @@ extern int lineNumber;
 int yyerror(char *s);
 
 int indexProc=0;
+int indexParams=0;
 int tipo=1000;
 
 //Variables temporales
@@ -20,7 +21,15 @@ int operando;
 int operador;
 ////////////////////////
 
+//Cuadruplos while
+int falso;
+int retorno;
+//////////////////
+
 char* aux_asignacion;
+
+//Agrega _PointerX y _PointerY a la tabla de globales
+
 
 %}
 
@@ -90,10 +99,13 @@ char* aux_asignacion;
 
 //GRAMATICA!
 
-programa	: global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
+programa	: a_pointers global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
 			;
 
-global	: /*vacio*/		{agregaProcedimiento(indexProc, 1000, "global", lineNumber); indexProc++;}
+a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
+			;
+
+global	: /*vacio*/		{agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;}
 		| GLOBAL declaracion global
 		;
 
@@ -101,11 +113,37 @@ functions	:
 			| function functions
 			;
 
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{agregaProcedimiento(indexProc, tipo, $3, lineNumber); indexProc++;}
-			| FUNCTION VOID ID PARENI function1 PAREND bloque							{agregaProcedimiento(indexProc, 1000, $3, lineNumber); indexProc++;}
+function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{
+				agregaProcedimiento(indexProc, indexParams, tipo, $3, lineNumber); 
+				indexProc++;
+				indexParams=0;
+			}
+			| FUNCTION VOID ID PARENI function1 PAREND bloque	{
+				agregaProcedimiento(indexProc, indexParams, 1000, $3, lineNumber); 
+				indexProc++;
+				indexParams=0;
+			}
 			;
-function1	: tipo ids_fun function11
+function1	: param_paso1 ids_fun function11
 			;
+param_paso1	: INT	{ 
+				agregaParams(indexProc, $1, indexParams); 
+				indexParams++;
+			}
+			| FLOAT	{ 
+				agregaParams(indexProc, $1, indexParams); 
+				indexParams++;
+			}
+			| COLOR	{ 
+				agregaParams(indexProc, $1, indexParams); 
+				indexParams++;
+			}
+			| STRING	{ 
+				agregaParams(indexProc, $1, indexParams); 
+				indexParams++;
+			}
+			;
+			
 ids_fun		: ID	{agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 
@@ -202,21 +240,25 @@ asignacion_in_line	: ID IGUAL exp
 for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_line PAREND bloque
 			;
 
-while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque
+while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque while_paso_3
 			;
 while_paso_1:	{
 					pushPilaSaltos(0);
 				}
 			;
 while_paso_2:	{
-				
+					pushPilaSaltos(0);
+					generaCuadruplo(302, popPilaOperandos(), -1, 0);
 				}
 			;
 while_paso_3:	{
-
+					falso=popPilaSaltos();
+					retorno=popPilaSaltos();
+					generaCuadruplo(300,-1,-1,retorno);
+					rellenaGoToF(falso, getPointerCuadruplos());
 				}
 			;
-			
+
 met_bt_or	: met_bt_or1 PARENI PAREND PUNCOMA
 			;
 met_bt_or1	: PUSH
@@ -294,20 +336,20 @@ expresion1	:
 expresion11	: AND	{pushPilaOperadores(200);}
 			| OR	{pushPilaOperadores(201);}
 			;
-			
+
 elem_log	: factor_log expresion_paso2 elem_log1
 			;
 elem_log1	:
 			| elem_log11 elem_log
 			;
-elem_log11	: MENOR		{pushPilaOperadores(207);}
-			| MENORI	{pushPilaOperadores(206);}
-			| MAYOR		{pushPilaOperadores(205);}
-			| MAYORI	{pushPilaOperadores(204);}
-			| IGUALDAD	{pushPilaOperadores(203);}
-			| DIFF		{pushPilaOperadores(202);}
+elem_log11	: MENOR		{pushPilaOperadores(202);}
+			| MENORI	{pushPilaOperadores(203);}
+			| MAYOR		{pushPilaOperadores(204);}
+			| MAYORI	{pushPilaOperadores(205);}
+			| IGUALDAD	{pushPilaOperadores(206);}
+			| DIFF		{pushPilaOperadores(207);}
 			;
-			
+
 factor_log	: PARENI expresion PAREND
 			| negacion exp
 			;
@@ -330,7 +372,7 @@ expresion_paso2	: 	{
 						}
 					}
 				;
-				
+
 tipo		: INT		{tipo=$1;}
 			| FLOAT		{tipo=$1;}
 			| COLOR		{tipo=$1;}
@@ -345,10 +387,10 @@ constante	: ID	{
 			| CTE_F			{agregaConstante(1, $1);operando=existeCteFloat($1);}
 			| CTE_HEX		{agregaConstante(2, $1);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1);operando=existeCteString($1);}
-			| WIDTH
-			| HEIGHT
-			| POINTER_X
-			| POINTER_Y
+			| WIDTH			{operando=1200;}
+			| HEIGHT		{operando=1201;}
+			| POINTER_X		{operando=0;}
+			| POINTER_Y		{operando=1;}
 			;
 
 exp_paso_1	:	{pushPilaOperandos(operando)}

@@ -12,10 +12,12 @@ struct proc{
 	int tipo;
 	char* id;
 	int index;
+	int index_params;
 	int totalInt;
 	int totalFlo;
 	int totalCol;
 	int totalStr;
+	int params[55];
 };
 
 
@@ -63,6 +65,29 @@ int offsetString = 150;
 void imprimeProcs(int x){
 	int j;
 	printf("Proc %s\n", procedimientos[x].id);
+	
+	//La firma
+	printf("Firma: ");
+	for(j=0; j<procedimientos[x].index_params; j++){
+		switch (procedimientos[x].params[j]){
+			case 0:
+				printf("int  ");
+				break;
+			case 1:
+				printf("float  ");
+				break;
+			case 2:
+				printf("color  ");
+				break;
+			case 3:
+				printf("string  ");
+				break;
+			default:
+				printf("tipo de dato irreconocible e irreconciliable");
+		}
+	}
+	printf("\n");
+	
 	for(j=0;j<procedimientos[x].index;j++){
 		if(x==0)
 			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
@@ -96,9 +121,10 @@ void imprimeConstantes(){
 	}
 }
 
-void agregaProcedimiento(int indexProc, int tipo, char* id, int linea){
+void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
+	procedimientos[indexProc].index_params = indexParams;
 	imprimeProcs(indexProc);
 }
 
@@ -144,6 +170,10 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	}
 
 	procedimientos[indexProc].index++;
+}
+
+void agregaParams(int indexProc, int tipo, int index){
+	procedimientos[indexProc].params[index] = tipo;
 }
 
 int existeCteInt(char* x){
@@ -223,7 +253,7 @@ void agregaConstante(int tipo, char* valor){
 			constantesInt[0].valor = atoi(valor);
 			constantesInt[0].dv = offsetConstantes;
 			break;
-		
+
 		//Constante _HEIGHT
 		case 101:
 			constantesInt[1].valor = atoi(valor);

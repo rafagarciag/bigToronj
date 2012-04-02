@@ -21,7 +21,7 @@ function void metodo2 (int x, int y){
 	}
 }
 
-function void metodo3 (int x, int y){
+function void metodo3 (int x, float y){
 
 	int var111, var222, var333;
 	float var444, var555, var666;
@@ -74,5 +74,5 @@ drawing (1024, 768, #ffffff){
 		tetragon(800, 800);
 	}
 	int final = 0;
-	
+
 }
