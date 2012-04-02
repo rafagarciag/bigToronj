@@ -99,7 +99,15 @@ char* aux_asignacion;
 
 //GRAMATICA!
 
-programa	: a_pointers global functions DRAWING canvas bloque {agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); printf("\nCompilación exitosa\n");imprimeConstantes();imprimeCuadruplos();}
+
+programa	: a_pointers global functions DRAWING canvas bloque {
+				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
+				printf("\nCompilación exitosa\n");
+				imprimeConstantes();imprimeCuadruplos();
+			}
+			;
+
+a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
 			;
 
 a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
