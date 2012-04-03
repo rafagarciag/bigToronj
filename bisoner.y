@@ -107,10 +107,10 @@ programa	: a_pointers global functions DRAWING canvas bloque {
 			}
 			;
 
-a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
-			;
-
-a_pointers	:	{agregaVariable(indexProc, 0, "_POINTERX", lineNumber);agregaVariable(indexProc, 0, "_POINTERY", lineNumber);}
+a_pointers	:	{
+					agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
+					agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
+				}
 			;
 
 global	: /*vacio*/		{agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;}
@@ -219,6 +219,7 @@ if			: IF PARENI expresion PAREND if_paso_1 bloque else
 			;
 if_paso_1	:	{
 					pushPilaSaltos(0);
+					//GOTOF
 					generaCuadruplo(302, popPilaOperandos(), -1, 0);
 				}
 			;
@@ -232,6 +233,7 @@ else		: /*vacio*/ if_paso_2
 			| ELSE else_paso_1 bloque else_paso_2
 			;
 else_paso_1 :	{
+					//GOTO
 					generaCuadruplo(300, -1, -1, 0);
 					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
 					pushPilaSaltos(-1);
@@ -245,7 +247,31 @@ else_paso_2 :	{
 asignacion_in_line	: ID IGUAL exp
 					;
 
-for			: FOR PARENI asignacion_in_line PUNCOMA expresion PUNCOMA asignacion_in_line PAREND bloque
+for			: FOR PARENI asignacion_in_line PUNCOMA for_paso_1 expresion for_paso_2 PUNCOMA for_paso_3 asignacion_in_line for_paso_4 PAREND bloque for_paso_5
+			;
+for_paso_1	:	{ pushPilaSaltos(0); }
+			;
+for_paso_2	:	{ 	pushPilaSaltos(0);
+					//GOTOF
+					generaCuadruplo(302, popPilaOperandos(), -1, 0);
+					pushPilaSaltos(0);
+					//GOTO
+					generaCuadruplo(300, -1, -1, 0);
+				}
+			;
+for_paso_3	:	{ pushPilaSaltos(0); }
+			;
+for_paso_4	:	{ 
+					int temp = popPilaSaltos();
+					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos());
+					pushPilaSaltos(temp - getPointerCuadruplos());
+				}
+			;
+for_paso_5	:	{ 
+					//GOTO
+					generaCuadruplo(300, -1, -1, popPilaSaltos());
+					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
+				}
 			;
 
 while 		: WHILE PARENI while_paso_1 expresion PAREND while_paso_2 bloque while_paso_3
@@ -256,12 +282,14 @@ while_paso_1:	{
 			;
 while_paso_2:	{
 					pushPilaSaltos(0);
+					//GOTOF
 					generaCuadruplo(302, popPilaOperandos(), -1, 0);
 				}
 			;
 while_paso_3:	{
 					falso=popPilaSaltos();
 					retorno=popPilaSaltos();
+					//GOTO
 					generaCuadruplo(300,-1,-1,retorno);
 					rellenaGoToF(falso, getPointerCuadruplos());
 				}
