@@ -327,16 +327,16 @@ dibujo		: line
 			| circle
 			;
 
-line		: LINE PARENI exp COMA exp PAREND PUNCOMA
+line		: LINE PARENI exp COMA exp PAREND PUNCOMA		{{generaCuadruplo(400,popPilaOperandos(),popPilaOperandos(),-1);	}}
 			;
 
 triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
 			;
 
-tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA
+tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(402,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 
-circle		: CIRCLE PARENI exp PAREND PUNCOMA
+circle		: CIRCLE PARENI exp PAREND PUNCOMA				{generaCuadruplo(403,popPilaOperandos(),-1,-1);}
 			;
 
 exp			: elem exp_paso_2 exp1 

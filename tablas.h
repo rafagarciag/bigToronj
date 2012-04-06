@@ -1,3 +1,11 @@
+//ES MEJOR TENER UNA TABLA DE FIRMAS DE PARAMS Y A CADA PROCEIMIENTO QUE SI TENGA PARAMS LE PONEMOS EL INDICE
+//DE LA FIRMA QUE LE CORRESPONDE
+
+//HAY QUE CAMBIAR EL NUMERO DE LAS VARIABLES Y CONSTANTES
+//ES MEJOR QUE SEAN UN VERGO!!!!!!
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,7 +48,6 @@ struct cteString{
 };
 
 struct proc procedimientos[100];
-struct var globales[100];
 struct var variables[100][2];
 
 //CONSTANTES

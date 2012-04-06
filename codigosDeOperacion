@@ -17,3 +17,9 @@ Asignacion	150
 goto	300
 gotoV	301
 gotoF	302
+
+
+line		400
+triangle	401
+tetragon	402
+circle		403
