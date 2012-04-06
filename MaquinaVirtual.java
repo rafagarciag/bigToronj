@@ -101,10 +101,6 @@ public class MaquinaVirtual{
 		
 		UnCanvas elCanvas = new UnCanvas();
 		Drawing d = new Drawing(elCanvas);
-		Drawing e = new Drawing(elCanvas);
-		Drawing f = new Drawing(elCanvas);
-		
-		Drawing g = new Drawing(elCanvas);
 	}
 
 
