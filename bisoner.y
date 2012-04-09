@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "cubo.h"
 #include "tablas.h"
 #include "cuadruplosExpresiones.h"
 #include "generacionCuadruplos.h"
@@ -100,17 +101,11 @@ char* aux_asignacion;
 //GRAMATICA!
 
 
-programa	: a_pointers global functions DRAWING canvas bloque {
+programa	: global functions DRAWING canvas bloque {
 				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
 				printf("\nCompilación exitosa\n");
 				imprimeConstantes();imprimeCuadruplos();
 			}
-			;
-
-a_pointers	:	{
-					agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
-					agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
-				}
 			;
 
 global	: /*vacio*/		{agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;}
@@ -461,6 +456,9 @@ int yyerror(char *s) {
 }
 
 int main(void){
+	agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
+	agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
+	
 	yyparse();
 	exit(0);
 }
