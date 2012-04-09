@@ -21,9 +21,11 @@ int AND=		10;
 int OR=			11;
 int IGUAL=		12;
 
-void cuboSyn(int tipo1, int tipo2, int op){
 
 char cubo[4][4][13];
+
+void inicializaCubo(){
+
 //	===========================
 //	Operaciones aritmeticas
 //	===========================
@@ -246,6 +248,12 @@ cubo[STRING][INT][IGUAL]=	'w';	//error
 cubo[STRING][FLOAT][IGUAL]=	'w';	//error
 cubo[STRING][COLOR][IGUAL]=	'w';	//error
 cubo[STRING][STRING][IGUAL]='s';	//error
+}
+
+void cuboSyn(int tipo1, int tipo2, int op){
+
+
+
 
 	printf("%c \n", cubo[tipo1][tipo2][op]);
 }
