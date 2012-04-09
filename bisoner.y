@@ -102,7 +102,9 @@ char* aux_asignacion;
 
 programa	: a_pointers global functions DRAWING canvas bloque {
 				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
+				printf("\n===========================\n");
 				printf("\nCompilación exitosa\n");
+				printf("\n===========================\n");
 				imprimeConstantes();imprimeCuadruplos();
 			}
 			;
@@ -121,17 +123,34 @@ functions	:
 			| function functions
 			;
 
-function	: FUNCTION tipo ID PARENI function1 PAREND LLAVEI bloque_fun return LLAVED	{
-				agregaProcedimiento(indexProc, indexParams, tipo, $3, lineNumber); 
-				indexProc++;
-				indexParams=0;
+function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return LLAVED	{
+
+				if(existeProcedimiento(indexProc, $3)<0){
+					agregaProcedimiento(indexProc, indexParams, tipo, $3, lineNumber); 
+					indexProc++;
+					indexParams=0;
+				}
+				else{
+					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
+				}
 			}
-			| FUNCTION VOID ID PARENI function1 PAREND bloque	{
-				agregaProcedimiento(indexProc, indexParams, 1000, $3, lineNumber); 
-				indexProc++;
-				indexParams=0;
+			| FUNCTION VOID ID PARENI function1 PAREND cuadruplo_inicio bloque	{
+
+				if(existeProcedimiento(indexProc, $3)<0){
+					agregaProcedimiento(indexProc, indexParams, 1000, $3, lineNumber); 
+					indexProc++;
+					indexParams=0;
+				}
+				else{
+					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
+				}
 			}
 			;
+
+cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
+							agregaCuadruploInicio(indexProc, getPointerCuadruplos());
+						}
+					;
 function1	: param_paso1 ids_fun function11
 			;
 param_paso1	: INT	{ 
@@ -151,7 +170,7 @@ param_paso1	: INT	{
 				indexParams++;
 			}
 			;
-			
+
 ids_fun		: ID	{agregaVariable(indexProc, tipo, $1, lineNumber);}
 			;
 
@@ -189,7 +208,7 @@ return		: RETURN exp PUNCOMA
 
 asignacion	: ID IGUAL exp PUNCOMA	{
 										if(existeVariable(indexProc, $1)==-1000)
-											printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 										else
 											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
 									}
@@ -205,7 +224,7 @@ ids_var		: ID 	{
 							aux_asignacion=$1;
 						}
 						else
-							printf("Error en linea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
+							printf("Error en línea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
 					}
 			;
 ids1		: /*vacio*/
@@ -327,16 +346,16 @@ dibujo		: line
 			| circle
 			;
 
-line		: LINE PARENI exp COMA exp PAREND PUNCOMA
+line		: LINE PARENI exp COMA exp PAREND PUNCOMA		{{generaCuadruplo(400,popPilaOperandos(),popPilaOperandos(),-1);	}}
 			;
 
 triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
 			;
 
-tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA
+tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(402,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 
-circle		: CIRCLE PARENI exp PAREND PUNCOMA
+circle		: CIRCLE PARENI exp PAREND PUNCOMA				{generaCuadruplo(403,popPilaOperandos(),-1,-1);}
 			;
 
 exp			: elem exp_paso_2 exp1 
