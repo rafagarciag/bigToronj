@@ -48,26 +48,26 @@ struct cteString{
 };
 
 struct proc procedimientos[100];
-struct var variables[100][2];
+struct var variables[2000][2];
 
 //CONSTANTES
-int offsetConstantes = 1200;
+int offsetConstantes = 12000;
 
 struct cteInt constantesInt[50];
 int offsetInt = 0; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
 int i_cteInt = 2;
 
 struct cteFloat constantesFloat[50];
-int offsetFloat = 50;
+int offsetFloat = 500;
 int i_cteFloat = 0;
 
 struct cteHex constantesHex[50];
-int offsetHex = 100;
+int offsetHex = 1000;
 int i_cteHex = 0;
 
 struct cteString constantesString[50];
 int i_cteString = 0;
-int offsetString = 150;
+int offsetString = 1500;
 
 void imprimeProcs(int x){
 	int j;
@@ -151,7 +151,7 @@ int existeVariable(int indexProc, char* id){
 void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	int offset=0, tabla=0;
 	if (indexProc > 0){
-		offset=200;
+		offset=2000;
 		tabla=1;
 	}
 
@@ -163,15 +163,15 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 			procedimientos[indexProc].totalInt++;
 			break;
 		case 1:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalFlo+50;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalFlo+500;
 			procedimientos[indexProc].totalFlo++;
 			break;
 		case 2:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalCol+100;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalCol+1000;
 			procedimientos[indexProc].totalCol++;
 			break;
 		case 3:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalStr+150;
+			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalStr+1500;
 			procedimientos[indexProc].totalStr++;
 			break;
 	}

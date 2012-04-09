@@ -1,6 +1,14 @@
+global int gvar0=0, gvar1, gvar2=2;
+global float gvar2=2, gvar3=3;
+global color gvar4, gvar5;
+global string gvar6, gvar7="stringstring", gvar8;
+
 drawing (1024, 768, #ffffff){
-	
-	int var0, var1, var2, var3, var4, var5;
+
+	int var0=0, var1=1;
+	float var2=2.2, var3=3.3;
+	color var4=#CAFE12, var5;
+	string var6="string", var7="otro";
 	
 	for(var0=1;var0<var1;var0=var0+1){
 		line(1+2,_POINTERX/_POINTERY);
