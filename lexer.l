@@ -34,7 +34,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 #({DIGIT}|{HEX}){6}			{yylval.string=strdup(yytext);return CTE_HEX;}
 
 	/* Constantes strings */
-(\".+\")					{yylval.string=strdup(yytext);return CTE_STRING; }
+(\"[^\"\n\t<<EOF>>]+\")					{yylval.string=strdup(yytext);return CTE_STRING; }
 
 	/* Constantes globales, siempre accesibles */
 (_POINTERX)					{return POINTER_X;}

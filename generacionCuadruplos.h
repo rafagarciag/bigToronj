@@ -48,7 +48,13 @@ void rellenaGoToF(int index, int valor){
 }
 
 void imprimeCuadruplos(){
+	FILE *ovejota;
+	ovejota=fopen("ovejota.btjo","w+");
+	
 	int i;
-	for(i=0;i<pointer;i++)
+	for(i=0;i<pointer;i++){
 		printf("%d: (%d, %d ,%d ,%d)\n",i, cuadruplos[i].operador,cuadruplos[i].operando1,cuadruplos[i].operando2,cuadruplos[i].resultado);
+		fprintf(ovejota,"%d,%d,%d,%d\n",cuadruplos[i].operador,cuadruplos[i].operando1,cuadruplos[i].operando2,cuadruplos[i].resultado);	
+	}
+	fclose(ovejota);
 }

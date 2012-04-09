@@ -13,7 +13,7 @@ int indexParams=0;
 int tipo=1000;
 
 //Variables temporales
-int temporales=400;
+int temporales=8000;
 //////////////////////
 
 //Cuadruplos expresiones
