@@ -26,6 +26,7 @@ struct proc{
 	int totalCol;
 	int totalStr;
 	int params[55];
+	int cuadruploInicio;
 };
 
 
@@ -71,7 +72,7 @@ int offsetString = 1500;
 
 void imprimeProcs(int x){
 	int j;
-	printf("Proc %s\n", procedimientos[x].id);
+	printf("\nProc %s\n", procedimientos[x].id);
 	
 	//La firma
 	printf("Firma: ");
@@ -95,6 +96,9 @@ void imprimeProcs(int x){
 	}
 	printf("\n");
 	
+	//Cuadruplo de inicio
+	printf("Cuadruplo de inicio: %d\n", procedimientos[x].cuadruploInicio);
+	
 	for(j=0;j<procedimientos[x].index;j++){
 		if(x==0)
 			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
@@ -106,22 +110,22 @@ void imprimeProcs(int x){
 void imprimeConstantes(){
 	int i;
 	printf("\nLAS CONSTANTES\n");
-	
+
 	printf("ENTEROS\n");
 	for(i=0; i<i_cteInt; i++){
 		printf("Constante %d con valor: %d\n", constantesInt[i].dv, constantesInt[i].valor);
 	}
-	
+
 	printf("FLOTANTES\n");
 	for(i=0; i<i_cteFloat; i++){
 		printf("Constante %d con valor: %f\n", constantesFloat[i].dv, constantesFloat[i].valor);
 	}
-	
+
 	printf("HEX\n");
 	for(i=0; i<i_cteHex; i++){
 		printf("Constante %d con valor: %s\n", constantesHex[i].dv, constantesHex[i].valor);
 	}
-	
+
 	printf("STRING\n");
 	for(i=0; i<i_cteString; i++){
 		printf("Constante %d con valor: %s\n", constantesString[i].dv, constantesString[i].valor);
@@ -146,6 +150,18 @@ int existeVariable(int indexProc, char* id){
 		if(!strcmp(variables[i][0].id, id))
 			return variables[i][0].dv;
 	return -1000;
+}
+
+int existeProcedimiento(int indexProc, char*id){
+	int i;
+	int cmp;
+	for(i=0; i <indexProc; i++){
+		cmp = strcmp(procedimientos[i].id, id);
+		if(cmp==0){
+			return i;
+		}
+	}
+	return -1;
 }
 
 void agregaVariable(int indexProc, int tipo, char* id, int linea){
@@ -181,6 +197,10 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 
 void agregaParams(int indexProc, int tipo, int index){
 	procedimientos[indexProc].params[index] = tipo;
+}
+
+void agregaCuadruploInicio(int indexProc, int inicio){
+	procedimientos[indexProc].cuadruploInicio=inicio;
 }
 
 int existeCteInt(char* x){
@@ -227,7 +247,7 @@ void agregaConstante(int tipo, char* valor){
 				i_cteInt++;
 			}
 			break;
-			
+
 		//FLOAT
 		case 1:
 			if(existeCteFloat(valor)==-1000){
@@ -245,7 +265,7 @@ void agregaConstante(int tipo, char* valor){
 				i_cteHex++;
 			}
 			break;
-			
+
 		//STRING
 		case 3:
 			if(existeCteString(valor)==-1000){
@@ -254,7 +274,7 @@ void agregaConstante(int tipo, char* valor){
 				i_cteString++;
 			}
 			break;
-		
+
 		//Constante _WIDTH
 		case 100:
 			constantesInt[0].valor = atoi(valor);

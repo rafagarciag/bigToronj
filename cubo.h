@@ -1,26 +1,25 @@
 #include <stdio.h>
-//	Operadores 
-#define SUMA		0
-#define RESTA		1
-#define MULT		2
-#define DIVI		3
-#define MENOR		4
-#define MAYOR		5
-#define IGUALDAD	6
-#define DIFF		7
-#define MAYORI		8
-#define MENORI		9
-#define AND			10
-#define OR			11
-#define IGUAL		12
 
 //	Tipos de datos
-#define	INT			0
-#define	FLOAT		1
-#define	COLOR		2
-#define	STRING		3
+int	INT=		0;
+int	FLOAT=		1;
+int	COLOR=		2;
+int	STRING=		3;
 
-
+//	Operadores 
+int SUMA=		0;
+int RESTA=		1;
+int MULT=		2;
+int DIVI=		3;
+int MENOR=		4;
+int MAYOR=		5;
+int IGUALDAD=	6;
+int DIFF=		7;
+int MAYORI=		8;
+int MENORI=		9;
+int AND=		10;
+int OR=			11;
+int IGUAL=		12;
 
 void cuboSyn(int tipo1, int tipo2, int op){
 
