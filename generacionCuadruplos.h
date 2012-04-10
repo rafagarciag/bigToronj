@@ -47,9 +47,9 @@ void rellenaGoToF(int index, int valor){
 	cuadruplos[index].resultado=valor;
 }
 
-void imprimeCuadruplos(){
+void imprimeCuadruplos(char* nombre){
 	FILE *ovejota;
-	ovejota=fopen("ovejota.btjo","w+");
+	ovejota=fopen(nombre,"a+");
 	
 	int i;
 	for(i=0;i<pointer;i++){

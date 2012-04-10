@@ -107,29 +107,39 @@ void imprimeProcs(int x){
 	}
 }
 
-void imprimeConstantes(){
+void imprimeConstantes(char* nombre){
+
+	FILE *ovejota;
+	ovejota=fopen(nombre,"w+");
+
 	int i;
 	printf("\nLAS CONSTANTES\n");
 
 	printf("ENTEROS\n");
 	for(i=0; i<i_cteInt; i++){
+		fprintf(ovejota,"%d,%d\n",constantesInt[i].dv, constantesInt[i].valor);
 		printf("Constante %d con valor: %d\n", constantesInt[i].dv, constantesInt[i].valor);
 	}
 
 	printf("FLOTANTES\n");
 	for(i=0; i<i_cteFloat; i++){
+		fprintf(ovejota,"%d,%f\n",constantesFloat[i].dv, constantesFloat[i].valor);
 		printf("Constante %d con valor: %f\n", constantesFloat[i].dv, constantesFloat[i].valor);
 	}
 
 	printf("HEX\n");
 	for(i=0; i<i_cteHex; i++){
+		fprintf(ovejota,"%d,%s\n",constantesHex[i].dv, constantesHex[i].valor);
 		printf("Constante %d con valor: %s\n", constantesHex[i].dv, constantesHex[i].valor);
 	}
 
 	printf("STRING\n");
 	for(i=0; i<i_cteString; i++){
+		fprintf(ovejota,"%d,%s\n",constantesString[i].dv, constantesString[i].valor);
 		printf("Constante %d con valor: %s\n", constantesString[i].dv, constantesString[i].valor);
 	}
+	fprintf(ovejota,"##\n");
+	fclose(ovejota);
 }
 
 void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int linea){

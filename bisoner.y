@@ -7,6 +7,7 @@
 #include "generacionCuadruplos.h"
 
 extern int lineNumber;
+extern FILE *yyin;
 int yyerror(char *s);
 
 int indexProc=0;
@@ -29,7 +30,8 @@ int retorno;
 
 char* aux_asignacion;
 
-//Agrega _PointerX y _PointerY a la tabla de globales
+//String con el nombre del programa
+char nombre[256];
 
 
 %}
@@ -106,7 +108,7 @@ programa	: global functions DRAWING canvas bloque {
 				printf("\n===========================\n");
 				printf("\nCompilación exitosa\n");
 				printf("\n===========================\n");
-				imprimeConstantes();imprimeCuadruplos();
+				imprimeConstantes(nombre);imprimeCuadruplos(nombre);
 			}
 			;
 
@@ -258,7 +260,12 @@ else_paso_2 :	{
 				}
 			;
 
-asignacion_in_line	: ID IGUAL exp
+asignacion_in_line	: ID IGUAL exp 	{
+										if(existeVariable(indexProc, $1)==-1000)
+											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+										else
+											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+									}
 					;
 
 for			: FOR PARENI asignacion_in_line PUNCOMA for_paso_1 expresion for_paso_2 PUNCOMA for_paso_3 asignacion_in_line for_paso_4 PAREND bloque for_paso_5
@@ -341,7 +348,7 @@ dibujo		: line
 			| circle
 			;
 
-line		: LINE PARENI exp COMA exp PAREND PUNCOMA		{{generaCuadruplo(400,popPilaOperandos(),popPilaOperandos(),-1);	}}
+line		: LINE PARENI exp COMA exp PAREND PUNCOMA		{generaCuadruplo(400,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 
 triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
@@ -474,10 +481,21 @@ int yyerror(char *s) {
 	return (0);
 }
 
-int main(void){
+int main(int argc, char* argv[]){
+	strcpy (nombre,argv[1]);
+	strcat (nombre,"o");
+	FILE *programa = fopen(argv[1],"r");
+	if(!programa){
+		printf("No existe el archivo");
+		return -1;
+	}
+	yyin = programa;
+
+
 	agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
 	agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
-	
+	inicializaCubo();
+	cuboSyn(1,1,1);
 	yyparse();
 	exit(0);
 }
