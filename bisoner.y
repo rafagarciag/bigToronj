@@ -284,11 +284,13 @@ for_paso_3	:	{ pushPilaSaltos(0); }
 			;
 for_paso_4	:	{ 
 					int temp = popPilaSaltos();
-					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos());
+					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos()+1);
 					pushPilaSaltos(temp - getPointerCuadruplos());
+					
+					generaCuadruplo(300, -1, -1, pilaSaltos[indexSaltos-3]);
 				}
 			;
-for_paso_5	:	{ 
+for_paso_5	:	{
 					//GOTO
 					generaCuadruplo(300, -1, -1, popPilaSaltos());
 					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
