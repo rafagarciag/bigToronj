@@ -263,7 +263,12 @@ else_paso_2 :	{
 				}
 			;
 
-asignacion_in_line	: ID IGUAL exp
+asignacion_in_line	: ID IGUAL exp	{
+									if(existeVariable(indexProc, $1)==-1000)
+										printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+									else
+										generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+									}
 					;
 
 for			: FOR PARENI asignacion_in_line PUNCOMA for_paso_1 expresion for_paso_2 PUNCOMA for_paso_3 asignacion_in_line for_paso_4 PAREND bloque for_paso_5
@@ -282,11 +287,13 @@ for_paso_3	:	{ pushPilaSaltos(0); }
 			;
 for_paso_4	:	{ 
 					int temp = popPilaSaltos();
-					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos());
+					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos()+1);
 					pushPilaSaltos(temp - getPointerCuadruplos());
+					
+					generaCuadruplo(300, -1, -1, pilaSaltos[indexSaltos-3]);
 				}
 			;
-for_paso_5	:	{ 
+for_paso_5	:	{
 					//GOTO
 					generaCuadruplo(300, -1, -1, popPilaSaltos());
 					rellenaGoToF(popPilaSaltos(), getPointerCuadruplos());
