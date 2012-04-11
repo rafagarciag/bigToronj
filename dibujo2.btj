@@ -1,10 +1,12 @@
 drawing (1024, 768, #ffffff){
 
-	int var0, var1;
-	
-	for(var0=1;var0<var1;var0=var0+1){
-		tetragon(#CAFE10,#C0CA12);
-		var1=var1+#CAFE10;
-	}
-	var1=3;
+	trans(500,300);
+	push();
+	trans(-100,0);
+	tetragon(50,50);
+	pop();
+	trans(100,0);
+	tetragon(50,50);
+	pop();
+	circle(20,20);
 }
