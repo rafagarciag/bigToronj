@@ -104,16 +104,27 @@ char nombre[256];
 //GRAMATICA!
 
 
-programa	: global functions DRAWING canvas bloque {
+programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque {
 				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
 				printf("\n===========================\n");
 				printf("\nCompilación exitosa\n");
 				printf("\n===========================\n");
-				imprimeConstantes(nombre);imprimeCuadruplos(nombre);
+				imprimeConstantes(nombre);
+				imprimeCuadruplos(nombre);
 			}
 			;
-
-global	: /*vacio*/		{agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;}
+programa_paso1:	{
+					//GOTO al Main
+					generaCuadruplo(300, -1, -1, 0);
+				}
+			 ;
+programa_paso2: {
+					rellenaGoTo(0, getPointerCuadruplos());
+				}
+			;
+global	: /*vacio*/	{
+						agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;
+					}
 		| GLOBAL declaracion global
 		;
 
