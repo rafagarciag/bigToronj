@@ -21,6 +21,7 @@ int temporales=8000;
 //Cuadruplos expresiones
 int operando;
 int operador;
+int aux_negativo=1;
 ////////////////////////
 
 //Cuadruplos while
@@ -176,8 +177,8 @@ function11	:
 			;
 
 canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND {
-				agregaConstante(100, $2);
-				agregaConstante(101, $4);
+				agregaConstante(100, $2, 0);
+				agregaConstante(101, $4, 0);
 			}
 			;
 
@@ -320,9 +321,9 @@ while_paso_3:	{
 
 met_bt_or	: met_bt_or1 PARENI PAREND PUNCOMA
 			;
-met_bt_or1	: PUSH
-			| POP
-			| POP_ORIGIN
+met_bt_or1	: PUSH			{generaCuadruplo(500,-1,-1,-1);}
+			| POP			{generaCuadruplo(501,-1,-1,-1);}
+			| POP_ORIGIN	{generaCuadruplo(502,-1,-1,-1);}
 			;
 
 met_bt		: trans
@@ -332,7 +333,7 @@ met_bt		: trans
 			| color_method
 			;
 
-trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA
+trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(450,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 rotate		: ROTATE PARENI exp PAREND PUNCOMA
 			;
@@ -359,7 +360,7 @@ triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
 tetragon	: TETRAGON PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(402,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 
-circle		: CIRCLE PARENI exp PAREND PUNCOMA				{generaCuadruplo(403,popPilaOperandos(),-1,-1);}
+circle		: CIRCLE PARENI exp COMA exp PAREND PUNCOMA				{generaCuadruplo(403,popPilaOperandos(),popPilaOperandos(),-1);}
 			;
 
 exp			: elem exp_paso_2 exp1 
@@ -371,7 +372,7 @@ exp11		: SUMA 	{pushPilaOperadores(100);}
 			| RESTA	{pushPilaOperadores(101);}
 			;
 
-elem		: factor exp_paso_3 elem1 
+elem		: factor reset_negativo exp_paso_3 elem1 
 			;
 elem1		: /*vacio*/
 			| elem11 elem
@@ -380,12 +381,15 @@ elem11		: MULT	{pushPilaOperadores(102);}
 			| DIVI	{pushPilaOperadores(103);}
 			;
 
-factor		: PARENI exp_paso_4 exp exp_paso_5 PAREND
+factor		: negativo PARENI exp_paso_4 exp exp_paso_5 PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
-			| RESTA	
+			| RESTA	{aux_negativo=-1;}
 			;
+			
+reset_negativo	:	{aux_negativo=1;}	
+				;
 
 expresion	: elem_log expresion_paso1 expresion1
 			;
@@ -442,10 +446,10 @@ constante	: ID	{
 						if((operando=existeVariable(indexProc, $1))==-1000)
 							printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 					}
-			| CTE_I			{agregaConstante(0, $1);operando=existeCteInt($1);}
-			| CTE_F			{agregaConstante(1, $1);operando=existeCteFloat($1);}
-			| CTE_HEX		{agregaConstante(2, $1);operando=existeCteHex($1);}
-			| CTE_STRING	{agregaConstante(3, $1);operando=existeCteString($1);}
+			| CTE_I			{agregaConstante(0, $1, aux_negativo);operando=existeCteInt(atoi($1)*aux_negativo);}
+			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
+			| CTE_HEX		{agregaConstante(2, $1, 0);operando=existeCteHex($1);}
+			| CTE_STRING	{agregaConstante(3, $1, 0);operando=existeCteString($1);}
 			| WIDTH			{operando=1200;}
 			| HEIGHT		{operando=1201;}
 			| POINTER_X		{operando=0;}

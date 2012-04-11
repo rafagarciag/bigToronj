@@ -213,18 +213,16 @@ void agregaCuadruploInicio(int indexProc, int inicio){
 	procedimientos[indexProc].cuadruploInicio=inicio;
 }
 
-int existeCteInt(char* x){
+int existeCteInt(int y){
 	int i;
-	int y = atoi(x);
 	for(i=0;i<i_cteInt;i++)
 		if(constantesInt[i].valor==y)
 			return constantesInt[i].dv;
 	return -1000;
 }
 
-int existeCteFloat(char* x){
+int existeCteFloat(float y){
 	int i;
-	float y = atof(x);
 	for(i=0;i<i_cteFloat;i++)
 		if(constantesFloat[i].valor==y)
 			return constantesFloat[i].dv;
@@ -247,12 +245,12 @@ int existeCteString(char* x){
 	return -1000;
 }
 
-void agregaConstante(int tipo, char* valor){
+void agregaConstante(int tipo, char* valor, int aux_negativo){
 	switch(tipo){
 		//INT
 		case 0:
-			if(existeCteInt(valor)==-1000){
-				constantesInt[i_cteInt].valor = atoi(valor);
+			if(existeCteInt(aux_negativo*atoi(valor))==-1000){
+				constantesInt[i_cteInt].valor = aux_negativo*atoi(valor);
 				constantesInt[i_cteInt].dv = offsetConstantes + offsetInt + i_cteInt;
 				i_cteInt++;
 			}
@@ -260,8 +258,8 @@ void agregaConstante(int tipo, char* valor){
 
 		//FLOAT
 		case 1:
-			if(existeCteFloat(valor)==-1000){
-				constantesFloat[i_cteFloat].valor = atof(valor);
+			if(existeCteFloat(aux_negativo*atof(valor))==-1000){
+				constantesFloat[i_cteFloat].valor = aux_negativo*atof(valor);
 				constantesFloat[i_cteFloat].dv = offsetConstantes + offsetFloat + i_cteFloat;
 				i_cteFloat++;
 			}

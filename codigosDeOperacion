@@ -23,3 +23,9 @@ line		400
 triangle	401
 tetragon	402
 circle		403
+
+trans		450
+
+push()			500
+pop()			501
+pop_origin()	502
