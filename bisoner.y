@@ -446,8 +446,8 @@ constante	: ID	{
 						if((operando=existeVariable(indexProc, $1))==-1000)
 							printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 					}
-			| CTE_I			{agregaConstante(0, $1, aux_negativo);operando=existeCteInt(atoi($1));}
-			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1));}
+			| CTE_I			{agregaConstante(0, $1, aux_negativo);operando=existeCteInt(atoi($1)*aux_negativo);}
+			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
 			| CTE_HEX		{agregaConstante(2, $1, 0);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1, 0);operando=existeCteString($1);}
 			| WIDTH			{operando=1200;}
