@@ -9,4 +9,6 @@ drawing (1024, 768, #ffffff){
 	tetragon(50,50);
 	pop();
 	circle(20,20);
+	pop();
+	circle(30,30);
 }
