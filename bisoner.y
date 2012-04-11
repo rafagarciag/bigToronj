@@ -14,6 +14,9 @@ int indexProc=0;
 int indexParams=0;
 int tipo=1000;
 
+//Errores de compilacion
+int error=0;
+
 //Variables temporales
 int temporales=8000;
 //////////////////////
@@ -106,9 +109,17 @@ char nombre[256];
 
 programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque {
 				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
-				printf("\n===========================\n");
-				printf("\nCompilación exitosa\n");
-				printf("\n===========================\n");
+
+				if(error==0){
+					printf("\n===========================\n");
+					printf("\nCompilación exitosa\n");
+					printf("\n===========================\n");
+				}
+				else{
+					printf("\n=============================================\n");
+					printf("\nSe detectaron %d error(es) de compilación\n", error);
+					printf("\n=============================================\n");
+				}
 				imprimeConstantes(nombre);
 				imprimeCuadruplos(nombre);
 			}
@@ -140,6 +151,7 @@ function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloq
 					indexParams=0;
 				}
 				else{
+					error++;
 					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
 				}
 			}
@@ -151,6 +163,7 @@ function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloq
 					indexParams=0;
 				}
 				else{
+					error++;
 					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
 				}
 			}
@@ -201,6 +214,25 @@ bloque1		: /*vacio*/
 
 bloque_fun	: bloque1
 			;
+			
+func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
+				//ERA
+				int i = existeProcedimiento(indexProc, $1);
+				if(i>0){
+					generaCuadruplo(999, 0, 0, i);
+				}
+				else{
+					error++;
+					printf("La función %s no ha sido definida anteriormente", $1);
+				}
+			}
+			;
+func_usuario1: /*vacio*/
+			| ID func_usuario1 func_usuario11
+			;
+func_usuario11:	/*vacio*/
+			| COMA ID
+			;
 
 estatuto	: asignacion
 			| declaracion
@@ -210,14 +242,17 @@ estatuto	: asignacion
 			| met_bt_or
 			| met_bt
 			| dibujo
+			| func_usuario
 			;
 
 return		: RETURN exp PUNCOMA
 			;
 
 asignacion	: ID IGUAL exp PUNCOMA	{
-										if(existeVariable(indexProc, $1)==-1000)
+										if(existeVariable(indexProc, $1)==-1000){
+											error++;
 											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+										}
 										else
 											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
 									}
@@ -232,8 +267,10 @@ ids_var		: ID 	{
 							agregaVariable(indexProc, tipo, $1, lineNumber);
 							aux_asignacion=$1;
 						}
-						else
+						else{
+							error++;
 							printf("Error en línea: %d. Variable '%s' ya fue declarada anteriormente.\n",lineNumber,$1);
+						}
 					}
 			;
 ids1		: /*vacio*/
@@ -273,8 +310,10 @@ else_paso_2 :	{
 			;
 
 asignacion_in_line	: ID IGUAL exp 	{
-										if(existeVariable(indexProc, $1)==-1000)
+										if(existeVariable(indexProc, $1)==-1000){
+											error++;
 											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+										}
 										else
 											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
 									}
@@ -454,8 +493,10 @@ tipo		: INT		{tipo=$1;}
 			;
 
 constante	: ID	{
-						if((operando=existeVariable(indexProc, $1))==-1000)
+						if((operando=existeVariable(indexProc, $1))==-1000){
+							error++;
 							printf("Error en linea: %d. Variable '%s' no existe.\n",lineNumber,$1);
+						}
 					}
 			| CTE_I			{agregaConstante(0, $1, aux_negativo);operando=existeCteInt(atoi($1)*aux_negativo);}
 			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
