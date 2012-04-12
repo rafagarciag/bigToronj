@@ -19,6 +19,7 @@ int error=0;
 
 //Variables temporales
 int temporales=8000;
+
 //////////////////////
 
 //Cuadruplos expresiones
@@ -227,11 +228,11 @@ func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				}
 			}
 			;
-func_usuario1: /*vacio*/
-			| ID func_usuario1 func_usuario11
-			;
+func_usuario1	: 
+				| exp func_usuario11
+				;
 func_usuario11:	/*vacio*/
-			| COMA ID
+			| COMA func_usuario1
 			;
 
 estatuto	: asignacion
@@ -512,8 +513,20 @@ exp_paso_1	:	{pushPilaOperandos(operando)}
 			;
 exp_paso_2	:	{
 					if(peekPilaOperadores()==100||peekPilaOperadores()==101){
-						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
-						pushPilaOperandos(temporales++);
+						int aux1=popPilaOperandos();
+						int aux2=popPilaOperandos();
+						int op=popPilaOperadores();
+						char tipo = cuboSyn(aux1, aux2, op);
+						int dir;
+						if(tipo !='w'){
+							dir = getDirTemp(tipo);
+							generaCuadruplo(op,aux1,aux2,dir);
+							pushPilaOperandos(dir);
+						}
+						else{
+							error++;
+							printf("\nError en mezcla de tipos linea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+						}
 					}
 				}
 			;
@@ -553,7 +566,6 @@ int main(int argc, char* argv[]){
 	agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
 	agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
 	inicializaCubo();
-	cuboSyn(1,1,1);
 	yyparse();
 	exit(0);
 }

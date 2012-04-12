@@ -96,6 +96,13 @@ void imprimeProcs(int x){
 	}
 	printf("\n");
 	
+	printf("\nContiene las variables\n");
+	printf("%d\tints\n", procedimientos[x].totalInt);
+	printf("%d\tfloats\n", procedimientos[x].totalFlo);
+	printf("%d\tcolors\n", procedimientos[x].totalCol);
+	printf("%d\tstrings\n", procedimientos[x].totalStr);
+	
+	
 	//Cuadruplo de inicio
 	printf("Cuadruplo de inicio: %d\n", procedimientos[x].cuadruploInicio);
 	
