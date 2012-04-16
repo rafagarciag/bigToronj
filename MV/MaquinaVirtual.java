@@ -123,6 +123,10 @@ public class MaquinaVirtual{
 					elPanel.traslada(variables.getValorNumerico(cuadruplos[index].getOperando1()), 
 							variables.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
+				case 451:
+					System.out.println("ROTATE");
+					elPanel.rota(variables.getValorNumerico(cuadruplos[index].getOperando1()));
+					break;
 					
 				//PUSHES Y POPES
 				case 500:
