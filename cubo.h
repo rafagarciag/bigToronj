@@ -21,6 +21,11 @@ int _AND=		10;
 int _OR=			11;
 int _IGUAL=		12;
 
+int tempInt = 0;
+int tempFloat = 0;
+int tempColor = 0;
+int tempString = 0;
+
 
 char cubo[4][4][13];
 
@@ -250,8 +255,118 @@ cubo[_STRING][_COLOR][_IGUAL]=	'w';	//error
 cubo[_STRING][_STRING][_IGUAL]='s';	//error
 }
 
-void cuboSyn(int tipo1, int tipo2, int op){
+int getDirTemp(char tipo){
+	int dir;
+	switch(tipo){
+		case 'i':
+			dir = 4000+tempInt;
+			tempInt++;
+			return dir; 
+			break;
+		case 'f':
+			dir = 6000 + tempFloat; 
+			tempFloat++;
+			return dir;
+			break;
+		case 'c':
+			dir = 8000 + tempColor; 
+			tempColor++;
+			return dir;
+			break;
+		case 's':
+			dir = 10000 + tempString; 
+			tempString++;
+			return dir;
+			break;
+	}
+}
 
-	printf("cubon cubon: %c \n", cubo[tipo1][tipo2][op]);
+int getTipo(int x){
+	/*
+	Scope		|	Rango de direcciones
+	-------------------------------------
+	Globales	|	0		-	1999
+		int		|	0		-	499
+		float	|	500		-	999
+		color	|	1000	-	1499
+		string	|	1500	-	1999
+		
+	Locales		|	2000	-	3999
+		int		|	2000	-	2499
+		float	|	2500	-	2999
+		color	|	3000	-	3499
+		string	|	3500	-	3999
+	
+	Temporales	|	4000	-	11999
+		int		|	4000	-	5999
+		float	|	6000	-	7999
+		color	|	8000	-	9999
+		string	|	10000	-	11999
+	
+	Constantes	|	12000	-	13999
+	*/
+	int scope = x/2000;
+	int mod = 0;
+	switch(scope){
+		
+		case 0:
+		case 1:
+		case 6:
+			return (x%2000)/500;
+			break;
+			
+		//Las temporales
+		case 2:
+			return ((x-4000)%8000)/2000;
+			break;
+	}
+	
+	return -1;
+}
+
+char cuboSyn(int tipo1, int tipo2, int op){
+	int operador=0;
+	switch(op){
+		//Suma 
+		case 100:
+			operador = 0; break;
+		//Resta
+		case 101:
+			operador = 1; break;
+		//Multiplicacion
+		case 102:
+			operador = 2; break;
+		//Division
+		case 103:
+			operador = 3; break;
+		//Igual
+		case 150:
+			operador = 12; break;
+		//And
+		case 200:
+			operador = 10; break;
+		//Or
+		case 201:
+			operador = 11; break;
+		//Menor
+		case 202:
+			operador = 4; break;
+		//Menor o igual
+		case 203:
+			operador = 9; break;
+		//Mayor
+		case 204:
+			operador = 0; break;
+		//Mayor o igual
+		case 205:
+			operador = 5; break;
+		//Igualdad
+		case 206:
+			operador = 6; break;
+		//Diferente
+		case 207:
+			operador = 7; break;
+	}
+	return cubo[getTipo(tipo1)][getTipo(tipo2)][operador];
 }
 
