@@ -335,7 +335,7 @@ met_bt		: trans
 
 trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(450,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
-rotate		: ROTATE PARENI exp PAREND PUNCOMA
+rotate		: ROTATE PARENI exp PAREND PUNCOMA			{generaCuadruplo(451,popPilaOperandos(),-1,-1);	}
 			;
 rotate_place: ROTATE_PLACE PARENI exp PAREND PUNCOMA
 			;

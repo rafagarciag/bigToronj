@@ -1,14 +1,16 @@
-drawing (1024, 768, #ffffff){
+drawing (1000, 600, #ffffff){
 
 	trans(500,300);
 	push();
 	trans(-100,0);
-	tetragon(50,50);
+	circle(50,50);
 	pop();
 	trans(100,0);
-	tetragon(50,50);
+	circle(50,50);
 	pop();
-	circle(20,20);
+	trans(0,100);
+	rotate(90);
+	tetragon(200,50);
 	pop();
-	circle(30,30);
+	circle(10,10);
 }
