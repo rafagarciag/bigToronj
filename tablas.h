@@ -114,11 +114,18 @@ void imprimeProcs(int x){
 	}
 }
 
+void imprimeTotalGlobales(char* nombre){
+	FILE *ovejota;
+	ovejota=fopen(nombre,"w+");
+	fprintf(ovejota,"%d\n%d\n%d\n%d\n",procedimientos[0].totalInt,procedimientos[0].totalFlo,procedimientos[0].totalCol,procedimientos[0].totalStr);
+	fclose(ovejota);
+}
+
 void imprimeConstantes(char* nombre){
 
 	FILE *ovejota;
-	ovejota=fopen(nombre,"w+");
-
+	ovejota=fopen(nombre,"a+");
+	
 	int i;
 	printf("\nLAS CONSTANTES\n");
 

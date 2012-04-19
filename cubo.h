@@ -378,3 +378,10 @@ char cuboSyn(int tipo1, int tipo2, int op){
 	return cubo[getTipo(tipo1)][getTipo(tipo2)][operador];
 }
 
+void imprimeTotalTemporales(char* nombre){
+	FILE *ovejota;
+	ovejota=fopen(nombre,"a+");
+	fprintf(ovejota,"%d\n%d\n%d\n%d\n",tempInt,tempFloat,tempColor,tempString);
+	fclose(ovejota);
+}
+
