@@ -121,6 +121,8 @@ programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque 
 					printf("\nSe detectaron %d error(es) de compilación\n", error);
 					printf("\n=============================================\n");
 				}
+				imprimeTotalGlobales(nombre);
+				imprimeTotalTemporales(nombre);
 				imprimeConstantes(nombre);
 				imprimeCuadruplos(nombre);
 			}
