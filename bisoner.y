@@ -250,12 +250,22 @@ return		: RETURN exp PUNCOMA
 			;
 
 asignacion	: ID IGUAL exp PUNCOMA	{
-										if(existeVariable(indexProc, $1)==-1000){
+										int dv = existeVariable(indexProc, $1);
+										if(dv==-1000){
 											error++;
 											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 										}
-										else
-											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+										else{
+											int aux1 = popPilaOperandos();
+											char tipo = cuboSyn(dv, aux1, 150);
+											if(tipo != 'w'){
+												generaCuadruplo(150,aux1,-1,dv);
+											}
+											else{
+												error++;
+												printf("\nError en mezcla de tipos en asignación, línea número %d\n", lineNumber);
+											}
+										}
 									}
 			;
 
@@ -278,7 +288,19 @@ ids1		: /*vacio*/
 			| COMA ids
 			;
 declaracion1: /*vacio*/
-			| IGUAL exp	{generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, aux_asignacion));}
+			| IGUAL exp	{
+					int aux1 = popPilaOperandos();
+					int dv = existeVariable(indexProc, aux_asignacion);
+					char tipo = cuboSyn(dv,aux1,150);
+					printf("Asignación espuria (%d = %d)", dv, aux1);
+					if(tipo != 'w'){
+						generaCuadruplo(150,aux1,-1,dv);
+					}
+					else{
+						error++;
+						printf("\nError en mezcla de tipos en declaración, línea número %d\n", lineNumber);
+					}
+			}
 			;
 
 if			: IF PARENI expresion PAREND if_paso_1 bloque else
@@ -311,12 +333,22 @@ else_paso_2 :	{
 			;
 
 asignacion_in_line	: ID IGUAL exp 	{
-										if(existeVariable(indexProc, $1)==-1000){
+										int dv = existeVariable(indexProc, $1);
+										if(dv==-1000){
 											error++;
 											printf("Error en línea: %d. Variable '%s' no existe.\n",lineNumber,$1);
 										}
-										else
-											generaCuadruplo(150,popPilaOperandos(),-1,existeVariable(indexProc, $1));
+										else{
+											int aux1 = popPilaOperandos();
+											char tipo = cuboSyn(dv, aux1, 150);
+											if(tipo != 'w'){
+												generaCuadruplo(150,aux1,-1,dv);
+											}
+											else{
+												error++;
+												printf("\nError en mezcla de tipos en asignación (in line), línea número %d\n", lineNumber);
+											}
+										}
 									}
 					;
 
@@ -525,7 +557,7 @@ exp_paso_2	:	{
 						}
 						else{
 							error++;
-							printf("\nError en mezcla de tipos linea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+							printf("\nError en mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
 						}
 					}
 				}
@@ -533,8 +565,21 @@ exp_paso_2	:	{
 
 exp_paso_3	:	{
 					if(peekPilaOperadores()==102||peekPilaOperadores()==103){
-						generaCuadruplo(popPilaOperadores(),popPilaOperandos(),popPilaOperandos(),temporales);
-						pushPilaOperandos(temporales++);
+						int aux1=popPilaOperandos();
+						int aux2=popPilaOperandos();
+						int op=popPilaOperadores();
+						char tipo = cuboSyn(aux1, aux2, op);
+						int dir;
+						printf("\nHaciendo multiplicación (%d %d %d)\n", aux1, aux2, op);
+						if(tipo !='w'){
+							dir = getDirTemp(tipo);
+							generaCuadruplo(op,aux1,aux2,dir);
+							pushPilaOperandos(dir);
+						}
+						else{
+							error++;
+							printf("\nError en mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
+						}
 					}
 				}
 			;
@@ -547,7 +592,10 @@ exp_paso_5	:	{popPilaOperadores();}
 
 %%
 int yyerror(char *s) {
-	printf("Compilation error, line #%d\n", lineNumber);
+	error++;
+	printf("\n=============================================\n");
+	printf("\nError de sintaxis, línea  #%d\n", lineNumber);
+	printf("\n=============================================\n");
 
 	return (0);
 }

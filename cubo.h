@@ -304,11 +304,16 @@ int getTipo(int x){
 		string	|	10000	-	11999
 	
 	Constantes	|	12000	-	13999
+		int		|	12000	-	12499
+		float	|	12500	-	12999
+		color	|	13000	-	13499
+		string	|	13500	-	13999
+		
 	*/
 	int scope = x/2000;
 	int mod = 0;
 	switch(scope){
-		
+		//Globales, locales 
 		case 0:
 		case 1:
 		case 6:
@@ -317,6 +322,9 @@ int getTipo(int x){
 			
 		//Las temporales
 		case 2:
+		case 3:
+		case 4:
+		case 5:
 			return ((x-4000)%8000)/2000;
 			break;
 	}
