@@ -146,7 +146,7 @@ functions	:
 			| function functions
 			;
 
-function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return LLAVED	{
+function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return ret LLAVED	{
 
 				if(existeProcedimiento(indexProc, $3)<0){
 					agregaProcedimiento(indexProc, indexParams, tipo, $3, lineNumber); 
@@ -158,7 +158,7 @@ function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloq
 					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
 				}
 			}
-			| FUNCTION VOID ID PARENI function1 PAREND cuadruplo_inicio bloque	{
+			| FUNCTION VOID ID PARENI function1 PAREND cuadruplo_inicio bloque ret	{
 
 				if(existeProcedimiento(indexProc, $3)<0){
 					agregaProcedimiento(indexProc, indexParams, 1000, $3, lineNumber); 
@@ -176,6 +176,10 @@ cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
 							agregaCuadruploInicio(indexProc, getPointerCuadruplos());
 						}
 					;
+ret			:	{
+					generaCuadruplo(600, -1, -1, -1);
+				}
+			;
 function1	: param_paso1 ids_fun function11
 			;
 param_paso1	: INT	{ 
@@ -222,7 +226,10 @@ func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				//ERA
 				int i = existeProcedimiento(indexProc, $1);
 				if(i>0){
-					generaCuadruplo(999, 0, 0, i);
+					generaCuadruplo(999, -1, -1, i);
+					
+					//gosub
+					generaCuadruplo(601, -1, -1, i);
 				}
 				else{
 					error++;
@@ -418,7 +425,10 @@ met_bt		: trans
 			| color_method
 			;
 
-trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA	{generaCuadruplo(450,popPilaOperandos(),popPilaOperandos(),-1);	}
+trans		: TRANS PARENI exp COMA exp PAREND PUNCOMA	{
+					generaCuadruplo(450,popPilaOperandos(),popPilaOperandos(),-1);
+					
+			}
 			;
 rotate		: ROTATE PARENI exp PAREND PUNCOMA			{generaCuadruplo(451,popPilaOperandos(),-1,-1);	}
 			;
