@@ -38,6 +38,9 @@ char* aux_asignacion;
 //String con el nombre del programa
 char nombre[256];
 
+//Número de parámetro al llamar una funcion del usuario
+int contParam = 0;
+
 
 %}
 
@@ -225,8 +228,16 @@ bloque_fun	: bloque1
 func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				//ERA
 				int i = existeProcedimiento(indexProc, $1);
+				int x;
 				if(i>0){
+					//ERA
 					generaCuadruplo(999, -1, -1, i);
+
+					for(x=0; x<contParam; x++){
+						generaCuadruplo(602, filaParams[x], -1, x);
+					}
+					
+					contParam=0;
 					
 					//gosub
 					generaCuadruplo(601, -1, -1, i);
@@ -237,9 +248,22 @@ func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				}
 			}
 			;
+
 func_usuario1	: 
-				| exp func_usuario11
+				| param func_usuario11
 				;
+				
+param		:	exp	{
+					//Parámetros
+					int p = popPilaOperandos();
+					filaParams[contParam] = p;
+					contParam++;
+					
+					
+					//generaCuadruplo(602, popPilaOperandos(), -1, 666);
+				}
+			;
+
 func_usuario11:	/*vacio*/
 			| COMA func_usuario1
 			;

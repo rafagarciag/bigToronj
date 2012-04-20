@@ -34,5 +34,6 @@ pop_origin()	502
 ret 			600
 gosub			601
 param			602
+return			603
 
 ERA				999
