@@ -310,3 +310,8 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			break;
 	}
 }
+
+//Regresa el tipo de dato que da el return de una función
+int getTipoProc(index){
+	return procedimientos[index].tipo;
+}
