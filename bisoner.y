@@ -547,8 +547,8 @@ constante	: ID	{
 			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
 			| CTE_HEX		{agregaConstante(2, $1, 0);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1, 0);operando=existeCteString($1);}
-			| WIDTH			{operando=1200;}
-			| HEIGHT		{operando=1201;}
+			| WIDTH			{operando=12000;}
+			| HEIGHT		{operando=12001;}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
 			;
