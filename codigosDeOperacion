@@ -26,6 +26,7 @@ circle		403
 
 trans		450
 rot			451
+color_m		452
 
 push()			500
 pop()			501
@@ -34,5 +35,6 @@ pop_origin()	502
 ret 			600
 gosub			601
 param			602
+return			603
 
 ERA				999

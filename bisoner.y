@@ -38,6 +38,9 @@ char* aux_asignacion;
 //String con el nombre del programa
 char nombre[256];
 
+//Número de parámetro al llamar una funcion del usuario
+int contParam = 0;
+
 
 %}
 
@@ -225,8 +228,16 @@ bloque_fun	: bloque1
 func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				//ERA
 				int i = existeProcedimiento(indexProc, $1);
+				int x;
 				if(i>0){
+					//ERA
 					generaCuadruplo(999, -1, -1, i);
+
+					for(x=0; x<contParam; x++){
+						generaCuadruplo(602, filaParams[x], -1, x);
+					}
+					
+					contParam=0;
 					
 					//gosub
 					generaCuadruplo(601, -1, -1, i);
@@ -237,9 +248,22 @@ func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
 				}
 			}
 			;
+
 func_usuario1	: 
-				| exp func_usuario11
+				| param func_usuario11
 				;
+				
+param		:	exp	{
+					//Parámetros
+					int p = popPilaOperandos();
+					filaParams[contParam] = p;
+					contParam++;
+					
+					
+					//generaCuadruplo(602, popPilaOperandos(), -1, 666);
+				}
+			;
+
 func_usuario11:	/*vacio*/
 			| COMA func_usuario1
 			;
@@ -255,7 +279,16 @@ estatuto	: asignacion
 			| func_usuario
 			;
 
-return		: RETURN exp PUNCOMA
+return		: RETURN exp PUNCOMA	{
+				//printf("\nRETURN %d  == %d\n", getTipo(peekPilaOperandos()), getTipoProc(indexProc));
+				generaCuadruplo(603, -1, -1, peekPilaOperandos());
+				/*
+				if(getTipo(peekPilaOperandos())==getTipoProc(indexProc)){
+					//cuadruplo return
+					generaCuadruplo(603, -1, -1, peekPilaOperandos());
+				}
+				*/
+			}
 			;
 
 asignacion	: ID IGUAL exp PUNCOMA	{
@@ -531,10 +564,10 @@ expresion_paso2	: 	{
 					}
 				;
 
-tipo		: INT		{tipo=$1;}
-			| FLOAT		{tipo=$1;}
-			| COLOR		{tipo=$1;}
-			| STRING	{tipo=$1;}
+tipo		: INT		{tipo=$1; printf("\nint tipo: %d\n", tipo)}
+			| FLOAT		{tipo=$1; printf("\nfloat tipo: %d\n", tipo)}
+			| COLOR		{tipo=$1; printf("\ncolor tipo: %d\n", tipo)}
+			| STRING	{tipo=$1; printf("\nstring tipo: %d\n", tipo)}
 			;
 
 constante	: ID	{
@@ -580,12 +613,12 @@ exp_paso_3	:	{
 						int aux1=popPilaOperandos();
 						int aux2=popPilaOperandos();
 						int op=popPilaOperadores();
-						char tipo = cuboSyn(aux1, aux2, op);
+						char tipo = cuboSyn(aux2, aux1, op);
 						int dir;
-						printf("\nHaciendo multiplicación (%d %d %d)\n", aux1, aux2, op);
+						printf("\nHaciendo multiplicación (%d %d %d)  resultado tipo %c\n", aux1, aux2, op, tipo);
 						if(tipo !='w'){
 							dir = getDirTemp(tipo);
-							generaCuadruplo(op,aux1,aux2,dir);
+							generaCuadruplo(op,aux2,aux1,dir);
 							pushPilaOperandos(dir);
 						}
 						else{
