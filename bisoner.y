@@ -593,11 +593,11 @@ exp_paso_2	:	{
 						int aux1=popPilaOperandos();
 						int aux2=popPilaOperandos();
 						int op=popPilaOperadores();
-						char tipo = cuboSyn(aux1, aux2, op);
+						char tipo = cuboSyn(aux2, aux1, op);
 						int dir;
 						if(tipo !='w'){
 							dir = getDirTemp(tipo);
-							generaCuadruplo(op,aux1,aux2,dir);
+							generaCuadruplo(op,aux2,aux1,dir);
 							pushPilaOperandos(dir);
 						}
 						else{
