@@ -27,6 +27,7 @@ struct proc{
 	int totalStr;
 	int params[55];
 	int cuadruploInicio;
+	int retorno;
 };
 
 
@@ -73,6 +74,7 @@ int offsetString = 1500;
 void imprimeProcs(int x){
 	int j;
 	printf("\nProc %s\n", procedimientos[x].id);
+	printf("Tipo de retorno:  %d\n", procedimientos[x].tipo);
 	
 	//La firma
 	printf("Firma: ");
@@ -309,6 +311,11 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			constantesInt[1].dv = offsetConstantes+1;
 			break;
 	}
+}
+
+//Guarda la dirección de donde se almacena el valor de retorno
+agregaReturn(int index, int dir){
+	procedimientos[index].retorno = dir;
 }
 
 //Regresa el tipo de dato que da el return de una función
