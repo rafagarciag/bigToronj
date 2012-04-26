@@ -51,6 +51,7 @@ void imprimeCuadruplos(char* nombre){
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");
 	
+	fprintf(ovejota,"%d\n", pointer);
 	int i;
 	for(i=0;i<pointer;i++){
 		printf("%d: (%d, %d ,%d ,%d)\n",i, cuadruplos[i].operador,cuadruplos[i].operando1,cuadruplos[i].operando2,cuadruplos[i].resultado);

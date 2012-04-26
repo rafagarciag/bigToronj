@@ -119,16 +119,17 @@ programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque 
 					printf("\n===========================\n");
 					printf("\nCompilación exitosa\n");
 					printf("\n===========================\n");
+					imprimeTotalGlobales(nombre);
+					imprimeTotalTemporales(nombre);
+					imprimeConstantes(nombre);
+					imprimeCuadruplos(nombre);
 				}
 				else{
 					printf("\n=============================================\n");
 					printf("\nSe detectaron %d error(es) de compilación\n", error);
 					printf("\n=============================================\n");
 				}
-				imprimeTotalGlobales(nombre);
-				imprimeTotalTemporales(nombre);
-				imprimeConstantes(nombre);
-				imprimeCuadruplos(nombre);
+				
 			}
 			;
 programa_paso1:	{
@@ -553,15 +554,40 @@ negacion	: /*vacio*/
 
 expresion_paso1:	{
 						if(peekPilaOperadores()==200||peekPilaOperadores()==201){
-							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
-							pushPilaOperandos(temporales++);
+							int aux1=popPilaOperandos();
+							int aux2=popPilaOperandos();
+							int op=popPilaOperadores();
+							char tipo = cuboSyn(aux2, aux1, op);
+							int dir;
+							if(tipo !='w'){
+								dir = getDirTemp(tipo);
+								generaCuadruplo(op,aux2,aux1,dir);
+								pushPilaOperandos(dir);
+							}
+							else{
+								error++;
+								printf("\nError en mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+							}
 						}
 					}
 				;
 expresion_paso2	: 	{
 						if(peekPilaOperadores()>=202 && peekPilaOperadores()<=207){
-							generaCuadruplo(popPilaOperadores(), popPilaOperandos(), popPilaOperandos(), temporales);
-							pushPilaOperandos(temporales++);
+							int aux1=popPilaOperandos();
+							int aux2=popPilaOperandos();
+							int op=popPilaOperadores();
+							char tipo = cuboSyn(aux2, aux1, op);
+							int dir;
+							printf("\nHaciendo multiplicación (%d %d %d)  resultado tipo %c\n", aux1, aux2, op, tipo);
+							if(tipo !='w'){
+								dir = getDirTemp(tipo);
+								generaCuadruplo(op,aux2,aux1,dir);
+								pushPilaOperandos(dir);
+							}
+							else{
+								error++;
+								printf("\nError en mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
+							}
 						}
 					}
 				;
@@ -582,8 +608,8 @@ constante	: ID	{
 			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
 			| CTE_HEX		{agregaConstante(2, $1, 0);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1, 0);operando=existeCteString($1);}
-			| WIDTH			{operando=1200;}
-			| HEIGHT		{operando=1201;}
+			| WIDTH			{operando=12000;}
+			| HEIGHT		{operando=12001;}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
 			| func_usuario
