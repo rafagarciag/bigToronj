@@ -73,7 +73,7 @@ int offsetString = 1500;
 void imprimeProcs(int x){
 	int j;
 	printf("\nProc %s\n", procedimientos[x].id);
-	
+	printf("Tipo de retorno %d\n",procedimientos[x].tipo);
 	//La firma
 	printf("Firma: ");
 	for(j=0; j<procedimientos[x].index_params; j++){

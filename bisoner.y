@@ -187,19 +187,23 @@ ret			:	{
 			;
 function1	: param_paso1 ids_fun function11
 			;
-param_paso1	: INT	{ 
+param_paso1	: INT	{
+				tipo=0;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| FLOAT	{ 
+			| FLOAT	{
+				tipo=1;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| COLOR	{ 
+			| COLOR	{
+				tipo=2;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
 			| STRING	{ 
+				tipo=3;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
