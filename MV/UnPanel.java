@@ -109,6 +109,7 @@ public class UnPanel extends JPanel {
 	}
    
 	public void dibujaCirculo(float x, float y){
+		System.out.println("Circulo: "+x+","+y);
 		g2d.setColor(Color.red);
 		g2d.translate(-(int)x/2, -(int)y/2);
 		g2d.fillOval(0, 0, (int)x, (int)y);
