@@ -37,4 +37,6 @@ gosub			601
 param			602
 return			603
 
+print			700
+
 ERA				999

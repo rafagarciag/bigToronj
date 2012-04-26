@@ -105,6 +105,7 @@ int contParam = 0;
 %token	RESTA
 %token	MULT
 %token	DIVI
+%token 	PRINT
 
 %%
 
@@ -225,7 +226,7 @@ bloque1		: /*vacio*/
 bloque_fun	: bloque1
 			;
 			
-func_usuario: ID PARENI func_usuario1 PAREND PUNCOMA {
+func_usuario: ID PARENI func_usuario1 PAREND {
 				//ERA
 				int i = existeProcedimiento(indexProc, $1);
 				int x;
@@ -277,6 +278,7 @@ estatuto	: asignacion
 			| met_bt
 			| dibujo
 			| func_usuario
+			| print
 			;
 
 return		: RETURN exp PUNCOMA	{
@@ -584,6 +586,7 @@ constante	: ID	{
 			| HEIGHT		{operando=1201;}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
+			| func_usuario
 			;
 
 exp_paso_1	:	{pushPilaOperandos(operando)}
@@ -633,6 +636,11 @@ exp_paso_4	:	{pushPilaOperadores(9999);}
 			;
 
 exp_paso_5	:	{popPilaOperadores();}
+			;
+			
+print		:	PRINT PARENI exp PAREND PUNCOMA{
+					generaCuadruplo(700, -1, -1, peekPilaOperandos());
+				}
 			;
 
 %%

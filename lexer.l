@@ -51,6 +51,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (pop)						{return POP;}
 (pop_origin)				{return POP_ORIGIN;}
 (set_color)					{return COLOR_METHOD;}
+(print)						{return PRINT;}
 
 	/* Metodos para crear figuras */
 (triangle)					{return TRIANGLE;}
