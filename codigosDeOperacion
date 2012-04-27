@@ -1,35 +1,35 @@
-Suma	100
-Resta	101
-Mult	102
-Divi	103
++Suma	100
++Resta	101
++Mult	102
++Divi	103
 
-Asignacion	150
++Asignacion	150
 
-&&		200
-||		201
-<		202
-<=		203
->		204
->=		205
-==		206
-!=		207
++&&		200
++||		201
++<		202
++<=		203
++>		204
++>=		205
++==		206
++!=		207
 
-goto	300
-gotoV	301
-gotoF	302
++goto	300
++gotoV	301
++gotoF	302
 
 
-line		400
++line		400
 triangle	401
-tetragon	402
-circle		403
++tetragon	402
++circle		403
 
-trans		450
-rot			451
++trans		450
++rot			451
 color_m		452
 
-push()			500
-pop()			501
++push()			500
++pop()			501
 pop_origin()	502
 
 ret 			600

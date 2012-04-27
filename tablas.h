@@ -30,7 +30,6 @@ struct proc{
 	int retorno;
 };
 
-
 //Almacenan las CONSTANTES enteras, flotantes, hexadecimales y string
 struct cteInt{
 	int valor;
@@ -116,6 +115,20 @@ void imprimeProcs(int x){
 	}
 }
 
+void imprimeProcedimientos(char* nombre, int numProcs){
+	int i;
+	FILE *ovejota;
+	ovejota=fopen(nombre,"a+");
+	
+	fprintf(ovejota,"%d\n",numProcs);
+	for(i=0;i<numProcs;i++){
+		fprintf(ovejota,"%s",procedimientos[i].id);
+		fprintf(ovejota,"%d,%d,%d,%d,%d,%d,%d,%d\n",procedimientos[i].tipo,procedimientos[i].index,procedimientos[i].totalInt,procedimientos[i].totalFlo,procedimientos[i].totalCol,procedimientos[i].totalStr,procedimientos[i].cuadruploInicio,procedimientos[i].retorno);
+	}
+	fclose(ovejota);
+	
+}
+
 void imprimeTotalGlobales(char* nombre){
 	FILE *ovejota;
 	ovejota=fopen(nombre,"w+");
@@ -124,7 +137,6 @@ void imprimeTotalGlobales(char* nombre){
 }
 
 void imprimeConstantes(char* nombre){
-
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");
 	
@@ -157,6 +169,7 @@ void imprimeConstantes(char* nombre){
 	fprintf(ovejota,"##\n");
 	fclose(ovejota);
 }
+
 
 void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;

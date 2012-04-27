@@ -1,8 +1,17 @@
+function int dibujando(int x, int y){
+	int a=3;
+	int b=4;
+	return x*y;
+}
+
 drawing (1000, 600, #ffffff){
 
 	int var1=100;
 	int var2=50;
 	int var3=0;
+	
+	
+	var1=dibujando(2,3);
 	
 	while(var3<5){
 		trans(50,50);
@@ -18,7 +27,7 @@ drawing (1000, 600, #ffffff){
 	pop();
 	
 	trans(_WIDTH/2, _HEIGHT/2);
-	if(var1>var2){
+	if(var1>var2&&var2<var1){
 		circle(var1,var1);
 	}
 	else{

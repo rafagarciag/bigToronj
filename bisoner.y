@@ -124,6 +124,7 @@ programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque 
 					imprimeTotalGlobales(nombre);
 					imprimeTotalTemporales(nombre);
 					imprimeConstantes(nombre);
+					imprimeProcedimientos(nombre,indexProc+1);
 					imprimeCuadruplos(nombre);
 					imprimePila();
 				}
@@ -196,23 +197,23 @@ ret			:	{
 function1	:	 
 			|	param_paso1 ids_fun function11
 			;
-param_paso1	: INT	{ 
-				tipo = $1;
+param_paso1	: INT	{
+				tipo=0;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| FLOAT	{ 
-				tipo = $1;
+			| FLOAT	{
+				tipo=1;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| COLOR	{ 
-				tipo = $1;
+			| COLOR	{
+				tipo=2;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| STRING	{ 
-				tipo = $1;
+			| STRING	{
+				tipo=3;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
