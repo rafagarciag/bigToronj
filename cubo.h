@@ -336,26 +336,32 @@ int getTipo(int x){
 		string	|	13500	-	13999
 		
 	*/
-	int scope = x/2000;
-	int mod = 0;
-	switch(scope){
-		//Globales, locales 
-		case 0:
-		case 1:
-		case 6:
-			return (x%2000)/500;
-			break;
+	if(x>=0){
+		int scope = x/2000;
+		int mod = 0;
+		switch(scope){
+			//Globales, locales 
+			case 0:
+			case 1:
+			case 6:
+				return (x%2000)/500;
+				break;
 			
-		//Las temporales
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-			return ((x-4000)%8000)/2000;
-			break;
+			//Las temporales
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+				return ((x-4000)%8000)/2000;
+				break;
+		}
+		return -1;
 	}
-	
-	return -1;
+	else{
+		//Tipo desconocido
+		return 99;
+	}
+
 }
 
 char cuboSyn(int tipo1, int tipo2, int op){

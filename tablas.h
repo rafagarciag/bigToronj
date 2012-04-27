@@ -1,11 +1,3 @@
-//ES MEJOR TENER UNA TABLA DE FIRMAS DE PARAMS Y A CADA PROCEIMIENTO QUE SI TENGA PARAMS LE PONEMOS EL INDICE
-//DE LA FIRMA QUE LE CORRESPONDE
-
-//HAY QUE CAMBIAR EL NUMERO DE LAS VARIABLES Y CONSTANTES
-//ES MEJOR QUE SEAN UN VERGO!!!!!!
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -327,7 +319,7 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 }
 
 //Guarda la dirección de donde se almacena el valor de retorno
-agregaReturn(int index, int dir){
+void agregaReturn(int index, int dir){
 	procedimientos[index].retorno = dir;
 }
 

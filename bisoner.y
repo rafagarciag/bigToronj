@@ -61,7 +61,7 @@ int contParam = 0;
 %token	<number> FLOAT
 %token	<number> COLOR
 %token	<number> STRING
-%token	VOID
+%token	<number> VOID
 %token	<string> CTE_I
 %token	<string> CTE_F
 %token	<string> CTE_HEX
@@ -172,11 +172,12 @@ function	: FUNCTION tipo_ret id_func PARENI function1 PAREND cuadruplo_inicio LL
 					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", id_func);
 				}
 			}
-			| FUNCTION VOID id_func PARENI function1 PAREND cuadruplo_inicio bloque ret	{
+			| FUNCTION voiding id_func PARENI function1 PAREND cuadruplo_inicio bloque ret	{
 				int indice = existeProcedimiento(indexProc, id_func);
-				tipo_ret=99;
 				if(indice<0 || indice == indexProc){
-					agregaProcedimiento(indexProc, indexParams, 1000, id_func, lineNumber); 
+					
+					agregaProcedimiento(indexProc, indexParams, tipo_ret, id_func, lineNumber);
+					procedimientos[indexProc].retorno = -99;
 					indexProc++;
 					indexParams=0;
 				}
@@ -186,10 +187,12 @@ function	: FUNCTION tipo_ret id_func PARENI function1 PAREND cuadruplo_inicio LL
 				}
 			}
 			;
-tipo_ret	: INT		{tipo_ret=$1;}
-			| FLOAT		{tipo_ret=$1;}
-			| COLOR		{tipo_ret=$1;}
-			| STRING	{tipo_ret=$1;}
+voiding		: VOID		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
+			;
+tipo_ret	: INT		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
+			| FLOAT		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
+			| COLOR		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
+			| STRING	{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
 			;
 id_func		: ID	{ procedimientos[indexProc].id = $1; id_func=$1; }
 			;
@@ -248,8 +251,8 @@ bloque1		: /*vacio*/
 
 bloque_fun	: bloque1
 			;
-			
-func_usuario: ID PARENI func_usuario1 PAREND {
+
+func_usuario: ID PARENI func_usuario1 PAREND{
 				//ERA
 				int i = existeProcedimiento(indexProc, $1);
 				int x;

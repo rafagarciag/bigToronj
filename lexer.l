@@ -22,7 +22,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 (float)						{yylval.number=1;return FLOAT;}
 (color)						{yylval.number=2;return COLOR;}
 (string)					{yylval.number=3;return STRING;}
-(void)						{return VOID;}
+(void)						{yylval.number=99;return VOID;}
 
 	/* Constantes enteras */
 {DIGIT}+					{yylval.string=strdup(yytext);return CTE_I;}
