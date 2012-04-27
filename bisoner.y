@@ -260,16 +260,29 @@ bloque1		: /*vacio*/
 bloque_fun	: bloque1
 			;
 
-func_usuario: ID PARENI func_usuario1 PAREND{
+func_usuario: id_func_usuario PARENI func_usuario1 PAREND{
 				//ERA
-				int i = existeProcedimiento(indexProc, $1);
+				int i = existeProcedimiento(indexProc, id_func);
 				int x;
+				int direccion;
+				int offsets[4];
+				offsets[0]=2000;
+				offsets[1]=2500;
+				offsets[2]=3000;
+				offsets[3]=3500;
+				int indices[4];
+				indices[0]=0;
+				indices[1]=0;
+				indices[2]=0;
+				indices[3]=0;
 				if(i>0){
 					//ERA
 					generaCuadruplo(999, -1, -1, i);
 
 					for(x=0; x<contParam; x++){
-						generaCuadruplo(602, filaParams[x], -1, x);
+						direccion=offsets[procedimientos[i].params[x]]+indices[procedimientos[i].params[x]];
+						generaCuadruplo(602, filaParams[x], -1, direccion);
+						indices[procedimientos[i].params[x]]+=1;
 					}
 					
 					contParam=0;
@@ -279,11 +292,12 @@ func_usuario: ID PARENI func_usuario1 PAREND{
 				}
 				else{
 					error++;
-					printf("La función %s no ha sido definida anteriormente", $1);
+					printf("La función %s no ha sido definida anteriormente", id_func);
 				}
 			}
 			;
-
+id_func_usuario	:	ID	{id_func=$1;}
+				;
 func_usuario1	: 
 				| param func_usuario11
 				;
@@ -291,8 +305,18 @@ func_usuario1	:
 param		:	exp	{
 					//Parámetros
 					int p = popPilaOperandos();
-					filaParams[contParam] = p;
-					contParam++;
+					
+					//Validación semántica con la firma del procedimiento
+					
+					if(getTipo(p)==procedimientos[existeProcedimiento(indexProc,id_func)].params[contParam]){
+						filaParams[contParam] = p;
+						contParam++;
+					}
+					else{
+						error++;
+						printf("Error en línea %d. Parámetros enviados a método no corresponden al tipo esperado\n", lineNumber);
+						printf("Validacion semantica de firma %d == %d\n", getTipo(p), procedimientos[existeProcedimiento(indexProc,id_func)].params[contParam]);
+					}
 					
 					//generaCuadruplo(602, popPilaOperandos(), -1, 666);
 				}
