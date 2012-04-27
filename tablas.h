@@ -251,9 +251,11 @@ int existeCteFloat(float y){
 
 int existeCteHex(char* x){
 	int i;
-	for(i=0;i<i_cteHex;i++)
+	for(i=1;i<i_cteHex;i++){
+		printf("CTEHEX: %s\n",constantesHex[i].valor);
 		if(!strcmp(constantesHex[i].valor, x))
 			return constantesHex[i].dv;
+	}
 	return -1000;
 }
 

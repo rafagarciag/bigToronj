@@ -32,12 +32,12 @@ color_m		452
 +pop()			501
 +pop_origin()	502
 
-ret 			600
-gosub			601
++ret 			600
++gosub			601
 param			602
 return			603
 
 print			700
 write			701
 
-ERA				999
++ERA				999

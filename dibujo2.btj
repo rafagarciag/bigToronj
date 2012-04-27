@@ -1,38 +1,11 @@
-function int circuloCuadros(){
-	int x=0;
-	while(x<360){
-		trans(0,50);
-		tetragon(30,30);
-		pop();
-		x=x+90;
-		rotate(90);
-		push();
-	}
-	pop();
-	return 1;
-}
+global string unString="cosas";
+global color elColor=#FFAA10;
+global int gi1=34;
 
-drawing (1000, 600, #ffffff){
-	int aux;
-	int torta=200;
-	line(_WIDTH,_HEIGHT);
-	trans(_WIDTH/4,_HEIGHT/4);
-	push();
-	circle(torta,torta);
-	aux=circuloCuadros();
-	torta=torta/2;
-	tetragon(torta,torta);
-	trans(_WIDTH/4,_HEIGHT/4);
-	push();
-	circle(torta,torta);
-	aux=circuloCuadros();
-	torta=torta/2;
-	tetragon(torta,torta);
-	trans(_WIDTH/4,_HEIGHT/4);
-	push();
-	circle(torta,torta);
-	aux=circuloCuadros();
-	torta=torta/2;
-	tetragon(torta,torta);
 
+drawing (1000, 600, #CAFE10){
+	color otroColor=#aa22aa, masColores=#dddddd;
+	set_color(#13DFC5);
+	trans(_WIDTH/2,_HEIGHT/2);
+	tetragon(50,50);
 }

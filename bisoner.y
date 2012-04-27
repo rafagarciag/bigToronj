@@ -525,7 +525,7 @@ rotate_place: ROTATE_PLACE PARENI exp PAREND PUNCOMA
 scale		: SCALE PARENI exp PAREND PUNCOMA
 			;
 
-color_method	: COLOR_METHOD PARENI exp PAREND PUNCOMA
+color_method	: COLOR_METHOD PARENI exp PAREND PUNCOMA {generaCuadruplo(452,popPilaOperandos(),-1,-1);}
 				;
 
 dibujo		: line
@@ -630,7 +630,6 @@ expresion_paso2	: 	{
 							int op=popPilaOperadores();
 							char tipo = cuboSyn(aux2, aux1, op);
 							int dir;
-							printf("\nHaciendo multiplicación (%d %d %d)  resultado tipo %c\n", aux1, aux2, op, tipo);
 							if(tipo !='w'){
 								dir = getDirTemp(tipo);
 								generaCuadruplo(op,aux2,aux1,dir);
@@ -708,7 +707,6 @@ exp_paso_3	:	{
 						int op=popPilaOperadores();
 						char tipo = cuboSyn(aux2, aux1, op);
 						int dir;
-						printf("\nHaciendo multiplicación (%d %d %d)  resultado tipo %c\n", aux1, aux2, op, tipo);
 						if(tipo !='w'){
 							dir = getDirTemp(tipo);
 							generaCuadruplo(op,aux2,aux1,dir);
