@@ -237,6 +237,8 @@ function11	:
 canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND {
 				agregaConstante(100, $2, 0);
 				agregaConstante(101, $4, 0);
+				agregaConstante(102, $2, 0);
+				agregaConstante(103, $4, 0);
 			}
 			;
 
@@ -649,8 +651,18 @@ constante	: ID	{
 			| CTE_F			{agregaConstante(1, $1, aux_negativo);operando=existeCteFloat(atof($1)*aux_negativo);}
 			| CTE_HEX		{agregaConstante(2, $1, 0);operando=existeCteHex($1);}
 			| CTE_STRING	{agregaConstante(3, $1, 0);operando=existeCteString($1);}
-			| WIDTH			{operando=12000;}
-			| HEIGHT		{operando=12001;}
+			| WIDTH			{
+								if(aux_negativo!=-1)
+									operando=12000;
+								else
+									operando=12002;
+							}
+			| HEIGHT		{
+								if(aux_negativo!=-1)
+									operando=12001;
+								else
+									operando=12003;
+							}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
 			| func_usuario	{

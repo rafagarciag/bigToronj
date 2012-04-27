@@ -13,6 +13,7 @@ public class MaquinaVirtual{
 		BufferedReader objIn = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(args[0]+".btjo"))));
 		
 		//...
+		Queue <Integer> pilaRetornos = new LinkedList<Integer>();
 		Queue <Variable> pilaScopes = new LinkedList<Variable>();
 		Variable scope;
 		
@@ -66,9 +67,6 @@ public class MaquinaVirtual{
 		scope= new Variable(listaProcs[numProcs-1].getTotalInt(),listaProcs[numProcs-1].getTotalFlo(),
 				listaProcs[numProcs-1].getTotalCol(),listaProcs[numProcs-1].getTotalStr());
 		
-		for(int i=0;i<listaProcs.length;i++)
-			System.out.println(""+listaProcs[i].getTipo()+listaProcs[i].getTotalInt()+listaProcs[i].getTotalFlo()+listaProcs[i].getTotalCol()+listaProcs[i].getTotalStr()+listaProcs[i].getCuadInicio());
-		
 		Cuadruplo [] cuadruplos = new Cuadruplo [Integer.parseInt(objIn.readLine())+1];
 		
 		int index=0;
@@ -88,6 +86,7 @@ public class MaquinaVirtual{
 		
 		index=0;
 		while(cuadruplos[index].getOperacion()!=-9999){
+			System.out.print(index+": ");
 			switch(cuadruplos[index].getOperacion()){
 				//OPERACIONES ARITMETICAS
 				case 100:
@@ -121,11 +120,11 @@ public class MaquinaVirtual{
 				
 				//ASIGNACION
 				case 150:
+					System.out.println("ASIGNACION");
 					switch(cuadruplos[index].getResultado()/2000){
 						case 0:
 							switch((cuadruplos[index].getResultado()%2000)/500){
 								case 0:
-									System.out.println("Tamaño de globales int:"+ Variable.globalesInt.length);
 									Variable.globalesInt[cuadruplos[index].getResultado()]=(int)scope.getValorNumerico(cuadruplos[index].getOperando1());
 									break;
 								case 1:
@@ -276,6 +275,37 @@ public class MaquinaVirtual{
 					System.out.println("POPORIGIN");
 					elPanel.popOrigin();
 					break;
+					
+				//Llamadas y metodos
+				case 600:
+					System.out.println("RET");
+					scope=pilaScopes.poll();
+					index=pilaRetornos.poll();
+					break;
+				case 601:
+					System.out.println("GOSUB");
+					int iSUB=cuadruplos[index].getResultado();
+					pilaRetornos.add(index);
+					index=listaProcs[iSUB].getCuadInicio()-1;
+					break;
+				case 602:
+					System.out.println("PARAM");
+					
+					break;
+				case 603:
+					System.out.println("RETURN");
+					
+					break;
+					
+				//ERA
+				case 999:
+					System.out.println("ERA");
+					int iERA=cuadruplos[index].getResultado();
+					pilaScopes.add(scope);
+					scope=new Variable(listaProcs[iERA].getTotalInt(),listaProcs[iERA].getTotalFlo(),
+							listaProcs[iERA].getTotalCol(),listaProcs[iERA].getTotalStr());
+					break;
+					
 			}
 			index++;
 			//Thread.sleep(500);

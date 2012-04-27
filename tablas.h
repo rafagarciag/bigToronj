@@ -56,7 +56,7 @@ int offsetConstantes = 12000;
 
 struct cteInt constantesInt[50];
 int offsetInt = 0; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
-int i_cteInt = 2;
+int i_cteInt = 4;
 
 struct cteFloat constantesFloat[50];
 int offsetFloat = 500;
@@ -323,6 +323,19 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			constantesInt[1].valor = atoi(valor);
 			constantesInt[1].dv = offsetConstantes+1;
 			break;
+			
+		//Constante _WIDTH negativa
+		case 102:
+			constantesInt[2].valor = -atoi(valor);
+			constantesInt[2].dv = offsetConstantes+2;
+			break;
+
+		//Constante _HEIGHT negativa
+		case 103:
+			constantesInt[3].valor = -atoi(valor);
+			constantesInt[3].dv = offsetConstantes+3;
+			break;
+			
 	}
 }
 
