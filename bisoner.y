@@ -15,6 +15,7 @@ int indexParams=0;
 int tipo=1000;
 int tipo_ret = 1000;
 int llamada;
+char* id_func;
 
 //Errores de compilacion
 int error=0;
@@ -108,13 +109,14 @@ int contParam = 0;
 %token	MULT
 %token	DIVI
 %token 	PRINT
+%token	WRITE
 
 %%
 
 //GRAMATICA!
 
 
-programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque {
+programa	: global programa_paso1 functions DRAWING canvas programa_paso2 bloque {
 				agregaProcedimiento(indexProc, 3, tipo, "drawing", lineNumber); 
 
 				if(error==0){
@@ -146,7 +148,7 @@ programa_paso2: {
 				}
 			;
 global	: /*vacio*/	{
-						agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); indexProc++;
+						agregaProcedimiento(indexProc, 0, 1000, "global", lineNumber); indexProc++;
 					}
 		| GLOBAL declaracion global
 		;
@@ -155,28 +157,28 @@ functions	:
 			| function functions
 			;
 
-function	: FUNCTION tipo_ret ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return ret LLAVED	{
-
-				if(existeProcedimiento(indexProc, $3)<0){
-					agregaProcedimiento(indexProc, indexParams, tipo_ret, $3, lineNumber); 
+function	: FUNCTION tipo_ret id_func PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return ret LLAVED	{
+				int indice = existeProcedimiento(indexProc, id_func);
+				if(indice<0 || indice == indexProc){
+					agregaProcedimiento(indexProc, indexParams, tipo_ret, id_func, lineNumber); 
 					indexProc++;
 					indexParams=0;
 				}
 				else{
 					error++;
-					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
+					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", id_func);
 				}
 			}
-			| FUNCTION VOID ID PARENI function1 PAREND cuadruplo_inicio bloque ret	{
-
-				if(existeProcedimiento(indexProc, $3)<0){
-					agregaProcedimiento(indexProc, indexParams, 1000, $3, lineNumber); 
+			| FUNCTION VOID id_func PARENI function1 PAREND cuadruplo_inicio bloque ret	{
+				int indice = existeProcedimiento(indexProc, id_func);
+				if(indice<0 || indice == indexProc){
+					agregaProcedimiento(indexProc, indexParams, 1000, id_func, lineNumber); 
 					indexProc++;
 					indexParams=0;
 				}
 				else{
 					error++;
-					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
+					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", id_func);
 				}
 			}
 			;
@@ -184,6 +186,8 @@ tipo_ret	: INT		{tipo_ret=$1;}
 			| FLOAT		{tipo_ret=$1;}
 			| COLOR		{tipo_ret=$1;}
 			| STRING	{tipo_ret=$1;}
+			;
+id_func		: ID	{ procedimientos[indexProc].id = $1; id_func=$1; }
 			;
 
 cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
@@ -293,6 +297,7 @@ estatuto	: asignacion
 			| dibujo
 			| func_usuario
 			| print
+			| write
 			;
 
 return		: RETURN exp PUNCOMA	{
@@ -699,7 +704,12 @@ exp_paso_5	:	{popPilaOperadores();}
 			;
 			
 print		:	PRINT PARENI exp PAREND PUNCOMA{
-					generaCuadruplo(700, -1, -1, peekPilaOperandos());
+					generaCuadruplo(700, -1, -1, popPilaOperandos());
+				}
+			;
+
+write		:	WRITE PARENI exp PAREND PUNCOMA{
+					generaCuadruplo(701, -1, -1, popPilaOperandos());
 				}
 			;
 
