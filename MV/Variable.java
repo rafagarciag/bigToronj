@@ -59,6 +59,7 @@ public class Variable {
 	
 	public float getValorNumerico(int dv){
 		if(dv>=0&&dv<500){
+			System.out.println("de la direccion"+dv+"Regrese:"+ globalesInt[dv]);
 			return globalesInt[dv];
 		}
 		if(dv>=500&&dv<1000){
@@ -67,7 +68,7 @@ public class Variable {
 		if(dv>=2000&&dv<2500){
 			return varInt[dv-2000];
 		}
-		if(dv>=2500&&dv<2000){
+		if(dv>=2500&&dv<3000){
 			return varFlo[dv-2500];
 		}
 		if(dv>=4000&&dv<6000){
@@ -79,7 +80,9 @@ public class Variable {
 		if(dv>=12000&&dv<12500){
 			return cteInt.get(dv-12000);
 		}
-		else if(dv>=12500&&dv<13000){
+		if(dv>=12500&&dv<13000){
+
+			System.out.println("de la direccion"+dv+"Regrese:"+ cteFlo.get(dv-12500));
 			return cteFlo.get(dv-12500);
 		}
 		return 0;

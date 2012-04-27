@@ -81,6 +81,13 @@ public class UnPanel extends JPanel {
 		boolRot=false;
 	}
 	
+	public void popOrigin(){
+		while(!(pilaX.isEmpty()||pilaY.isEmpty()||pilaRot.isEmpty())){
+			pop();
+		}
+		pop();
+	}
+	
 	public void traslada(float x, float y){
 		g2d.translate((int)x, (int)y);
 		transX+=x;
@@ -89,6 +96,8 @@ public class UnPanel extends JPanel {
 	}
 	
 	public void rota(float x){
+		System.out.println("Los grados: "+x);
+		System.out.println("To radians:"+Math.toRadians(x));
 		g2d.rotate(Math.toRadians(x));
 		rot+=Math.toRadians(x);
 		boolRot=true;

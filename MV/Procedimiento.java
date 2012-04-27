@@ -1,28 +1,43 @@
-import java.util.Arrays;
-
-
 public class Procedimiento {
 	private int tipo;
-	private String id;
-	private int totalVariables;
-	private int totalParams;
 	private int totalInt;
 	private int totalFlo;
 	private int totalCol;
 	private int totalStr;
-	private int [] params;
-	private int cuadruploInicio;
+	private int cuadInicio;
 	
+	public Procedimiento(int tipo, int totalInt, int totalFlo, int totalCol, int totalStr, int cuadInicio){
+		this.tipo=tipo;
+		this.totalInt=totalInt;
+		this.totalFlo=totalFlo;
+		this.totalCol=totalCol;
+		this.totalStr=totalStr;
+		this.cuadInicio=cuadInicio;
+	}
+
 	public int getTipo() {
 		return tipo;
 	}
-	public String getId() {
-		return id;
+
+	public int getTotalInt() {
+		return totalInt;
 	}
-	public int[] getParams() {
-		return params;
+
+	public int getTotalFlo() {
+		return totalFlo;
 	}
-	public int getCuadruploInicio() {
-		return cuadruploInicio;
+
+	public int getTotalCol() {
+		return totalCol;
 	}
+
+	public int getTotalStr() {
+		return totalStr;
+	}
+
+	public int getCuadInicio() {
+		return cuadInicio;
+	}
+	
+	
 }

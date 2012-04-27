@@ -30,7 +30,7 @@ color_m		452
 
 +push()			500
 +pop()			501
-pop_origin()	502
++pop_origin()	502
 
 ret 			600
 gosub			601

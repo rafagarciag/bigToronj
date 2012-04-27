@@ -19,6 +19,10 @@ public class MaquinaVirtual{
 		String constante;//String auxiliar usado para leer una linea del archivo con la informacion de una constante
 		String [] auxConstante = new String [2];//En este arreglo se divide la informacion del string anterior para manipularse mas facilmente
 		
+		String procedimiento;
+		String [] auxProcedimiento = new String [6];
+		Procedimiento [] listaProcs;
+		
 		String cuadruplo;//String auxiliar para lectura de cuadruplos en el archivo
 		String [] auxCuadruplo = new String [4];//Arreglo auxiliar para contener la informacion de los cuadruplos para manipularse mas facilmente
 		
@@ -44,18 +48,30 @@ public class MaquinaVirtual{
 				Integer.parseInt(objIn.readLine()));
 		
 		
-		int index=0;
+		
 		while(!(constante=objIn.readLine()).equals("##")){
 			auxConstante=constante.split(",");
 			Variable.agregaConstante(Integer.parseInt(auxConstante[0]), auxConstante[1]);
 		}
 		
-		//EEEEEEEEHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-				//EHHHH!!
-				//EHHHHHHH!!!
-				//Despues hay que cambiar esto por un arraylist o declarar el arreglo con un tamaño ya determinado.
+		int numProcs=Integer.parseInt(objIn.readLine());
+		listaProcs = new Procedimiento[numProcs];
+		for(int i=0;i<listaProcs.length;i++){
+			procedimiento=objIn.readLine();
+			auxProcedimiento=procedimiento.split(",");
+			listaProcs[i]=new Procedimiento(Integer.parseInt(auxProcedimiento[0]),Integer.parseInt(auxProcedimiento[1]),Integer.parseInt(auxProcedimiento[2]),
+					Integer.parseInt(auxProcedimiento[3]),Integer.parseInt(auxProcedimiento[4]),Integer.parseInt(auxProcedimiento[5]));
+		}
+		
+		scope= new Variable(listaProcs[numProcs-1].getTotalInt(),listaProcs[numProcs-1].getTotalFlo(),
+				listaProcs[numProcs-1].getTotalCol(),listaProcs[numProcs-1].getTotalStr());
+		
+		for(int i=0;i<listaProcs.length;i++)
+			System.out.println(""+listaProcs[i].getTipo()+listaProcs[i].getTotalInt()+listaProcs[i].getTotalFlo()+listaProcs[i].getTotalCol()+listaProcs[i].getTotalStr()+listaProcs[i].getCuadInicio());
+		
 		Cuadruplo [] cuadruplos = new Cuadruplo [Integer.parseInt(objIn.readLine())+1];
 		
+		int index=0;
   		while((cuadruplo=objIn.readLine())!=null){
   			auxCuadruplo=cuadruplo.split(",");
   			cuadruplos[index]=new Cuadruplo(Integer.parseInt(auxCuadruplo[0]),Integer.parseInt(auxCuadruplo[1]),
@@ -65,7 +81,7 @@ public class MaquinaVirtual{
   		cuadruplos[index]=new Cuadruplo(-9999,-1,-1,-1);
 		System.out.println("Fin de lectura");
 		
-		scope= new Variable(10,10,10,10);
+		
 		
 		UnPanel elPanel = new UnPanel(scope.getValorNumerico(12000),scope.getValorNumerico(12001));
 		Drawing d = new Drawing(elPanel);
@@ -109,6 +125,7 @@ public class MaquinaVirtual{
 						case 0:
 							switch((cuadruplos[index].getResultado()%2000)/500){
 								case 0:
+									System.out.println("Tamaño de globales int:"+ Variable.globalesInt.length);
 									Variable.globalesInt[cuadruplos[index].getResultado()]=(int)scope.getValorNumerico(cuadruplos[index].getOperando1());
 									break;
 								case 1:
@@ -206,6 +223,9 @@ public class MaquinaVirtual{
 					break;
 				case 301:
 					System.out.println("GOTO/VERDADERO");
+					if (scope.getValorNumerico(cuadruplos[index].getOperando1())!=0){
+						index=cuadruplos[index].getResultado()-1;
+					}
 					break;
 				case 302:
 					System.out.println("GOTO/FALSO");
@@ -254,6 +274,7 @@ public class MaquinaVirtual{
 					break;
 				case 502:
 					System.out.println("POPORIGIN");
+					elPanel.popOrigin();
 					break;
 			}
 			index++;
