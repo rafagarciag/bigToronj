@@ -110,7 +110,7 @@ int contParam = 0;
 %token	MULT
 %token	DIVI
 %token 	PRINT
-%token	WRITE
+%token	READ
 
 %%
 
@@ -174,6 +174,7 @@ function	: FUNCTION tipo_ret id_func PARENI function1 PAREND cuadruplo_inicio LL
 			}
 			| FUNCTION VOID id_func PARENI function1 PAREND cuadruplo_inicio bloque ret	{
 				int indice = existeProcedimiento(indexProc, id_func);
+				tipo_ret=99;
 				if(indice<0 || indice == indexProc){
 					agregaProcedimiento(indexProc, indexParams, 1000, id_func, lineNumber); 
 					indexProc++;
@@ -300,7 +301,7 @@ estatuto	: asignacion
 			| dibujo
 			| func_usuario
 			| print
-			| write
+			| read
 			;
 
 return		: RETURN exp PUNCOMA	{
@@ -711,7 +712,7 @@ print		:	PRINT PARENI exp PAREND PUNCOMA{
 				}
 			;
 
-write		:	WRITE PARENI exp PAREND PUNCOMA{
+read		:	READ PARENI exp PAREND PUNCOMA{
 					generaCuadruplo(701, -1, -1, popPilaOperandos());
 				}
 			;
