@@ -122,8 +122,7 @@ void imprimeProcedimientos(char* nombre, int numProcs){
 	
 	fprintf(ovejota,"%d\n",numProcs);
 	for(i=0;i<numProcs;i++){
-		fprintf(ovejota,"%s",procedimientos[i].id);
-		fprintf(ovejota,"%d,%d,%d,%d,%d,%d,%d,%d\n",procedimientos[i].tipo,procedimientos[i].index,procedimientos[i].totalInt,procedimientos[i].totalFlo,procedimientos[i].totalCol,procedimientos[i].totalStr,procedimientos[i].cuadruploInicio,procedimientos[i].retorno);
+		fprintf(ovejota,"%d,%d,%d,%d,%d,%d\n",procedimientos[i].tipo,procedimientos[i].totalInt,procedimientos[i].totalFlo,procedimientos[i].totalCol,procedimientos[i].totalStr,procedimientos[i].cuadruploInicio);
 	}
 	fclose(ovejota);
 	
