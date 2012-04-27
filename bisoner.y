@@ -16,6 +16,7 @@ int tipo=1000;
 int tipo_ret = 1000;
 int llamada;
 char* id_func;
+int cuad_main;
 
 //Errores de compilacion
 int error=0;
@@ -144,11 +145,13 @@ programa_paso1:	{
 				}
 			 ;
 programa_paso2: {
-					rellenaGoTo(0, getPointerCuadruplos());
+					rellenaGoTo(cuad_main, getPointerCuadruplos());
 				}
 			;
 global	: /*vacio*/	{
-						agregaProcedimiento(indexProc, 0, 1000, "global", lineNumber); indexProc++;
+						agregaProcedimiento(indexProc, 3, 1000, "global", lineNumber); 
+						cuad_main = getPointerCuadruplos();
+						indexProc++;
 					}
 		| GLOBAL declaracion global
 		;
