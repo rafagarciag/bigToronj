@@ -1,32 +1,38 @@
-drawing (1000, 600, #ffffff){
-	int gi1=30;
-	
-	gi1=20;
-	int i=0;
-	int j=0;
-	
-	while(i<5){
-		push();
-		j=0;
-		while(j<5){
-			tetragon(50,50);
-			trans(25,0);
-			j=j+1;
-		}
-		pop();
-		trans(0,25);
-		i=i+1;
-	}
-	
-	trans(_WIDTH/2,_HEIGHT/2);
-	push();
+function int circuloCuadros(){
 	int x=0;
 	while(x<360){
-		trans(0,100);
-		tetragon(gi1,gi1);
+		trans(0,50);
+		tetragon(30,30);
 		pop();
-		x=x+20;
-		rotate(gi1);
+		x=x+90;
+		rotate(90);
 		push();
 	}
+	pop();
+	return 1;
+}
+
+drawing (1000, 600, #ffffff){
+	int aux;
+	int torta=200;
+	line(_WIDTH,_HEIGHT);
+	trans(_WIDTH/4,_HEIGHT/4);
+	push();
+	circle(torta,torta);
+	aux=circuloCuadros();
+	torta=torta/2;
+	tetragon(torta,torta);
+	trans(_WIDTH/4,_HEIGHT/4);
+	push();
+	circle(torta,torta);
+	aux=circuloCuadros();
+	torta=torta/2;
+	tetragon(torta,torta);
+	trans(_WIDTH/4,_HEIGHT/4);
+	push();
+	circle(torta,torta);
+	aux=circuloCuadros();
+	torta=torta/2;
+	tetragon(torta,torta);
+
 }
