@@ -401,7 +401,16 @@ char cuboSyn(int tipo1, int tipo2, int op){
 		case 207:
 			operador = 7; break;
 	}
-	return cubo[getTipo(tipo1)][getTipo(tipo2)][operador];
+	
+	int t1 = getTipo(tipo1);
+	int t2 = getTipo(tipo2);
+	
+	if( (t1>=0 && t1<=3) && (t2>=0 && t2<=3)){
+		return cubo[t1][t2][operador];
+	}
+	else{
+		return 'w';
+	}
 }
 
 void imprimeTotalTemporales(char* nombre){

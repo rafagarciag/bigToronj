@@ -14,6 +14,7 @@ int indexProc=0;
 int indexParams=0;
 int tipo=1000;
 int tipo_ret = 1000;
+int llamada;
 
 //Errores de compilacion
 int error=0;
@@ -192,7 +193,8 @@ ret			:	{
 					generaCuadruplo(600, -1, -1, -1);
 				}
 			;
-function1	: param_paso1 ids_fun function11
+function1	:	 
+			|	param_paso1 ids_fun function11
 			;
 param_paso1	: INT	{ 
 				tipo = $1;
@@ -295,13 +297,18 @@ estatuto	: asignacion
 return		: RETURN exp PUNCOMA	{
 				//printf("\nRETURN %d  == %d\n", getTipo(peekPilaOperandos()), getTipoProc(indexProc));
 				//imprimePila();
-				if(getTipo(peekPilaOperandos())==getTipoProc(indexProc)){
+				printf("Peek = %d\n", getTipo(peekPilaOperandos()));
+				printf("Tipo proc = %d\n", tipo_ret);
+				
+				//Validación semántica
+				if(getTipo(peekPilaOperandos())==tipo_ret){
+					
 					int valor = popPilaOperandos();
 					//Asignar a una temporal el valor de retorno
 					int dirTemp = getDirTempInt(getTipoProc(indexProc));
 					generaCuadruplo(150, valor, -1, dirTemp);
 					agregaReturn(indexProc, dirTemp);
-					
+					llamada = indexProc;
 					generaCuadruplo(603, -1, -1, valor);
 					
 				}
@@ -362,7 +369,7 @@ declaracion1: /*vacio*/
 					int dv = existeVariable(indexProc, aux_asignacion);
 					char tipo = cuboSyn(dv,aux1,150);
 					//printf("Asignación espuria (%d = %d)", dv, aux1);
-					if(1){
+					if(tipo!='w'){
 						generaCuadruplo(150,aux1,-1,dv);
 					}
 					else{
@@ -636,7 +643,9 @@ constante	: ID	{
 			| HEIGHT		{operando=12001;}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
-			| func_usuario	{pushPilaOperandos(dirTemp);}
+			| func_usuario	{
+								operando=procedimientos[llamada].retorno;
+							}
 			;
 
 exp_paso_1	:	{pushPilaOperandos(operando)}
