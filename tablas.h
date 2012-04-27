@@ -27,8 +27,8 @@ struct proc{
 	int totalStr;
 	int params[55];
 	int cuadruploInicio;
+	int retorno;
 };
-
 
 //Almacenan las CONSTANTES enteras, flotantes, hexadecimales y string
 struct cteInt{
@@ -73,7 +73,8 @@ int offsetString = 1500;
 void imprimeProcs(int x){
 	int j;
 	printf("\nProc %s\n", procedimientos[x].id);
-	printf("Tipo de retorno %d\n",procedimientos[x].tipo);
+	printf("Tipo de retorno:  %d\n", procedimientos[x].tipo);
+	
 	//La firma
 	printf("Firma: ");
 	for(j=0; j<procedimientos[x].index_params; j++){
@@ -114,6 +115,20 @@ void imprimeProcs(int x){
 	}
 }
 
+void imprimeProcedimientos(char* nombre, int numProcs){
+	int i;
+	FILE *ovejota;
+	ovejota=fopen(nombre,"a+");
+	
+	fprintf(ovejota,"%d\n",numProcs);
+	for(i=0;i<numProcs;i++){
+		fprintf(ovejota,"%s",procedimientos[i].id);
+		fprintf(ovejota,"%d,%d,%d,%d,%d,%d,%d,%d\n",procedimientos[i].tipo,procedimientos[i].index,procedimientos[i].totalInt,procedimientos[i].totalFlo,procedimientos[i].totalCol,procedimientos[i].totalStr,procedimientos[i].cuadruploInicio,procedimientos[i].retorno);
+	}
+	fclose(ovejota);
+	
+}
+
 void imprimeTotalGlobales(char* nombre){
 	FILE *ovejota;
 	ovejota=fopen(nombre,"w+");
@@ -122,7 +137,6 @@ void imprimeTotalGlobales(char* nombre){
 }
 
 void imprimeConstantes(char* nombre){
-
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");
 	
@@ -155,6 +169,7 @@ void imprimeConstantes(char* nombre){
 	fprintf(ovejota,"##\n");
 	fclose(ovejota);
 }
+
 
 void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;
@@ -309,6 +324,11 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			constantesInt[1].dv = offsetConstantes+1;
 			break;
 	}
+}
+
+//Guarda la dirección de donde se almacena el valor de retorno
+agregaReturn(int index, int dir){
+	procedimientos[index].retorno = dir;
 }
 
 //Regresa el tipo de dato que da el return de una función

@@ -11,7 +11,7 @@ drawing (1000, 600, #ffffff){
 	int var3=0;
 	
 	
-	dibujando(2,3);
+	var1=dibujando(2,3);
 	
 	while(var3<5){
 		trans(50,50);

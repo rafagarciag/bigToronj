@@ -281,6 +281,32 @@ int getDirTemp(char tipo){
 	}
 }
 
+int getDirTempInt(int tipo){
+	int dir;
+	switch(tipo){
+		case 0:
+			dir = 4000+tempInt;
+			tempInt++;
+			return dir; 
+			break;
+		case 1:
+			dir = 6000 + tempFloat; 
+			tempFloat++;
+			return dir;
+			break;
+		case 2:
+			dir = 8000 + tempColor; 
+			tempColor++;
+			return dir;
+			break;
+		case 3:
+			dir = 10000 + tempString; 
+			tempString++;
+			return dir;
+			break;
+	}
+}
+
 int getTipo(int x){
 	/*
 	Scope		|	Rango de direcciones

@@ -13,6 +13,7 @@ int yyerror(char *s);
 int indexProc=0;
 int indexParams=0;
 int tipo=1000;
+int tipo_ret = 1000;
 
 //Errores de compilacion
 int error=0;
@@ -122,7 +123,9 @@ programa	: programa_paso1 global functions DRAWING canvas programa_paso2 bloque 
 					imprimeTotalGlobales(nombre);
 					imprimeTotalTemporales(nombre);
 					imprimeConstantes(nombre);
+					imprimeProcedimientos(nombre,indexProc+1);
 					imprimeCuadruplos(nombre);
+					imprimePila();
 				}
 				else{
 					printf("\n=============================================\n");
@@ -151,10 +154,10 @@ functions	:
 			| function functions
 			;
 
-function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return ret LLAVED	{
+function	: FUNCTION tipo_ret ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloque_fun return ret LLAVED	{
 
 				if(existeProcedimiento(indexProc, $3)<0){
-					agregaProcedimiento(indexProc, indexParams, tipo, $3, lineNumber); 
+					agregaProcedimiento(indexProc, indexParams, tipo_ret, $3, lineNumber); 
 					indexProc++;
 					indexParams=0;
 				}
@@ -175,6 +178,11 @@ function	: FUNCTION tipo ID PARENI function1 PAREND cuadruplo_inicio LLAVEI bloq
 					printf("¡Error!, función '%s' ha sido definida múltiples veces\n", $3);
 				}
 			}
+			;
+tipo_ret	: INT		{tipo_ret=$1;}
+			| FLOAT		{tipo_ret=$1;}
+			| COLOR		{tipo_ret=$1;}
+			| STRING	{tipo_ret=$1;}
 			;
 
 cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
@@ -202,7 +210,7 @@ param_paso1	: INT	{
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
 			}
-			| STRING	{ 
+			| STRING	{
 				tipo=3;
 				agregaParams(indexProc, $1, indexParams); 
 				indexParams++;
@@ -265,7 +273,6 @@ param		:	exp	{
 					filaParams[contParam] = p;
 					contParam++;
 					
-					
 					//generaCuadruplo(602, popPilaOperandos(), -1, 666);
 				}
 			;
@@ -288,7 +295,21 @@ estatuto	: asignacion
 
 return		: RETURN exp PUNCOMA	{
 				//printf("\nRETURN %d  == %d\n", getTipo(peekPilaOperandos()), getTipoProc(indexProc));
-				generaCuadruplo(603, -1, -1, peekPilaOperandos());
+				//imprimePila();
+				if(getTipo(peekPilaOperandos())==getTipoProc(indexProc)){
+					int valor = popPilaOperandos();
+					//Asignar a una temporal el valor de retorno
+					int dirTemp = getDirTempInt(getTipoProc(indexProc));
+					generaCuadruplo(150, valor, -1, dirTemp);
+					agregaReturn(indexProc, dirTemp);
+					
+					generaCuadruplo(603, -1, -1, valor);
+					
+				}
+				else{
+					error++;
+					printf("Error en línea: %d. Tipo de retorno inválido\n", lineNumber);
+				}
 				/*
 				if(getTipo(peekPilaOperandos())==getTipoProc(indexProc)){
 					//cuadruplo return
@@ -312,7 +333,7 @@ asignacion	: ID IGUAL exp PUNCOMA	{
 											}
 											else{
 												error++;
-												printf("\nError en mezcla de tipos en asignación, línea número %d\n", lineNumber);
+												printf("\nError de mezcla de tipos en asignación, línea número %d\n", lineNumber);
 											}
 										}
 									}
@@ -341,13 +362,13 @@ declaracion1: /*vacio*/
 					int aux1 = popPilaOperandos();
 					int dv = existeVariable(indexProc, aux_asignacion);
 					char tipo = cuboSyn(dv,aux1,150);
-					printf("Asignación espuria (%d = %d)", dv, aux1);
-					if(tipo != 'w'){
+					//printf("Asignación espuria (%d = %d)", dv, aux1);
+					if(1){
 						generaCuadruplo(150,aux1,-1,dv);
 					}
 					else{
 						error++;
-						printf("\nError en mezcla de tipos en declaración, línea número %d\n", lineNumber);
+						printf("\nError de mezcla de tipos en declaración, línea número %d\n", lineNumber);
 					}
 			}
 			;
@@ -395,7 +416,7 @@ asignacion_in_line	: ID IGUAL exp 	{
 											}
 											else{
 												error++;
-												printf("\nError en mezcla de tipos en asignación (in line), línea número %d\n", lineNumber);
+												printf("\nError de mezcla de tipos en asignación (in line), línea número %d\n", lineNumber);
 											}
 										}
 									}
@@ -570,7 +591,7 @@ expresion_paso1:	{
 							}
 							else{
 								error++;
-								printf("\nError en mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+								printf("\nError de mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
 							}
 						}
 					}
@@ -590,16 +611,16 @@ expresion_paso2	: 	{
 							}
 							else{
 								error++;
-								printf("\nError en mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
+								printf("\nError de mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
 							}
 						}
 					}
 				;
 
-tipo		: INT		{tipo=$1; printf("\nint tipo: %d\n", tipo)}
-			| FLOAT		{tipo=$1; printf("\nfloat tipo: %d\n", tipo)}
-			| COLOR		{tipo=$1; printf("\ncolor tipo: %d\n", tipo)}
-			| STRING	{tipo=$1; printf("\nstring tipo: %d\n", tipo)}
+tipo		: INT		{tipo=$1;}
+			| FLOAT		{tipo=$1;}
+			| COLOR		{tipo=$1;}
+			| STRING	{tipo=$1;}
 			;
 
 constante	: ID	{
@@ -616,7 +637,7 @@ constante	: ID	{
 			| HEIGHT		{operando=12001;}
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
-			| func_usuario
+			| func_usuario	{}
 			;
 
 exp_paso_1	:	{pushPilaOperandos(operando)}
@@ -635,7 +656,7 @@ exp_paso_2	:	{
 						}
 						else{
 							error++;
-							printf("\nError en mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+							printf("\nError de mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
 						}
 					}
 				}
@@ -656,7 +677,7 @@ exp_paso_3	:	{
 						}
 						else{
 							error++;
-							printf("\nError en mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
+							printf("\nError de mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
 						}
 					}
 				}
