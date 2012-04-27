@@ -238,10 +238,16 @@ function11	:
 			;
 
 canvas		: PARENI CTE_I COMA CTE_I COMA CTE_HEX PAREND {
+				//_WIDTH
 				agregaConstante(100, $2, 0);
+				//_HEIGHT
 				agregaConstante(101, $4, 0);
+				//-_WIDTH
 				agregaConstante(102, $2, 0);
+				//-_HEIGHT
 				agregaConstante(103, $4, 0);
+				//Color de fondo
+				agregaConstante(104, $6, 0);
 			}
 			;
 

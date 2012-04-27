@@ -46,19 +46,19 @@ struct var variables[2000][2];
 //CONSTANTES
 int offsetConstantes = 12000;
 
-struct cteInt constantesInt[50];
+struct cteInt constantesInt[500];
 int offsetInt = 0; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
 int i_cteInt = 4;
 
-struct cteFloat constantesFloat[50];
+struct cteFloat constantesFloat[500];
 int offsetFloat = 500;
 int i_cteFloat = 0;
 
-struct cteHex constantesHex[50];
+struct cteHex constantesHex[500];
 int offsetHex = 1000;
-int i_cteHex = 0;
+int i_cteHex = 1;
 
-struct cteString constantesString[50];
+struct cteString constantesString[500];
 int i_cteString = 0;
 int offsetString = 1500;
 
@@ -327,6 +327,11 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			constantesInt[3].valor = -atoi(valor);
 			constantesInt[3].dv = offsetConstantes+3;
 			break;
+		
+		//Constante HEX de color
+		case 104:
+			constantesHex[0].valor = valor;
+			constantesHex[0].dv = offsetConstantes + offsetHex;
 			
 	}
 }
