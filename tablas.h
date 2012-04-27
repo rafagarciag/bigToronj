@@ -193,7 +193,7 @@ int existeVariable(int indexProc, char* id){
 int existeProcedimiento(int indexProc, char*id){
 	int i;
 	int cmp;
-	for(i=0; i <indexProc; i++){
+	for(i=0; i <=indexProc; i++){
 		cmp = strcmp(procedimientos[i].id, id);
 		if(cmp==0){
 			return i;
@@ -280,6 +280,7 @@ void agregaConstante(int tipo, char* valor, int aux_negativo){
 			if(existeCteInt(aux_negativo*atoi(valor))==-1000){
 				constantesInt[i_cteInt].valor = aux_negativo*atoi(valor);
 				constantesInt[i_cteInt].dv = offsetConstantes + offsetInt + i_cteInt;
+				//printf("Constante int dv = %d + %d + %d\n", offsetConstantes, offsetInt, i_cteInt);
 				i_cteInt++;
 			}
 			break;
