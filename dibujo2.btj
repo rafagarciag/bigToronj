@@ -1,5 +1,7 @@
 drawing (1000, 600, #ffffff){
+	int gi1=30;
 	
+	gi1=20;
 	int i=0;
 	int j=0;
 	
@@ -21,10 +23,10 @@ drawing (1000, 600, #ffffff){
 	int x=0;
 	while(x<360){
 		trans(0,100);
-		tetragon(30,30);
+		tetragon(gi1,gi1);
 		pop();
-		x=x+27;
-		rotate(20);
+		x=x+20;
+		rotate(gi1);
 		push();
 	}
 }
