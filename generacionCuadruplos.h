@@ -22,6 +22,15 @@ int peekPilaSaltos(){
 	return pilaSaltos[indexSaltos-1];
 }
 
+void imprimePilaSaltos(){
+	int i;
+	printf("\nPila SALTOS\n");
+	printf("-------------------\n");
+	for(i=0; i<indexSaltos; i++){
+		printf("%d\n", pilaSaltos[i]);	
+	}
+}
+
 struct cuadruplo{
 	int operador;
 	int operando1;
