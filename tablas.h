@@ -235,7 +235,7 @@ void agregaCuadruploInicio(int indexProc, int inicio){
 
 int existeCteInt(int y){
 	int i;
-	for(i=0;i<i_cteInt;i++)
+	for(i=4;i<i_cteInt;i++)
 		if(constantesInt[i].valor==y)
 			return constantesInt[i].dv;
 	return -1000;

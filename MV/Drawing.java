@@ -8,8 +8,8 @@ public class Drawing{
 	
 	private JFrame frame;
 	
-	public Drawing(UnPanel elPanel){
-		frame = new JFrame("Drawing");
+	public Drawing(UnPanel elPanel, String nombre){
+		frame = new JFrame(nombre);
 		frame.setUndecorated(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(elPanel);

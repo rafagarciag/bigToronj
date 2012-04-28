@@ -19,9 +19,12 @@ public class UnPanel extends JPanel {
 	public double rot;
 	public ArrayList<Double> pilaRot = new ArrayList<Double>();
 
-	public UnPanel(float x, float y) {
+	public UnPanel(float x, float y, String color) {
 		image = new BufferedImage((int)x, (int)y, BufferedImage.TYPE_INT_ARGB);
 		g2d = (Graphics2D) image.getGraphics();
+		g2d.setColor(Color.decode("0x"+color.substring(1)));
+		g2d.fillRect(0, 0, (int)x, (int)y);
+		g2d.setColor(Color.BLACK);
 	}
 	
 	public int getAncho(){
@@ -103,14 +106,16 @@ public class UnPanel extends JPanel {
 		boolRot=true;
 	}
 	
+	public void cambiaColor(String color){
+		g2d.setColor(Color.decode("0x"+color.substring(1)));
+	}
+	
 	public void dibujaLinea(float x, float y){
-		g2d.setColor(Color.green);
 		g2d.drawLine(0, 0, (int)x, (int)y);
 		repaint();
 	}
 
 	public void dibujaRectangulo(float x, float y){
-		g2d.setColor(Color.blue);
 		g2d.translate(-(int)x/2, -(int)y/2);
 		g2d.fillRect(0, 0, (int)x, (int)y);
 		g2d.translate((int)x/2, (int)y/2);
@@ -118,7 +123,6 @@ public class UnPanel extends JPanel {
 	}
    
 	public void dibujaCirculo(float x, float y){
-		g2d.setColor(Color.red);
 		g2d.translate(-(int)x/2, -(int)y/2);
 		g2d.fillOval(0, 0, (int)x, (int)y);
 		g2d.translate((int)x/2, (int)y/2);

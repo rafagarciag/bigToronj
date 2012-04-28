@@ -81,8 +81,8 @@ public class MaquinaVirtual{
 		
 		
 		
-		UnPanel elPanel = new UnPanel(scope.getValorNumerico(12000),scope.getValorNumerico(12001));
-		Drawing d = new Drawing(elPanel);
+		UnPanel elPanel = new UnPanel(scope.getValorNumerico(12000),scope.getValorNumerico(12001), scope.getValorString(13000));
+		Drawing d = new Drawing(elPanel, args[0]);
 		
 		index=0;
 		while(cuadruplos[index].getOperacion()!=-9999){
@@ -131,30 +131,42 @@ public class MaquinaVirtual{
 									Variable.globalesFlo[cuadruplos[index].getResultado()-500]=scope.getValorNumerico(cuadruplos[index].getOperando1());
 									break;
 								case 2:
-									
+									Variable.globalesCol[cuadruplos[index].getResultado()-1000]=scope.getValorString(cuadruplos[index].getOperando1());
 									break;
 								case 3:
-									
+									Variable.globalesStr[cuadruplos[index].getResultado()-1500]=scope.getValorString(cuadruplos[index].getOperando1());
 									break;
 							}
 							break;
 						case 1:
 							switch((cuadruplos[index].getResultado()%2000)/500){
-							case 0:
-								scope.varInt[cuadruplos[index].getResultado()-2000]=(int)scope.getValorNumerico(cuadruplos[index].getOperando1());
-								break;
-							case 1:
-								scope.varFlo[cuadruplos[index].getResultado()-2500]=scope.getValorNumerico(cuadruplos[index].getOperando1());
-								break;
-							case 2:
-								
-								break;
-							case 3:
-								
-								break;
+								case 0:
+									scope.varInt[cuadruplos[index].getResultado()-2000]=(int)scope.getValorNumerico(cuadruplos[index].getOperando1());
+									break;
+								case 1:
+									scope.varFlo[cuadruplos[index].getResultado()-2500]=scope.getValorNumerico(cuadruplos[index].getOperando1());
+									break;
+								case 2:
+									scope.varCol[cuadruplos[index].getResultado()-3000]=scope.getValorString(cuadruplos[index].getOperando1());
+									break;
+								case 3:
+									scope.varStr[cuadruplos[index].getResultado()-3500]=scope.getValorString(cuadruplos[index].getOperando1());
+									break;
 							}
 							break;
-						}
+						case 2:
+							Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)scope.getValorNumerico(cuadruplos[index].getOperando1());
+							break;
+						case 3:
+							Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=scope.getValorNumerico(cuadruplos[index].getOperando1());
+							break;	
+						case 4:
+							Variable.tempsCol[cuadruplos[index].getResultado()-8000]=scope.getValorString(cuadruplos[index].getOperando1());
+							break;
+						case 5:
+							Variable.tempsStr[cuadruplos[index].getResultado()-10000]=scope.getValorString(cuadruplos[index].getOperando1());
+							break;
+					}
 					break;
 					
 				//OPERACIONES LOGICAS
@@ -261,6 +273,10 @@ public class MaquinaVirtual{
 					System.out.println("ROTATE");
 					elPanel.rota(scope.getValorNumerico(cuadruplos[index].getOperando1()));
 					break;
+				case 452:
+					System.out.println("COLOR");
+					elPanel.cambiaColor(scope.getValorString(cuadruplos[index].getOperando1()));
+					break;
 					
 				//PUSHES Y POPES
 				case 500:
@@ -290,7 +306,27 @@ public class MaquinaVirtual{
 					break;
 				case 602:
 					System.out.println("PARAM");
-					
+					switch(cuadruplos[index].getResultado()/2000){
+					case 0:
+						
+						break;
+					case 1:
+						switch((cuadruplos[index].getResultado()%2000)/500){
+						case 0:
+							scope.varInt[cuadruplos[index].getResultado()-2000]=(int)pilaScopes.peek().getValorNumerico(cuadruplos[index].getOperando1());
+							break;
+						case 1:
+							scope.varFlo[cuadruplos[index].getResultado()-2500]=pilaScopes.peek().getValorNumerico(cuadruplos[index].getOperando1());
+							break;
+						case 2:
+							
+							break;
+						case 3:
+							
+							break;
+						}
+						break;
+					}
 					break;
 				case 603:
 					System.out.println("RETURN");
