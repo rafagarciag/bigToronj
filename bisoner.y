@@ -130,6 +130,7 @@ programa	: global programa_paso1 functions DRAWING canvas programa_paso2 bloque 
 					imprimeProcedimientos(nombre,indexProc+1);
 					imprimeCuadruplos(nombre);
 					imprimePila();
+					imprimePilaSaltos();
 				}
 				else{
 					printf("\n=============================================\n");
@@ -492,7 +493,11 @@ for_paso_4	:	{
 					rellenaGoTo(popPilaSaltos(), getPointerCuadruplos()+1);
 					pushPilaSaltos(temp - getPointerCuadruplos());
 					
-					generaCuadruplo(300, -1, -1, pilaSaltos[indexSaltos-3]);
+					int temp2=popPilaSaltos();
+					int temp3=popPilaSaltos();
+					generaCuadruplo(300, -1, -1, popPilaSaltos());
+					pushPilaSaltos(temp3-getPointerCuadruplos());
+					pushPilaSaltos(temp2-getPointerCuadruplos());
 				}
 			;
 for_paso_5	:	{
