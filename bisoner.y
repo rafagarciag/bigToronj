@@ -30,6 +30,8 @@ int temporales=8000;
 int operando;
 int operador;
 int aux_negativo=1;
+//Bandera para variables negativas
+int bit_negativo=0;
 ////////////////////////
 
 //Cuadruplos while
@@ -597,10 +599,25 @@ factor		: negativo PARENI exp_paso_4 exp exp_paso_5 PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
-			| RESTA	{aux_negativo=-1;}
+			| RESTA	{
+					//aux_negativo=-1;
+					bit_negativo++;
+					
+				}
 			;
 			
-reset_negativo	:	{aux_negativo=1;}	
+reset_negativo	:	{	
+						printf("===Aqui va====\n");
+						printf("bit negatico: %d\n",bit_negativo);
+						if(bit_negativo%2!=0){
+							//Multiplica por (-1) el valor de la expresion
+							int aux_dir=getDirTemp('i');
+							generaCuadruplo(102,12004,popPilaOperandos(),aux_dir);
+							pushPilaOperandos(aux_dir);
+						}
+						aux_negativo=1;
+						bit_negativo=0;
+					}	
 				;
 
 expresion	: elem_log expresion_paso1 expresion1
@@ -788,6 +805,7 @@ int main(int argc, char* argv[]){
 
 	agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
 	agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
+	agregaConstante(0,"1",-1);
 	inicializaCubo();
 	yyparse();
 	exit(0);
