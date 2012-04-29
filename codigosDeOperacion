@@ -38,6 +38,7 @@ param			602
 return			603
 
 print			700
-write			701
+printl			701
+write			702
 
 +ERA				999

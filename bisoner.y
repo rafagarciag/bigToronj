@@ -112,6 +112,7 @@ int contParam = 0;
 %token	MULT
 %token	DIVI
 %token 	PRINT
+%token	PRINTL
 %token	READ
 
 %%
@@ -263,7 +264,9 @@ bloque1		: /*vacio*/
 bloque_fun	: bloque1
 			;
 
-func_usuario: id_func_usuario PARENI func_usuario1 PAREND{
+func_usuario_void	: func_usuario PUNCOMA
+					;
+func_usuario: id_func_usuario PARENI func_usuario1 PAREND {
 				//ERA
 				int i = existeProcedimiento(indexProc, id_func);
 				int x;
@@ -337,8 +340,9 @@ estatuto	: asignacion
 			| met_bt_or
 			| met_bt
 			| dibujo
-			| func_usuario
+			| func_usuario_void
 			| print
+			| printl
 			| read
 			;
 
@@ -607,8 +611,6 @@ negativo	: /*vacio*/
 			;
 			
 reset_negativo	:	{	
-						printf("===Aqui va====\n");
-						printf("bit negatico: %d\n",bit_negativo);
 						if(bit_negativo%2!=0){
 							//Multiplica por (-1) el valor de la expresion
 							int aux_dir=getDirTemp('i');
@@ -776,9 +778,23 @@ print		:	PRINT PARENI exp PAREND PUNCOMA{
 					generaCuadruplo(700, -1, -1, popPilaOperandos());
 				}
 			;
-
-read		:	READ PARENI exp PAREND PUNCOMA{
+printl		:	PRINTL PARENI exp PAREND PUNCOMA{
 					generaCuadruplo(701, -1, -1, popPilaOperandos());
+				}
+			;	
+
+read		:	READ PARENI id_read PAREND PUNCOMA
+			;
+id_read		:	ID{
+					//Validación semántica 
+					int dir_id = existeVariable(indexProc, $1);
+					if(dir_id>=0){
+						generaCuadruplo(702, -1, -1, dir_id);
+					}
+					else{
+						error++;
+						printf("Variable %s no ha sido declarada anteriormente", $1);
+					}
 				}
 			;
 
