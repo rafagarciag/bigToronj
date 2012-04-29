@@ -32,6 +32,8 @@ int operador;
 int aux_negativo=1;
 //Bandera para variables negativas
 int bit_negativo=0;
+//Bandera para expresiones lógicas negadas
+int bit_negacion=0;
 ////////////////////////
 
 //Cuadruplos while
@@ -111,6 +113,7 @@ int contParam = 0;
 %token	RESTA
 %token	MULT
 %token	DIVI
+%token	MODULO
 %token 	PRINT
 %token	PRINTL
 %token	READ
@@ -631,7 +634,7 @@ expresion11	: AND	{pushPilaOperadores(200);}
 			| OR	{pushPilaOperadores(201);}
 			;
 
-elem_log	: factor_log expresion_paso2 elem_log1
+elem_log	: factor_log expresion_paso2 elem_log1 reset_negacion
 			;
 elem_log1	:
 			| elem_log11 elem_log
@@ -644,13 +647,26 @@ elem_log11	: MENOR		{pushPilaOperadores(202);}
 			| DIFF		{pushPilaOperadores(207);}
 			;
 
-factor_log	: PARENI expresion PAREND
+factor_log	: negacion PARENI expresion PAREND
 			| negacion exp
 			;
 
 negacion	: /*vacio*/
-			| NOT	{pushPilaOperadores(208);}
+			| NOT	{
+						pushPilaOperadores(208);
+						bit_negacion++;
+					}
 			;
+reset_negacion	:	{
+						if(bit_negacion%2!=0){
+							int aux_dir = getDirTemp('i');
+							
+							generaCuadruplo(208, -1, -1, popPilaOperandos());
+							pushPilaOperandos(aux_dir);
+						}
+						bit_negacion=0;
+					}
+				;
 
 expresion_paso1:	{
 						if(peekPilaOperadores()==200||peekPilaOperadores()==201){
