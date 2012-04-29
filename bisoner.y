@@ -269,7 +269,7 @@ bloque_fun	: bloque1
 
 func_usuario_void	: func_usuario PUNCOMA
 					;
-func_usuario: id_func_usuario PARENI func_usuario1 PAREND {
+func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 				//ERA
 				int i = existeProcedimiento(indexProc, id_func);
 				int x;
@@ -310,7 +310,11 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND {
 				}
 			}
 			;
-id_func_usuario	:	ID	{id_func=$1;}
+id_func_usuario	:	ID	{
+							id_func=$1;
+							//fondo falso
+							pushPilaOperadores(9999);
+						}
 				;
 func_usuario1	: 
 				| param func_usuario11
@@ -339,6 +343,11 @@ param		:	exp	{
 func_usuario11:	/*vacio*/
 			| COMA func_usuario1
 			;
+func_usuario111	:	{
+						//Remover fondo falso
+						popPilaOperadores();
+					}	
+				
 
 estatuto	: asignacion
 			| declaracion
