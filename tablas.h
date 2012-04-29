@@ -234,6 +234,9 @@ void agregaCuadruploInicio(int indexProc, int inicio){
 	procedimientos[indexProc].cuadruploInicio=inicio;
 }
 
+void agregaIndexParams(int indexProc, int index){
+	procedimientos[indexProc].index_params=index;
+}
 int existeCteInt(int y){
 	int i;
 	for(i=4;i<i_cteInt;i++)

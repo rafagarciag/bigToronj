@@ -205,6 +205,7 @@ id_func		: ID	{ procedimientos[indexProc].id = $1; id_func=$1; }
 			;
 
 cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
+							agregaIndexParams(indexProc,indexParams);
 							agregaCuadruploInicio(indexProc, getPointerCuadruplos());
 						}
 					;
@@ -285,6 +286,7 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 				indices[2]=0;
 				indices[3]=0;
 				if(i>0){
+					printf("Chedando numero de params contParam=%d, index_params=%d\n", contParam, procedimientos[i].index_params);
 					if(contParam==procedimientos[i].index_params){
 						//ERA
 						generaCuadruplo(999, -1, -1, i);
@@ -328,6 +330,7 @@ param		:	exp	{
 					
 					if(getTipo(p)==procedimientos[existeProcedimiento(indexProc,id_func)].params[contParam]){
 						filaParams[contParam] = p;
+						printf("Incrementando contParam\n");
 						contParam++;
 					}
 					else{
