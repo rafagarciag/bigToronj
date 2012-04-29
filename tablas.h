@@ -66,6 +66,7 @@ void imprimeProcs(int x){
 	int j;
 	printf("\nProc %s\n", procedimientos[x].id);
 	printf("Tipo de retorno:  %d\n", procedimientos[x].tipo);
+	printf("Dir de retorno:  %d\n", procedimientos[x].retorno);
 	
 	//La firma
 	printf("Firma: ");

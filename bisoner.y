@@ -32,6 +32,8 @@ int operador;
 int aux_negativo=1;
 //Bandera para variables negativas
 int bit_negativo=0;
+//Bandera para expresiones lógicas negadas
+int bit_negacion=0;
 ////////////////////////
 
 //Cuadruplos while
@@ -111,6 +113,7 @@ int contParam = 0;
 %token	RESTA
 %token	MULT
 %token	DIVI
+%token	MODULO
 %token 	PRINT
 %token	PRINTL
 %token	READ
@@ -282,15 +285,20 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND {
 				indices[2]=0;
 				indices[3]=0;
 				if(i>0){
-					//ERA
-					generaCuadruplo(999, -1, -1, i);
-
-					for(x=0; x<contParam; x++){
-						direccion=offsets[procedimientos[i].params[x]]+indices[procedimientos[i].params[x]];
-						generaCuadruplo(602, filaParams[x], -1, direccion);
-						indices[procedimientos[i].params[x]]+=1;
+					if(contParam==procedimientos[i].index_params){
+						//ERA
+						generaCuadruplo(999, -1, -1, i);
+						for(x=0; x<contParam; x++){
+							direccion=offsets[procedimientos[i].params[x]]+indices[procedimientos[i].params[x]];
+							generaCuadruplo(602, filaParams[x], -1, direccion);
+							indices[procedimientos[i].params[x]]+=1;
+						}
 					}
-					
+					else{
+						error++;
+						printf("Error en línea: %d. Número de parámetros inválido para llamada a función %s\n", lineNumber, id_func);
+					}
+										
 					contParam=0;
 					
 					//gosub
@@ -603,7 +611,7 @@ factor		: negativo PARENI exp_paso_4 exp exp_paso_5 PAREND
 			| negativo constante exp_paso_1
 			;
 negativo	: /*vacio*/
-			| RESTA	{
+			| RESTA	negativo{
 					//aux_negativo=-1;
 					bit_negativo++;
 					
@@ -631,7 +639,7 @@ expresion11	: AND	{pushPilaOperadores(200);}
 			| OR	{pushPilaOperadores(201);}
 			;
 
-elem_log	: factor_log expresion_paso2 elem_log1
+elem_log	: factor_log expresion_paso2 elem_log1 reset_negacion
 			;
 elem_log1	:
 			| elem_log11 elem_log
@@ -644,13 +652,27 @@ elem_log11	: MENOR		{pushPilaOperadores(202);}
 			| DIFF		{pushPilaOperadores(207);}
 			;
 
-factor_log	: PARENI expresion PAREND
+factor_log	: negacion PARENI expresion PAREND
 			| negacion exp
 			;
 
 negacion	: /*vacio*/
-			| NOT	{pushPilaOperadores(208);}
+			| NOT	{
+						pushPilaOperadores(208);
+						bit_negacion++;
+					}
 			;
+reset_negacion	:	{
+						if(bit_negacion%2!=0){
+							int aux_dir = getDirTemp('i');
+							
+							generaCuadruplo(208, -1, -1, popPilaOperandos());
+							pushPilaOperandos(aux_dir);
+							printf("Haciendo push negacion de dir: %d", aux_dir);
+						}
+						bit_negacion=0;
+					}
+				;
 
 expresion_paso1:	{
 						if(peekPilaOperadores()==200||peekPilaOperadores()==201){

@@ -99,6 +99,7 @@ DEL			[ \t\n,;\+\-!=\/\(\)\{\}\[\]\<\>#]
 "-"							{return RESTA;}
 "*"							{return MULT;}
 "/"							{return DIVI;}
+"%"						{return MODULO;}
 
 	/* Lo que se ignora */
 	/*(\/\*)[a-zA-Z0-9{DEL}]*(\*\/)	{}*/
