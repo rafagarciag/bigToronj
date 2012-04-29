@@ -1,29 +1,8 @@
-function void recursion(int torta){
-	push();
-	if(torta<=1){
-		tetragon(1,1,0);
-	}
-	else{
-		tetragon(torta,torta,0);
-		push();
-		trans(-1*(torta/2),-1*(torta/2));
-		push();
-		recursion(torta/2)
-		pop();
-		pop();
-		push();
-		trans(torta/2,-1*(torta/2));
-		recursion(torta/2)
-		pop();
-	}
-	pop();
-}
-
-
-
-drawing (500,500,#CAFEFE){
+drawing (500,500,#9900FF){
 	trans(_WIDTH/2,_HEIGHT/2);
 	push();
-	recursion(100)
-
+	trans(-(_WIDTH/4),-(-(-(_HEIGHT/4))));
+	circle(20,20,1);
+	pop();
+	
 }

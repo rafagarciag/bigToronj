@@ -20,13 +20,13 @@
 
 
 +line		400
-triangle	401
++triangle	401
 +tetragon	402
 +circle		403
 
 +trans		450
 +rot		451
-color_m		452
++color_m		452
 
 +push()			500
 +pop()			501
@@ -37,8 +37,8 @@ color_m		452
 param			602
 return			603
 
-print			700
-printl			701
-write			702
++print			700
++printl			701
+read			702
 
 +ERA				999

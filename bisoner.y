@@ -572,7 +572,7 @@ dibujo		: line
 line		: LINE PARENI exp COMA exp PAREND PUNCOMA		{generaCuadruplo(400,popPilaOperandos(),popPilaOperandos(),-1);	}
 			;
 
-triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp PAREND PUNCOMA
+triangle	: TRIANGLE PARENI exp COMA exp COMA exp COMA exp COMA exp PAREND PUNCOMA	{generaCuadruplo(401,popPilaOperandos(),popPilaOperandos(),popPilaOperandos());generaCuadruplo(401,popPilaOperandos(),popPilaOperandos(),-1);}
 			;
 
 tetragon	: TETRAGON PARENI exp COMA exp COMA exp PAREND PUNCOMA	{generaCuadruplo(402,popPilaOperandos(),popPilaOperandos(),popPilaOperandos());}
