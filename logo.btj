@@ -1,0 +1,29 @@
+drawing (500,500,#9900FF){
+	color negro=#000000;
+	trans(0,_HEIGHT);
+	push();
+	set_color(#FF3300);
+	circle(_WIDTH*2,_HEIGHT*2,1);
+	set_color(negro);
+	circle(_WIDTH*2,_HEIGHT*2,0);
+	set_color(#FFFF99);
+	
+	
+	circle(_WIDTH*2-50,_HEIGHT*2-50,1);
+	set_color(negro);
+	circle(_WIDTH*2-50,_HEIGHT*2-50,0);
+	push();
+	set_color(#FF6666);
+	
+	rotate(-20);
+	int i;
+	for(i=0;i<=90;i=i+20){
+		rotate(20);
+		push();
+		triangle(_POINTERX-65,-400,_POINTERX+65,-400,1);
+		trans(0,-400);
+		circle(130,130,1);
+		pop();
+	
+	}
+}

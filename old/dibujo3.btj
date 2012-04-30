@@ -1,0 +1,40 @@
+function int circuloCuadros(int torta){
+	int x=0;
+	while(x<360){
+		trans(0,torta);
+		set_color(#FFFFFF);
+		tetragon(torta+2,torta+2);
+		set_color(#000000);
+		tetragon(torta,torta);
+		pop();
+		x=x+90;
+		rotate(90);
+		push();
+	}
+	pop();
+	return torta/2;
+}
+
+drawing (1000, 600, #CAFE10){
+	int aux;
+	int torta=200;
+	set_color(#0000FF);
+	int i,j;
+	for(i=0;i<10;i=i+1){
+		trans(25,0);
+		push();
+		for(j=0;j<10;j=j+1){
+			trans(0,25);
+			tetragon(50,50);
+		}
+		pop();
+	}
+	pop();
+	trans(_WIDTH/2,_HEIGHT/2);
+	push();
+	while (torta>10){
+	torta=circuloCuadros(torta);
+	push();
+	}
+
+}

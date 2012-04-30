@@ -1,0 +1,25 @@
+drawing(600,600,#CAFEFE){
+	
+	trans(100,_HEIGHT/2);
+	set_color(#FF0000);
+	circle(100,100,1);
+	circle(150,150,0);
+	trans(200,0);
+	set_color(#00FF00);
+	tetragon(100,100,1);
+	tetragon(150,150,0);
+	trans(200,0);
+	set_color(#0000FF);
+	triangle(-50,-50,50,-50,1);
+	triangle(-50,50,50,50,0);
+	pop();
+	set_color(#000000);
+	line(_WIDTH,_HEIGHT);
+	trans(_WIDTH,0);
+	line(-_WIDTH,_HEIGHT);
+
+
+
+
+}
+

@@ -1,0 +1,16 @@
+x=dV mod 200;
+switch(x){
+	case 0,1,6:
+		dv-=(x*200);
+		y=dv mod 50;
+		dv-=(y*50);
+		z=dv;
+		break;
+	case 2,3,4,5:
+		x=2;
+		dv-=(x*200);
+		y=dv mod 200;
+		dv-=(y*200);
+		z=dv;
+		break;
+}
