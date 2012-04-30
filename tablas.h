@@ -63,11 +63,12 @@ int i_cteString = 0;
 int offsetString = 1500;
 
 void imprimeProcs(int x){
+
 	int j;
 	printf("\nProc %s\n", procedimientos[x].id);
 	printf("Tipo de retorno:  %d\n", procedimientos[x].tipo);
 	printf("Dir de retorno:  %d\n", procedimientos[x].retorno);
-	
+
 	//La firma
 	printf("Firma: ");
 	for(j=0; j<procedimientos[x].index_params; j++){
@@ -89,17 +90,17 @@ void imprimeProcs(int x){
 		}
 	}
 	printf("\n");
-	
+
 	printf("\nContiene las variables\n");
 	printf("%d\tints\n", procedimientos[x].totalInt);
 	printf("%d\tfloats\n", procedimientos[x].totalFlo);
 	printf("%d\tcolors\n", procedimientos[x].totalCol);
 	printf("%d\tstrings\n", procedimientos[x].totalStr);
-	
-	
+
+
 	//Cuadruplo de inicio
 	printf("Cuadruplo de inicio: %d\n", procedimientos[x].cuadruploInicio);
-	
+
 	for(j=0;j<procedimientos[x].index;j++){
 		if(x==0)
 			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
@@ -122,7 +123,7 @@ void imprimeProcedimientos(char* nombre, int numProcs){
 	int i;
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");
-	
+
 	fprintf(ovejota,"%d\n",numProcs);
 	for(i=0;i<numProcs;i++){
 		fprintf(ovejota,"%d,%d,%d,%d,%d,%d\n",procedimientos[i].tipo,procedimientos[i].totalInt,procedimientos[i].totalFlo,procedimientos[i].totalCol,procedimientos[i].totalStr,procedimientos[i].cuadruploInicio);
@@ -199,8 +200,10 @@ int existeProcedimiento(int indexProc, char*id){
 	return -1;
 }
 
-void agregaVariable(int indexProc, int tipo, char* id, int linea){
+//Regresa la dirección que se le asigno a la variable
+int agregaVariable(int indexProc, int tipo, char* id, int linea){
 	int offset=0, tabla=0;
+	int direccion;
 	if (indexProc > 0){
 		offset=2000;
 		tabla=1;
@@ -210,24 +213,27 @@ void agregaVariable(int indexProc, int tipo, char* id, int linea){
 	variables[procedimientos[indexProc].index][tabla].tipo=tipo;
 	switch (tipo){
 		case 0:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalInt;
+			direccion=offset+procedimientos[indexProc].totalInt;
 			procedimientos[indexProc].totalInt++;
 			break;
 		case 1:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalFlo+500;
+			direccion=offset+procedimientos[indexProc].totalFlo+500;
 			procedimientos[indexProc].totalFlo++;
 			break;
 		case 2:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalCol+1000;
+			direccion=offset+procedimientos[indexProc].totalCol+1000;
 			procedimientos[indexProc].totalCol++;
 			break;
 		case 3:
-			variables[procedimientos[indexProc].index][tabla].dv=offset+procedimientos[indexProc].totalStr+1500;
+			direccion=offset+procedimientos[indexProc].totalStr+1500;
 			procedimientos[indexProc].totalStr++;
 			break;
 	}
-
+	
+	variables[procedimientos[indexProc].index][tabla].dv=direccion;
 	procedimientos[indexProc].index++;
+	
+	return direccion;
 }
 
 void agregaParams(int indexProc, int tipo, int index){
