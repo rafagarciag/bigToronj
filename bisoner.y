@@ -404,7 +404,7 @@ return		: RETURN exp PUNCOMA	{
 					
 					int valor = popPilaOperandos();
 					//Asignar a una temporal el valor de retorno
-					int dirTemp = getDirTempInt(getTipoProc(indexProc));
+					//int dirTemp = getDirTempInt(getTipoProc(indexProc));
 					generaCuadruplo(150, valor, -1, dirTemp);
 					//agregaReturn(indexProc, dirTemp);
 					llamada = indexProc;
