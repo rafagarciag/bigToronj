@@ -10,8 +10,10 @@ int indexOperadores=0;
 int indexLlamadas=0;
 
 void pushPilaOperandos(int x){
-	pilaOperandos[indexOperandos]=x;
-	indexOperandos++;
+	if(x>=0){
+		pilaOperandos[indexOperandos]=x;
+		indexOperandos++;
+	}
 }
 
 int popPilaOperandos(){

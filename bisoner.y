@@ -49,6 +49,10 @@ char nombre[256];
 //Número de parámetro al llamar una funcion del usuario
 int contParam = 0;
 
+//Incremental cuando se llama a un return
+int dir=1;
+int dirTemp=0;
+
 
 %}
 
@@ -201,7 +205,19 @@ tipo_ret	: INT		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
 			| COLOR		{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
 			| STRING	{tipo_ret=$1;procedimientos[indexProc].tipo=tipo_ret;}
 			;
-id_func		: ID	{ procedimientos[indexProc].id = $1; id_func=$1; }
+id_func		: ID	{ 
+						procedimientos[indexProc].id = $1; id_func=$1; 
+						
+						//Variable global de la funcion
+						agregaVariable(0,tipo_ret,$1,lineNumber);
+						
+						
+
+						//Asignar a una temporal el valor de retorno
+						dirTemp = getDirTempInt(getTipoProc(indexProc));
+						agregaReturn(indexProc, dirTemp);
+						
+					}
 			;
 
 cuadruplo_inicio	:	{	//Guardar el numero de cuadrupo en el que inicia la funcion
@@ -275,6 +291,8 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 				int i = existeProcedimiento(indexProc, id_func);
 				int x;
 				int direccion;
+				int dir_ret_local;
+				char nombre_ret[10];
 				int offsets[4];
 				offsets[0]=2000;
 				offsets[1]=2500;
@@ -305,6 +323,14 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 					
 					//gosub
 					generaCuadruplo(601, -1, -1, i);
+					
+					//Generar una variable local donde se guardará el return y
+					//	empujarla a la pila
+					dir_ret_local=agregaVariable(indexProc, procedimientos[i].tipo, "retorno111222333", lineNumber);
+					generaCuadruplo(150, dir_ret_local, -1, procedimientos[i].retorno);
+					pushPilaOperandos(dir_ret_local);
+					//operador=dir_ret_local;
+
 				}
 				else{
 					error++;
@@ -756,7 +782,8 @@ constante	: ID	{
 			| POINTER_X		{operando=0;}
 			| POINTER_Y		{operando=1;}
 			| func_usuario	{
-								operando=procedimientos[llamada].retorno;
+								//operando=procedimientos[llamada].retorno;
+								operando=-1;
 							}
 			;
 
@@ -851,7 +878,6 @@ int main(int argc, char* argv[]){
 		return -1;
 	}
 	yyin = programa;
-
 
 	agregaVariable(indexProc, 0, "_POINTERX", lineNumber);
 	agregaVariable(indexProc, 0, "_POINTERY", lineNumber);
