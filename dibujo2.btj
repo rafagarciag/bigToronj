@@ -1,18 +1,17 @@
 function int factorial(int x){
-	int aux;
-	printl("La x: ");
+	int aux=1;
+	print("LA X: ");
 	printl(x);
-	if(x<=1){
-		aux=1;
-		printl("Caso base!!");
-	}
-	else{
-		printl("LLAMADA!");
+	if(x>1){
 		aux=x*factorial(x-1);
 	}
+	print("AUX: ");
+	printl(aux);
 	return aux;
 }
 
 drawing (500,500,#CAFEFE){
-	factorial(5);
+	int x=0;
+	x=factorial(2);
+	print(x);
 }

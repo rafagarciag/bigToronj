@@ -3,18 +3,22 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
 public class MaquinaVirtual{
  	
 	public static void main(String args[]) throws IOException, InterruptedException{
+		
+		int wait=Integer.parseInt(args[1]);
+		boolean dibujo=false;
+		
 		//BufferedReader usado para la lecutra del archivo .btjo
 		BufferedReader objIn = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(args[0]+".btjo"))));
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		
 		//...
-		Queue <Integer> pilaRetornos = new LinkedList<Integer>();
-		Queue <Variable> pilaScopes = new LinkedList<Variable>();
+		Stack <Integer> pilaRetornos = new Stack<Integer>();
+		Stack <Variable> pilaScopes = new Stack<Variable>();
 		Variable scope;
 		
 		String constante;//String auxiliar usado para leer una linea del archivo con la informacion de una constante
@@ -86,32 +90,31 @@ public class MaquinaVirtual{
 		
 		index=0;
 		while(cuadruplos[index].getOperacion()!=-9999){
-			System.out.print(index+": ");
+			//System.out.print(index+": ");
 			switch(cuadruplos[index].getOperacion()){
 				//OPERACIONES ARITMETICAS
 				case 100:
-					System.out.println("SUMA");
 					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())+scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					else if(cuadruplos[index].getResultado()>=6000&&cuadruplos[index].getResultado()<8000)
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())+scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
 				case 101:
-					System.out.println("RESTA");
 					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())-scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					else if(cuadruplos[index].getResultado()>=6000&&cuadruplos[index].getResultado()<8000)
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())-scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
 				case 102:
-					System.out.println("MULTIPLICACION");
-					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
+					System.out.println("la 2002: "+scope.varInt[2]);
+					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000){
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())*scope.getValorNumerico(cuadruplos[index].getOperando2()));
+						System.out.println(scope.getValorNumerico(cuadruplos[index].getOperando1())+"*"+scope.getValorNumerico(cuadruplos[index].getOperando2()));
+					}
 					else if(cuadruplos[index].getResultado()>=6000&&cuadruplos[index].getResultado()<8000)
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())*scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
 				case 103:
-					System.out.println("DIVISION");
 					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())/scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					else if(cuadruplos[index].getResultado()>=6000&&cuadruplos[index].getResultado()<8000)
@@ -120,7 +123,6 @@ public class MaquinaVirtual{
 				
 				//ASIGNACION
 				case 150:
-					System.out.println("ASIGNACION");
 					switch(cuadruplos[index].getResultado()/2000){
 						case 0:
 							switch((cuadruplos[index].getResultado()%2000)/500){
@@ -171,56 +173,48 @@ public class MaquinaVirtual{
 					
 				//OPERACIONES LOGICAS
 				case 200:
-					System.out.println("AND");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1())!=0 && scope.getValorNumerico(cuadruplos[index].getOperando2())!=0)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 201:
-					System.out.println("OR");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1())!=0 || scope.getValorNumerico(cuadruplos[index].getOperando2())!=0)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 202:
-					System.out.println("MENOR");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) < scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 203:
-					System.out.println("MENOR/IGUAL");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) <= scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 204:
-					System.out.println("MAYOR");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) > scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 205:
-					System.out.println("MAYOR/IGUAL");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) >= scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 206:
-					System.out.println("IGUAL");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) == scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				case 207:
-					System.out.println("DIFERENTE");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) != scope.getValorNumerico(cuadruplos[index].getOperando2()))
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
@@ -229,83 +223,85 @@ public class MaquinaVirtual{
 				
 				//GOTOs
 				case 300:
-					System.out.println("GOTO");
 					index=cuadruplos[index].getResultado()-1;
 					break;
 				case 301:
-					System.out.println("GOTO/VERDADERO");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1())!=0){
 						index=cuadruplos[index].getResultado()-1;
 					}
 					break;
 				case 302:
-					System.out.println("GOTO/FALSO");
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1())==0){
 						index=cuadruplos[index].getResultado()-1;
 					}
 					break;
 				//DIBUJO
 				case 400:
-					System.out.println("LINEA");
 					elPanel.dibujaLinea(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
 							scope.getValorNumerico(cuadruplos[index].getOperando2()));
+					dibujo=true;
 					break;
 				case 401:
-					System.out.println("TRIANGULO");
+					elPanel.dibujaTriangulo(scope.getValorNumerico(cuadruplos[index+1].getOperando1()),
+							scope.getValorNumerico(cuadruplos[index+1].getOperando2()), 
+							scope.getValorNumerico(cuadruplos[index].getOperando1()),
+							scope.getValorNumerico(cuadruplos[index].getOperando2()),
+							scope.getValorNumerico(cuadruplos[index].getResultado()));
+					index++;
+					dibujo=true;
 					break;
 				case 402:
-					System.out.println("TETRAGON");
 					elPanel.dibujaRectangulo(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
-							scope.getValorNumerico(cuadruplos[index].getOperando2()));
+							scope.getValorNumerico(cuadruplos[index].getOperando2()),
+							scope.getValorNumerico(cuadruplos[index].getResultado()));
+					dibujo=true;
 					break;
 				case 403:
-					System.out.println("CIRCULO");
 					elPanel.dibujaCirculo(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
-							scope.getValorNumerico(cuadruplos[index].getOperando2()));
+							scope.getValorNumerico(cuadruplos[index].getOperando2()),
+							scope.getValorNumerico(cuadruplos[index].getResultado()));
+					dibujo=true;
 					break;
 				
 				case 450:
-					System.out.println("TRANS");
 					elPanel.traslada(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
 							scope.getValorNumerico(cuadruplos[index].getOperando2()));
+					Variable.globalesInt[0]=elPanel.getPointerX();
+					Variable.globalesInt[1]=elPanel.getPointerY();
 					break;
 				case 451:
-					System.out.println("ROTATE");
 					elPanel.rota(scope.getValorNumerico(cuadruplos[index].getOperando1()));
 					break;
 				case 452:
-					System.out.println("COLOR");
 					elPanel.cambiaColor(scope.getValorString(cuadruplos[index].getOperando1()));
 					break;
 					
 				//PUSHES Y POPES
 				case 500:
-					System.out.println("PUSH");
 					elPanel.push();
 					break;
 				case 501:
-					System.out.println("POP");
 					elPanel.pop();
+					Variable.globalesInt[0]=elPanel.getPointerX();
+					Variable.globalesInt[1]=elPanel.getPointerY();
 					break;
 				case 502:
-					System.out.println("POPORIGIN");
 					elPanel.popOrigin();
+					Variable.globalesInt[0]=elPanel.getPointerX();
+					Variable.globalesInt[1]=elPanel.getPointerY();
 					break;
 					
 				//Llamadas y metodos
 				case 600:
-					System.out.println("RET");
-					scope=pilaScopes.poll();
-					index=pilaRetornos.poll();
+					scope=pilaScopes.pop();
+					index=pilaRetornos.pop();
 					break;
 				case 601:
-					System.out.println("GOSUB");
 					int iSUB=cuadruplos[index].getResultado();
-					pilaRetornos.add(index);
+					pilaRetornos.push(index);
 					index=listaProcs[iSUB].getCuadInicio()-1;
 					break;
 				case 602:
-					System.out.println("PARAM");
 					switch(cuadruplos[index].getResultado()/2000){
 					case 0:
 						
@@ -330,21 +326,81 @@ public class MaquinaVirtual{
 					break;
 				case 603:
 					System.out.println("RETURN");
+					break;
 					
+				case 700:
+					float print=scope.getValorNumerico(cuadruplos[index].getResultado());
+					if(print!=-1000)
+						System.out.print(""+print);
+					else{
+						String printStr=scope.getValorString(cuadruplos[index].getResultado());
+						System.out.print(printStr.substring(1, printStr.length()-1));	
+						
+					}
+					break;
+				case 701:
+					float printl=scope.getValorNumerico(cuadruplos[index].getResultado());
+					if(printl!=-1000)
+						System.out.println(""+printl);
+					else{
+						String printStr=scope.getValorString(cuadruplos[index].getResultado());
+						System.out.println(printStr.substring(1, printStr.length()-1));	
+						
+					}
+					break;
+				case 702:
+					switch(cuadruplos[index].getResultado()/2000){
+						case 0:
+							switch((cuadruplos[index].getResultado()%2000)/500){
+								case 0:
+									Variable.globalesInt[cuadruplos[index].getResultado()]=Integer.parseInt(stdIn.readLine());
+									break;
+								case 1:
+									Variable.globalesFlo[cuadruplos[index].getResultado()-500]=Float.parseFloat(stdIn.readLine());
+									break;
+								case 2:
+									Variable.globalesCol[cuadruplos[index].getResultado()-1000]=stdIn.readLine();
+									break;
+								case 3:
+									Variable.globalesStr[cuadruplos[index].getResultado()-1500]=stdIn.readLine();
+									break;
+							}
+							break;
+						case 1:
+							switch((cuadruplos[index].getResultado()%2000)/500){
+								case 0:
+									scope.varInt[cuadruplos[index].getResultado()-2000]=Integer.parseInt(stdIn.readLine());
+									break;
+								case 1:
+									scope.varFlo[cuadruplos[index].getResultado()-2500]=Float.parseFloat(stdIn.readLine());
+									break;
+								case 2:
+									scope.varCol[cuadruplos[index].getResultado()-3000]=stdIn.readLine();
+									break;
+								case 3:
+									scope.varStr[cuadruplos[index].getResultado()-3500]=stdIn.readLine();
+									break;
+							}
+							break;
+					}
 					break;
 					
 				//ERA
 				case 999:
-					System.out.println("ERA");
 					int iERA=cuadruplos[index].getResultado();
-					pilaScopes.add(scope);
+					pilaScopes.push(scope);
 					scope=new Variable(listaProcs[iERA].getTotalInt(),listaProcs[iERA].getTotalFlo(),
 							listaProcs[iERA].getTotalCol(),listaProcs[iERA].getTotalStr());
 					break;
 					
 			}
+			
 			index++;
-			//Thread.sleep(500);
+			if (dibujo){
+				Thread.sleep(wait);
+				dibujo=false;
+			}
 		}
+		elPanel.guardaImagen(args[0]);
 	}
 }

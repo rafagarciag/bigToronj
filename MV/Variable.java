@@ -1,3 +1,11 @@
+/*
+ * La clase Variable concentra todos los tipos de variables en un solo lugar para facilitar
+ * su acceso. Una instancia de la clase variable es usada para representar el scope de
+ * un procedimiento. Ademas se cuenta con diversos arreglos de tipo estaticos para poder
+ * tener acceso a las variables globales o temporales desde cualquier scope que se este
+ * trabajando.
+ */
+
 import java.util.ArrayList;
 
 public class Variable {
@@ -21,6 +29,11 @@ public class Variable {
 	public static ArrayList<String> cteCol = new ArrayList<String>();
 	public static ArrayList<String> cteStr = new ArrayList<String>();
 	
+	/*
+	 * Este constructor es llamado con cada cambio de scope en la maquina virtual
+	 * Se inicializan los tamaños de las variables temporales de cada instancia segun
+	 * los parametros que se obtienen de su procedimiento correspondiente.
+	 */
 	public Variable(int i, int f, int c, int s){
 		varInt = new int[i];
 		varFlo = new float[f];
@@ -28,6 +41,10 @@ public class Variable {
 		varStr = new String[s];
 	}
 	
+	/*
+	 * Con este metodo se inicializan los tamaños de los arreglos que contienen las
+	 * variables globales del programa que se va a ejecutar.
+	 */
 	public static void inicializaGlobales(int i, int f, int c, int s){
 		globalesInt = new int[i];
 		globalesFlo = new float[f];
@@ -35,6 +52,11 @@ public class Variable {
 		globalesStr = new String[s];
 	}
 	
+	/*
+	 * Este metodo inicializa los tamaños de los arreglos que contienen las variables
+	 * temporales. Se opto por esta solucion en lugar de solo declarar un tamaño fijo
+	 * para que la maquina virtual sea lo mas eficiente posible y no gaste mucha memoria.
+	 */
 	public static void inicializaTemporales(int i, int f, int c, int s){
 		tempsInt = new int[i];
 		tempsFlo = new float[f];
@@ -42,6 +64,12 @@ public class Variable {
 		tempsStr = new String[s];
 	}
 	
+	/*
+	 * Este metodo es invocado con cada linea del archivo .btjo que contiene una constante
+	 * para cada linea genera introduce una nueva constante a su respectiva lista.
+	 * Se utilizo arraylist para obtener la ventaja de ampliacion dinamica asi como las
+	 * facilidades de acceso de un arreglo.
+	 */
 	public static void agregaConstante(int dv, String valor){
 		if(dv>=12000&&dv<12500){
 			cteInt.add(Integer.parseInt(valor));
@@ -57,9 +85,16 @@ public class Variable {
 		}
 	}
 	
+	/*
+	 * Segun el rango en el que se encuentre el parametro que se manda a este metodo
+	 * regresara la posicion correpondiente en el arreglo que corresponda a su 
+	 * localizacion en memoria de la maquina virtual.
+	 * Se opto por regresar un valor float ya que este puede regresar ambos tipos de 
+	 * valores numericos(flotantes y enteros). En caso de requerirse se hace un cast
+	 * a entero en su llamada en la maquina virtual.
+	 */
 	public float getValorNumerico(int dv){
 		if(dv>=0&&dv<500){
-			System.out.println("de la direccion"+dv+"Regrese:"+ globalesInt[dv]);
 			return globalesInt[dv];
 		}
 		if(dv>=500&&dv<1000){
@@ -81,13 +116,19 @@ public class Variable {
 			return cteInt.get(dv-12000);
 		}
 		if(dv>=12500&&dv<13000){
-
-			System.out.println("de la direccion"+dv+"Regrese:"+ cteFlo.get(dv-12500));
 			return cteFlo.get(dv-12500);
 		}
-		return 0;
+		return -1000;
 	}
 	
+	/*
+	 * De igual forma que el metodo anterior este metodo busca un valor en el arreglo
+	 * correspondiente segun el rango en el que se encuentra la direccion virtual que
+	 * se mando como parametro.
+	 * Las variables hexadecimales se almacenan en un string y son transformadas a
+	 * enteros hexadecimales cuando se necesita por lo que este metodo regresa un valor
+	 * de tipo string.
+	 */
 	public String getValorString(int dv){
 		if(dv>=1000&&dv<1500){
 			return globalesCol[dv-1000];
