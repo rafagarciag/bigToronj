@@ -327,7 +327,8 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 					//Generar una variable local donde se guardará el return y
 					//	empujarla a la pila
 					dir_ret_local=agregaVariable(indexProc, procedimientos[i].tipo, "retorno111222333", lineNumber);
-					generaCuadruplo(150, dir_ret_local, -1, procedimientos[i].retorno);
+					printf("Imprimiendo indice de cosa= %d %s retorno=%d\n", i, procedimientos[i].id, procedimientos[i].retorno);
+					generaCuadruplo(150, getDirReturn(i), -1, dir_ret_local);
 					pushPilaOperandos(dir_ret_local);
 					//operador=dir_ret_local;
 
@@ -405,9 +406,10 @@ return		: RETURN exp PUNCOMA	{
 					//Asignar a una temporal el valor de retorno
 					int dirTemp = getDirTempInt(getTipoProc(indexProc));
 					generaCuadruplo(150, valor, -1, dirTemp);
-					agregaReturn(indexProc, dirTemp);
+					//agregaReturn(indexProc, dirTemp);
 					llamada = indexProc;
-					generaCuadruplo(603, -1, -1, valor);
+					//Antiguo return
+					//generaCuadruplo(603, -1, -1, valor);
 					
 				}
 				else{

@@ -353,6 +353,10 @@ void agregaReturn(int index, int dir){
 	procedimientos[index].retorno = dir;
 }
 
+int getDirReturn(int index){
+	return procedimientos[index].retorno;
+}
+
 //Regresa el tipo de dato que da el return de una función
 int getTipoProc(index){
 	return procedimientos[index].tipo;
