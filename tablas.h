@@ -108,6 +108,16 @@ void imprimeProcs(int x){
 	}
 }
 
+/*	Este metodo se encarga de escribir el total de cada tipo de constante en el archivo .btjo */
+void imprimeTotalGlobales(char* nombre){
+	FILE *ovejota;
+	ovejota=fopen(nombre,"w+");
+	fprintf(ovejota,"%d\n%d\n%d\n%d\n",procedimientos[0].totalInt,procedimientos[0].totalFlo,procedimientos[0].totalCol,procedimientos[0].totalStr);
+	fclose(ovejota);
+}
+
+/*	Este metodo se encarga de escribir la informacion de cada uno de los procedimientos en el archivo
+	.btjo para que sea interpertado por la maquina virtual.*/
 void imprimeProcedimientos(char* nombre, int numProcs){
 	int i;
 	FILE *ovejota;
@@ -119,13 +129,6 @@ void imprimeProcedimientos(char* nombre, int numProcs){
 	}
 	fclose(ovejota);
 	
-}
-
-void imprimeTotalGlobales(char* nombre){
-	FILE *ovejota;
-	ovejota=fopen(nombre,"w+");
-	fprintf(ovejota,"%d\n%d\n%d\n%d\n",procedimientos[0].totalInt,procedimientos[0].totalFlo,procedimientos[0].totalCol,procedimientos[0].totalStr);
-	fclose(ovejota);
 }
 
 void imprimeConstantes(char* nombre){
@@ -162,7 +165,8 @@ void imprimeConstantes(char* nombre){
 	fclose(ovejota);
 }
 
-
+/*	Este metodo se encarga de guardar la informacion de cada metodo que se va creando en el archivo
+	en el arreglo de procedimientos.*/
 void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int linea){
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
@@ -237,6 +241,7 @@ void agregaCuadruploInicio(int indexProc, int inicio){
 void agregaIndexParams(int indexProc, int index){
 	procedimientos[indexProc].index_params=index;
 }
+
 int existeCteInt(int y){
 	int i;
 	for(i=4;i<i_cteInt;i++)
