@@ -126,6 +126,11 @@ public class MaquinaVirtual{
 			
 			switch(cuadruplos[index].getOperacion()){
 				//OPERACIONES ARITMETICAS
+				/*
+				 * Los resultados se las exprsiones aritmeticas solo se pueden guardar en variables temporales por lo tanto
+				 * solo se verifica que el resultado se encuentre entre los rangos de temporales enteras o flotantes y se
+				 * almmacena el resultado de la operacion en la direccion correspondiente.
+				 */
 				case 100: //SUMA
 					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())+scope.getValorNumerico(cuadruplos[index].getOperando2()));
@@ -151,7 +156,10 @@ public class MaquinaVirtual{
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())/scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
 				
-				
+				/*
+				 * La asignacion checa el cuadruplo del resultado y aplica operaciones de aritmetica modular para determinar
+				 * a que arreglo y en que indice se debe almacenar el dato que se encuentra en el operando1
+				 */
 				case 150: //ASIGNACION
 					switch(cuadruplos[index].getResultado()/2000){
 						case 0:
@@ -201,6 +209,11 @@ public class MaquinaVirtual{
 					}
 					break;
 					
+				/*
+				 * Los resultados de las operaciones logicas se almacenan en variables temporales enteras debido a la logica
+				 * aritmetica que tiene bigToronj. Por lo tanto a la direccion almacenada en el resultado siempre se le resta
+				 * el offset de temporales enteras y se almcena un 0 o un 1 segun el resultado de la operacion.
+				 */
 				//OPERACIONES LOGICAS
 				case 200: //AND
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1())!=0 && scope.getValorNumerico(cuadruplos[index].getOperando2())!=0)
@@ -257,6 +270,10 @@ public class MaquinaVirtual{
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
 					break;
 				
+				/*
+				 * Los cuadruplos de Go To observan el resultado del cuadruplo para obtener a que cuadruplo deben
+				 * dirigirse. En el caso de GoToF y GoToV se analiza el operando1 para saber si moverse o no.
+				 */
 				//GOTOs
 				case 300: //GO TO
 					index=cuadruplos[index].getResultado()-1;
@@ -273,6 +290,11 @@ public class MaquinaVirtual{
 					break;
 					
 				//DIBUJO
+				/*
+				 * Los cuadruplos de dibujo analizan las 3 ultimas partes el cuadruplo
+				 * A partir del operando1 y 2 se obtienen las dimensiones de la figura que se va a generar
+				 * la parte del resultado tiene la condicion que determina si la figura va a estar rellena o no
+				 */
 				case 400: //LINEA
 					elPanel.dibujaLinea(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
 							scope.getValorNumerico(cuadruplos[index].getOperando2()));
@@ -284,7 +306,7 @@ public class MaquinaVirtual{
 							scope.getValorNumerico(cuadruplos[index].getOperando1()),
 							scope.getValorNumerico(cuadruplos[index].getOperando2()),
 							scope.getValorNumerico(cuadruplos[index].getResultado()));
-					index++;
+					index++;//Se incrementa el indice en uno porque el triangulo consume dos cuadruplos.
 					dibujo=true;
 					break;
 				case 402: //RECTANGULO
@@ -300,6 +322,10 @@ public class MaquinaVirtual{
 					dibujo=true;
 					break;
 				
+				//TRANSFORMACIONES	
+				/*
+				 * 
+				 */
 				case 450: //TRASLACION
 					elPanel.traslada(scope.getValorNumerico(cuadruplos[index].getOperando1()), 
 							scope.getValorNumerico(cuadruplos[index].getOperando2()));
@@ -329,20 +355,32 @@ public class MaquinaVirtual{
 					break;
 					
 				//LLAMADAS Y METODOS
+				/*
+				 * En esta accion el scope actual es desechado y se recupera el scope que este almacenado en la pila
+				 * el indice tambien recibe una modificacion al obtener aquel indice que este guardado en la pila de retornos.
+				 */
 				case 600: //RET
 					scope=pilaScopes.pop();
 					index=pilaRetornos.pop();
 					break;
+				/*
+				 * El metodo go sub almacena el cuadruplo actual en una pila de retornos para poder regresar a el
+				 * cuando se termine la ejecucion del metodo que fue invocado. EL indice se iguala al cuadruplo de inicio
+				 * de la funcion invocada y se hace un ajuste de -1 porque el indice se incrementara al salir de este caso
+				 * del switch.
+				 */
 				case 601: //GOSUB
 					int iSUB=cuadruplos[index].getResultado();
 					pilaRetornos.push(index);
 					index=listaProcs[iSUB].getCuadInicio()-1;
 					break;
+				/*
+				 * En el cuadruplo param solo se modifican los valores de variables locales. por lo tanto se 
+				 * ajusta el indice para caer dentro de alguno de los arreglos correspondientes y le asigna
+				 * el valor del parametro a la variable local correspondiente.
+				 */
 				case 602: //PARAM
 					switch(cuadruplos[index].getResultado()/2000){
-					case 0:
-						
-						break;
 					case 1:
 						switch((cuadruplos[index].getResultado()%2000)/500){
 						case 0:
@@ -361,7 +399,13 @@ public class MaquinaVirtual{
 						break;
 					}
 					break;
-					
+				
+				/*
+				 * Para los metodos de print se busca si la variable o constante que se desea imrimir es de tipo numerico
+				 * en caso de serlo se imprime directamente.
+				 * De lo contrario se hace una nueva busqueda en las variables de tipo string y se imprime la variable que
+				 * regrese la busqueda.
+				 */
 				case 700: //PRINT
 					float print=scope.getValorNumerico(cuadruplos[index].getResultado());
 					if(print!=-1000)
@@ -369,7 +413,6 @@ public class MaquinaVirtual{
 					else{
 						String printStr=scope.getValorString(cuadruplos[index].getResultado());
 						System.out.print(printStr.substring(1, printStr.length()-1));	
-						
 					}
 					break;
 				case 701: //PRINTL
@@ -378,10 +421,16 @@ public class MaquinaVirtual{
 						System.out.println(""+printl);
 					else{
 						String printStr=scope.getValorString(cuadruplos[index].getResultado());
-						System.out.println(printStr.substring(1, printStr.length()-1));	
-						
+						System.out.println(printStr.substring(1, printStr.length()-1));
 					}
 					break;
+				
+				/*
+				 * El cuadruplo read solo puede hacer modificaciones a variables locales o globales.
+				 * Por lo tanto solo se hace el ajuste de indices antes estos dos casos y despues realiza
+				 * las mismas acciones que el cuadruplo de asignacion pra modificar el dato que se encuentra
+				 * en la posicion calculada.
+				 */
 				case 702: //READ
 					switch(cuadruplos[index].getResultado()/2000){
 						case 0:
