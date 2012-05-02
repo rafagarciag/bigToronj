@@ -86,6 +86,17 @@ public class UnPanel extends JPanel {
 		rot=0;
 	}
 	
+	/*
+	 * El metodo pop se encarga de regresar las cordenadas del contexto grafico a una 
+	 * posicion previa a las ultimas transformaciones que ha sufrido.
+	 * Antes de hacer cualquier cosa se verifica el estado de las banderas boolTrans y
+	 * boolRot. En caso se estar prendidas el metodo pop solo resta las modificaciones que
+	 * se han realizado para volver a la posicion anterior.
+	 * En caso de estar apagadas significa que se estan generando diversos pop seguidos
+	 * por lo que en esta situacion se tiene que sacar las posiciones que estan guardadas
+	 * en las pilas de modificaciones para poder regresar el puntero a la posicion que
+	 * se desea.
+	 */
 	public void pop(){
 		if(!boolRot){
 			if(!pilaRot.isEmpty()){
