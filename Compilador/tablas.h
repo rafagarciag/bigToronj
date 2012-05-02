@@ -2,12 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+La estructura var es utilizada pra describir una variable con todos los atributos necesarios
+para que el compilador pueda utilizarlas de manera correcta
+*/
 struct var{
 	int tipo;
 	char* id;
 	int dv;
 };
 
+/*
+La estructura proc representa un procedimiento definido por el usuario. En ella no solo se almacenan
+atributos que le otorga el usuario como el tipo y id, tambien se guarda informacion vital que va a ser
+mandada a la maquina virtual al momento de ejecucion
+*/
 struct proc{
 	int tipo;
 	char* id;
@@ -47,8 +56,8 @@ struct var variables[2000][2];
 int offsetConstantes = 12000;
 
 struct cteInt constantesInt[500];
-int offsetInt = 0; //Casillas 0 y 1 se reservan para _WIDTH y _HEIGHT
-int i_cteInt = 4;
+int offsetInt = 0; 
+int i_cteInt = 4;	//Casillas 0 a 4 se reservan para _WIDTH y _HEIGHT y sus valores negativos
 
 struct cteFloat constantesFloat[500];
 int offsetFloat = 500;
@@ -56,58 +65,11 @@ int i_cteFloat = 0;
 
 struct cteHex constantesHex[500];
 int offsetHex = 1000;
-int i_cteHex = 1;
+int i_cteHex = 1; //La casilla 0 se reserva para el color del fondo del canvas
 
 struct cteString constantesString[500];
 int i_cteString = 0;
 int offsetString = 1500;
-
-void imprimeProcs(int x){
-
-	int j;
-	printf("\nProc %s\n", procedimientos[x].id);
-	printf("Tipo de retorno:  %d\n", procedimientos[x].tipo);
-	printf("Dir de retorno:  %d\n", procedimientos[x].retorno);
-
-	//La firma
-	printf("Firma: ");
-	for(j=0; j<procedimientos[x].index_params; j++){
-		switch (procedimientos[x].params[j]){
-			case 0:
-				printf("int  ");
-				break;
-			case 1:
-				printf("float  ");
-				break;
-			case 2:
-				printf("color  ");
-				break;
-			case 3:
-				printf("string  ");
-				break;
-			default:
-				printf("tipo de dato irreconocible e irreconciliable");
-		}
-	}
-	printf("\n");
-
-	printf("\nContiene las variables\n");
-	printf("%d\tints\n", procedimientos[x].totalInt);
-	printf("%d\tfloats\n", procedimientos[x].totalFlo);
-	printf("%d\tcolors\n", procedimientos[x].totalCol);
-	printf("%d\tstrings\n", procedimientos[x].totalStr);
-
-
-	//Cuadruplo de inicio
-	printf("Cuadruplo de inicio: %d\n", procedimientos[x].cuadruploInicio);
-
-	for(j=0;j<procedimientos[x].index;j++){
-		if(x==0)
-			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][0].tipo, variables[j][0].id,variables[j][0].dv);
-		else
-			printf("VAR/ tipo: %d, id: %s, dv: %d\n", variables[j][1].tipo, variables[j][1].id,variables[j][1].dv);
-	}
-}
 
 /*	Este metodo se encarga de escribir el total de cada tipo de constante en el archivo .btjo */
 void imprimeTotalGlobales(char* nombre){
@@ -135,32 +97,22 @@ void imprimeProcedimientos(char* nombre, int numProcs){
 void imprimeConstantes(char* nombre){
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");
-	
 	int i;
-	printf("\nLAS CONSTANTES\n");
 
-	printf("ENTEROS\n");
 	for(i=0; i<i_cteInt; i++){
 		fprintf(ovejota,"%d,%d\n",constantesInt[i].dv, constantesInt[i].valor);
-		printf("Constante %d con valor: %d\n", constantesInt[i].dv, constantesInt[i].valor);
 	}
 
-	printf("FLOTANTES\n");
 	for(i=0; i<i_cteFloat; i++){
 		fprintf(ovejota,"%d,%f\n",constantesFloat[i].dv, constantesFloat[i].valor);
-		printf("Constante %d con valor: %f\n", constantesFloat[i].dv, constantesFloat[i].valor);
 	}
 
-	printf("HEX\n");
 	for(i=0; i<i_cteHex; i++){
 		fprintf(ovejota,"%d,%s\n",constantesHex[i].dv, constantesHex[i].valor);
-		printf("Constante %d con valor: %s\n", constantesHex[i].dv, constantesHex[i].valor);
 	}
 
-	printf("STRING\n");
 	for(i=0; i<i_cteString; i++){
 		fprintf(ovejota,"%d,%s\n",constantesString[i].dv, constantesString[i].valor);
-		printf("Constante %d con valor: %s\n", constantesString[i].dv, constantesString[i].valor);
 	}
 	fprintf(ovejota,"##\n");
 	fclose(ovejota);
@@ -172,7 +124,6 @@ void agregaProcedimiento(int indexProc, int indexParams, int tipo, char* id, int
 	procedimientos[indexProc].id=id;
 	procedimientos[indexProc].tipo=tipo;
 	procedimientos[indexProc].index_params = indexParams;
-	imprimeProcs(indexProc);
 }
 
 int existeVariable(int indexProc, char* id){
@@ -267,7 +218,6 @@ int existeCteFloat(float y){
 int existeCteHex(char* x){
 	int i;
 	for(i=1;i<i_cteHex;i++){
-		printf("CTEHEX: %s\n",constantesHex[i].valor);
 		if(!strcmp(constantesHex[i].valor, x))
 			return constantesHex[i].dv;
 	}

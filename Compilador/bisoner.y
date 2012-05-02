@@ -139,8 +139,6 @@ programa	: global programa_paso1 functions DRAWING canvas programa_paso2 bloque 
 					imprimeConstantes(nombre);
 					imprimeProcedimientos(nombre,indexProc+1);
 					imprimeCuadruplos(nombre);
-					imprimePila();
-					imprimePilaSaltos();
 				}
 				else{
 					printf("\n=============================================\n");
@@ -304,7 +302,6 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 				indices[2]=0;
 				indices[3]=0;
 				if(i>0){
-					printf("Chedando numero de params contParam=%d, index_params=%d\n", contParam, procedimientos[i].index_params);
 					if(contParam==procedimientos[i].index_params){
 						//ERA
 						generaCuadruplo(999, -1, -1, i);
@@ -327,7 +324,6 @@ func_usuario: id_func_usuario PARENI func_usuario1 PAREND func_usuario111 {
 					//Generar una variable local donde se guardará el return y
 					//	empujarla a la pila
 					dir_ret_local=agregaVariable(indexProc, procedimientos[i].tipo, "retorno111222333", lineNumber);
-					printf("Imprimiendo indice de cosa= %d %s retorno=%d\n", i, procedimientos[i].id, procedimientos[i].retorno);
 					generaCuadruplo(150, getDirReturn(i), -1, dir_ret_local);
 					pushPilaOperandos(dir_ret_local);
 					//operador=dir_ret_local;
@@ -357,13 +353,11 @@ param		:	exp	{
 					
 					if(getTipo(p)==procedimientos[existeProcedimiento(indexProc,id_func)].params[contParam]){
 						filaParams[contParam] = p;
-						printf("Incrementando contParam\n");
 						contParam++;
 					}
 					else{
 						error++;
 						printf("Error en línea %d. Parámetros enviados a método no corresponden al tipo esperado\n", lineNumber);
-						printf("Validacion semantica de firma %d == %d\n", getTipo(p), procedimientos[existeProcedimiento(indexProc,id_func)].params[contParam]);
 					}
 					
 					//generaCuadruplo(602, popPilaOperandos(), -1, 666);
@@ -394,10 +388,6 @@ estatuto	: asignacion
 			;
 
 return		: RETURN exp PUNCOMA	{
-				//printf("\nRETURN %d  == %d\n", getTipo(peekPilaOperandos()), getTipoProc(indexProc));
-				//imprimePila();
-				printf("Peek = %d\n", getTipo(peekPilaOperandos()));
-				printf("Tipo proc = %d\n", tipo_ret);
 				
 				//Validación semántica
 				if(getTipo(peekPilaOperandos())==tipo_ret){
@@ -468,7 +458,6 @@ declaracion1: /*vacio*/
 					int aux1 = popPilaOperandos();
 					int dv = existeVariable(indexProc, aux_asignacion);
 					char tipo = cuboSyn(dv,aux1,150);
-					//printf("Asignación espuria (%d = %d)", dv, aux1);
 					if(tipo!='w'){
 						generaCuadruplo(150,aux1,-1,dv);
 					}
@@ -708,7 +697,6 @@ reset_negacion	:	{
 							
 							generaCuadruplo(208, -1, -1, popPilaOperandos());
 							pushPilaOperandos(aux_dir);
-							printf("Haciendo push negacion de dir: %d", aux_dir);
 						}
 						bit_negacion=0;
 					}
@@ -728,7 +716,7 @@ expresion_paso1:	{
 							}
 							else{
 								error++;
-								printf("\nError de mezcla de tipos en suma, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
+								printf("\nError de mezcla de tipos en la operacion logica, línea número %d\n  [%d %d %d]", lineNumber, aux1, op, aux2);
 							}
 						}
 					}
@@ -747,7 +735,7 @@ expresion_paso2	: 	{
 							}
 							else{
 								error++;
-								printf("\nError de mezcla de tipos en multiplicación, línea número %d\n", lineNumber);
+								printf("\nError de mezcla de tipos en la operacion logica, línea número %d\n", lineNumber);
 							}
 						}
 					}

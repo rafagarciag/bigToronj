@@ -22,15 +22,6 @@ int peekPilaSaltos(){
 	return pilaSaltos[indexSaltos-1];
 }
 
-void imprimePilaSaltos(){
-	int i;
-	printf("\nPila SALTOS\n");
-	printf("-------------------\n");
-	for(i=0; i<indexSaltos; i++){
-		printf("%d\n", pilaSaltos[i]);	
-	}
-}
-
 struct cuadruplo{
 	int operador;
 	int operando1;
@@ -63,7 +54,6 @@ void imprimeCuadruplos(char* nombre){
 	fprintf(ovejota,"%d\n", pointer);
 	int i;
 	for(i=0;i<pointer;i++){
-		printf("%d: (%d, %d ,%d ,%d)\n",i, cuadruplos[i].operador,cuadruplos[i].operando1,cuadruplos[i].operando2,cuadruplos[i].resultado);
 		fprintf(ovejota,"%d,%d,%d,%d\n",cuadruplos[i].operador,cuadruplos[i].operando1,cuadruplos[i].operando2,cuadruplos[i].resultado);	
 	}
 	fclose(ovejota);

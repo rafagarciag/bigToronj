@@ -81,8 +81,6 @@ public class MaquinaVirtual{
   			index++;
   		}
   		cuadruplos[index]=new Cuadruplo(-9999,-1,-1,-1);
-		System.out.println("Fin de lectura");
-		
 		
 		
 		UnPanel elPanel = new UnPanel(scope.getValorNumerico(12000),scope.getValorNumerico(12001), scope.getValorString(13000));
@@ -106,10 +104,8 @@ public class MaquinaVirtual{
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())-scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
 				case 102:
-					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000){
+					if(cuadruplos[index].getResultado()>=4000&&cuadruplos[index].getResultado()<6000)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=(int)(scope.getValorNumerico(cuadruplos[index].getOperando1())*scope.getValorNumerico(cuadruplos[index].getOperando2()));
-						System.out.println(scope.getValorNumerico(cuadruplos[index].getOperando1())+"*"+scope.getValorNumerico(cuadruplos[index].getOperando2()));
-					}
 					else if(cuadruplos[index].getResultado()>=6000&&cuadruplos[index].getResultado()<8000)
 						Variable.tempsFlo[cuadruplos[index].getResultado()-6000]=(scope.getValorNumerico(cuadruplos[index].getOperando1())*scope.getValorNumerico(cuadruplos[index].getOperando2()));
 					break;
@@ -215,6 +211,12 @@ public class MaquinaVirtual{
 					break;
 				case 207:
 					if (scope.getValorNumerico(cuadruplos[index].getOperando1()) != scope.getValorNumerico(cuadruplos[index].getOperando2()))
+						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
+					else
+						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;
+					break;
+				case 208:
+					if (scope.getValorNumerico(cuadruplos[index].getResultado())==0)
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=1;
 					else
 						Variable.tempsInt[cuadruplos[index].getResultado()-4000]=0;

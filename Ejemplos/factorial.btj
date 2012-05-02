@@ -1,0 +1,34 @@
+function int factorial(int x){
+	int aux=1;
+	if(x>1){
+		aux=x*factorial(x-1);
+	}
+	tetragon(aux,aux,0);
+	return aux;
+}
+
+drawing (800,800,#CAFEFE){
+	int x=0;
+	int fact=0;
+	trans(400,400);
+	push();
+	
+	print("factorial Recursivo de: ");
+	read(fact);
+	x=factorial(fact);
+	print("Resultado: ");
+	printl(x);
+	
+	set_color(#FF0000);
+	print("factorial Iterativo de: ");
+	read(fact);
+	x=1;
+	int i;
+	for(i=fact;i>0;i=i-1){
+		x=x*i;
+		circle(x,x,0);
+	}
+	print("Resultado: ");
+	printl(x);
+	
+}

@@ -54,13 +54,3 @@ int popPilaLlamadas(){
 int peekPilaLlamadas(){
 	return pilaLlamadas[indexLlamadas-1];
 }
-
-void imprimePila(){
-	int i;
-	printf("\nPila operandos\n");
-	printf("-------------------\n");
-	for(i=0; i<indexOperandos; i++){
-		printf("%d\n", pilaOperandos[i]);	
-	}
-	
-}

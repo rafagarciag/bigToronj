@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+/*
+El cubo semantico es utilizado para checar la combinacion de diversos tipos de datos cuando se utilizan
+con las operaciones basiscas del lenguaje
+*/
+
+/*
+Se inicializaron variables neuonicas con su valor correspondiente en la tabla para
+poder visualizar mejor al combinacion de tipos
+*/
 //	Tipos de datos
 int	_INT=		0;
 int	_FLOAT=		1;
@@ -21,6 +30,7 @@ int _AND=		10;
 int _OR=			11;
 int _IGUAL=		12;
 
+//Contadores de variables temporales segun su tipo
 int tempInt = 0;
 int tempFloat = 0;
 int tempColor = 0;
@@ -255,6 +265,11 @@ cubo[_STRING][_COLOR][_IGUAL]=	'w';	//error
 cubo[_STRING][_STRING][_IGUAL]='s';	//error
 }
 
+/*
+Este metodo regresa una direccion temporal valida segun el tipo que se mande como parametro
+cada direccion que se genera tiene su offset correspondiente en memoria segun el tipo que sea
+indicado.
+*/
 int getDirTemp(char tipo){
 	int dir;
 	switch(tipo){
@@ -281,6 +296,10 @@ int getDirTemp(char tipo){
 	}
 }
 
+/*
+Debido a la falta de polimorfismo en C este metodo cumple con la misma funcion del metodo anterior
+con la diferencia de que recibe el tipo de variable como un entero y no como un caracter.
+*/
 int getDirTempInt(int tipo){
 	int dir;
 	switch(tipo){
@@ -307,6 +326,10 @@ int getDirTempInt(int tipo){
 	}
 }
 
+/*
+Este metodo regresa el tipo de variable segun el rango en el que se encuentra la direccion virtual que es
+mandada como parametro al metodo.
+*/
 int getTipo(int x){
 	/*
 	Scope		|	Rango de direcciones
@@ -364,6 +387,11 @@ int getTipo(int x){
 
 }
 
+/*
+Este metodo se encarga de verificar la combinacion de tipos segun la operacion que se desea realizar
+Antes de hacer la comparacion se iguala la variable operador a su entero correspondiente en el cubo
+segun el codigo de operacion que se manda como parametro.
+*/
 char cuboSyn(int tipo1, int tipo2, int op){
 	int operador=0;
 	switch(op){
@@ -419,6 +447,7 @@ char cuboSyn(int tipo1, int tipo2, int op){
 	}
 }
 
+//Este metodo imprime el total de variables temporales de cada tipo en el archivo objeto generado por el compilador.
 void imprimeTotalTemporales(char* nombre){
 	FILE *ovejota;
 	ovejota=fopen(nombre,"a+");

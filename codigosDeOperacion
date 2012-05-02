@@ -35,11 +35,10 @@
 
 +ret 			600
 +gosub			601
-param			602
-return			603
++param			602
 
 +print			700
 +printl			701
-read			702
++read			702
 
 +ERA				999

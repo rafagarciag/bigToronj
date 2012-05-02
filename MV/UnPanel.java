@@ -129,12 +129,13 @@ public class UnPanel extends JPanel {
 	 * los valores del pointer a cero.
 	 */
 	public void popOrigin(){
-		while(!(pilaX.isEmpty()||pilaY.isEmpty()||pilaRot.isEmpty())){
-			pop();
-		}
-		pop();
-		pointerX=0;
-		pointerY=0;
+		pilaX.clear();
+		pilaY.clear();
+		pilaRot.clear();
+		Color auxColor=g2d.getColor();
+		g2d.dispose();
+		g2d = (Graphics2D) image.getGraphics();
+		g2d.setColor(auxColor);
 	}
 	
 	/*
@@ -157,8 +158,6 @@ public class UnPanel extends JPanel {
 	 * los valores necesarios para la correcta ejecucion de el metodo pop()
 	 */
 	public void rota(float x){
-		System.out.println("Los grados: "+x);
-		System.out.println("To radians:"+Math.toRadians(x));
 		g2d.rotate(Math.toRadians(x));
 		rot+=Math.toRadians(x);
 		boolRot=true;
@@ -233,7 +232,6 @@ public class UnPanel extends JPanel {
 		else
 			g2d.fillOval(0, 0, (int)x, (int)y);
 		g2d.translate((int)x/2, (int)y/2);
-		System.out.println("Dibuje un circulito de: "+x+","+y);
 		repaint();
 	}
 	

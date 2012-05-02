@@ -1,0 +1,43 @@
+function int fibonacci(int x){
+	int aux=x;
+	if(x>=2){
+		aux=fibonacci(x-2)+fibonacci(x-1);
+	}
+	tetragon(aux,aux,0);
+	return aux;
+}
+
+drawing (800,800,#CAFEFE){
+	int x=0;
+	int fib=0;
+	trans(400,400);
+	push();
+	
+	print("fibonacci Recursivo de: ");
+	read(fib);
+	x=fibonacci(fib);
+	print("Resultado: ");
+	printl(x);
+	
+	print("fibonacci Iterativo de: ");
+	read(fib);
+	
+	set_color(#FF0000);
+	if(fib<2){
+		x=fib;
+	}
+	else{
+		int i;
+		int uno=0;
+		int dos=1;
+		int resultado=0;
+		for(i=2;i<=fib;i=i+1){
+			resultado=uno+dos;
+			uno=dos;
+			dos=resultado;
+			circle(resultado,resultado,0);
+		}
+		print("Resultado: ");
+		printl(resultado);
+	}
+}

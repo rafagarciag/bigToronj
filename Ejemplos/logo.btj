@@ -8,7 +8,6 @@ drawing (500,500,#9900FF){
 	circle(_WIDTH*2,_HEIGHT*2,0);
 	set_color(#FFFF99);
 	
-	
 	circle(_WIDTH*2-50,_HEIGHT*2-50,1);
 	set_color(negro);
 	circle(_WIDTH*2-50,_HEIGHT*2-50,0);
@@ -24,6 +23,5 @@ drawing (500,500,#9900FF){
 		trans(0,-400);
 		circle(130,130,1);
 		pop();
-	
 	}
 }

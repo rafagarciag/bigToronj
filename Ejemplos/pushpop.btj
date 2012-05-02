@@ -1,0 +1,28 @@
+drawing(1000,500,#CAFEFE){
+	trans(_WIDTH/2,_HEIGHT/2);
+	set_color(#FF0000);
+	circle(100,100,1);
+	push();
+	trans(-100,-100);
+	circle(50,50,1);
+	pop();
+	trans(100,-100);
+	circle(50,50,1);
+	pop();
+	
+	set_color(#0000FF);
+	trans(0,100);
+	push();
+	trans(-100,0);
+	circle(50,50,1);
+	pop();
+	trans(100,0);
+	circle(50,50,1);
+	pop();
+	
+	circle(30,30,1);
+	pop_origin();
+	set_color(#00FF00);
+	circle(300,300,1);
+
+}
